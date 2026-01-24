@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "types": [
+      "node",
+      "jest"
+    ],
+    "lib": [
+      "es2019",
+      "dom"
+    ],
+    "module": "commonjs",
+    "target": "es2019",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "composite": true
+  },
+  "exclude": [
+    "test"
+  ]
+}

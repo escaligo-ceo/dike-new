@@ -1,0 +1,20 @@
+{
+  "realm": "master",
+  "smtpServer": {
+    "host": "${KC_SPI_EMAIL_TEMPLATE_HOST:smtps.aruba.it}",
+    "port": "${KC_SPI_EMAIL_TEMPLATE_PORT:465}",
+    "from": "${KC_SPI_EMAIL_TEMPLATE_FROM:noreply@dike.cloud}",
+    "fromDisplayName": "${KC_SPI_EMAIL_TEMPLATE_FROM_DISPLAY_NAME:Servizio Clienti}",
+    "replyTo": "${KC_SPI_EMAIL_TEMPLATE_REPLY_TO:supporto@escaligo.it}",
+    "replyToDisplayName": "${KC_SPI_EMAIL_TEMPLATE_REPLY_TO_DISPLAY_NAME:Supporto}",
+    "starttls": "${KC_SPI_EMAIL_TEMPLATE_STARTTLS:true}",
+    "auth": "${KC_SPI_EMAIL_TEMPLATE_AUTH:true}",
+    "user": "${KC_SPI_EMAIL_TEMPLATE_USER:noreply@escaligo.it}",
+    "password": "${KC_SPI_EMAIL_TEMPLATE_PASSWORD:Ps@6@q1owM6d237}",
+    "ssl": "true"
+  },
+  "verifyEmail": true,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true
+}

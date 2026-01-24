@@ -1,0 +1,25 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+<h1>Elenco Tenant Memberships</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Creato il</th>
+      <th>Azioni</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for team in teams %}
+    <tr>
+      <td>{{ team.id }}</td>
+      <td>{{ team.name }}</td>
+      <td>{{ team.createdAt }}</td>
+      <td><!-- Azioni future --></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

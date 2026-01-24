@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+		<meta charset="UTF-8">
+		<title>{% block title %}Escaligo{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/assets/style.css">
+	</head>
+	<body class="layout-base">
+		<header class="layout-base__header">
+			{% block header %}{% endblock %}
+		</header>
+		<main class="layout-base__main">
+				{% block content %}{% endblock %}
+			</main>
+			<footer class="layout-base__footer">
+				{% block footer %}
+					<p>
+						&copy; {{ currentYear or "2025" }}
+						<a href="https://www.escaligo.it">Escaligo</a> - Tutti i diritti riservati.
+					</p>
+				{% endblock %}
+			</footer>
+		</body>
+	</html>

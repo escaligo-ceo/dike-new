@@ -1,0 +1,21 @@
+{% extends "./base.njk" %}
+
+{% block header %}
+  <header class="auth-header">
+    <nav class="auth-nav">
+      <ul>
+        <li>
+          <a href="/profile" class="auth-link auth-profile-link">
+            <img src="{{ user.avatarUrl or '/assets/avatar-default.png' }}" alt="Avatar" class="auth-avatar">
+            Profilo
+          </a>
+        </li>
+        <li>
+          <a href="/logout" class="auth-link auth-logout-link">Logout</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+{% endblock %}
+
+{% block content %}{% endblock %}

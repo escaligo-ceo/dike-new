@@ -1,0 +1,318 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_CONNECTION_STR: ${POSTGRES_CONNECTION_STR}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/terminate-connections.sql:/docker-entrypoint-initdb.d/terminate-connections.sql
+      - ./scripts/terminate-hanging-connections.sh:/docker-entrypoint-initdb.d/terminate-hanging-connections.sh:ro
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USERNAME} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2.4
+    command: start-dev --hostname=${KEYCLOAK_URL} --hostname-admin=${KEYCLOAK_URL}
+    environment:
+      KC_DB_URL: ${KC_DB_URL}
+      KC_DB: ${KC_DB}
+      KC_DB_USERNAME: ${POSTGRES_USERNAME}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_HOSTNAME_STRICT: "false"
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KC_DB_POOL_INITIAL_SIZE: 5
+      KC_DB_POOL_MIN_SIZE: 5
+      KC_DB_POOL_MAX_SIZE: 30
+      KC_DB_POOL_MAX_LIFETIME: 600
+      KC_DB_POOL_IDLE_TIMEOUT: 60000
+      KC_DB_POOL_ACQUISITION_TIMEOUT: 60
+    ports:
+      - 8080:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  redis:
+    image: redis:latest
+    container_name: redis_broker
+    ports:
+      - "6379:6379"
+    restart: always
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: apps/backend/api-gateway/Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+      - keycloak
+      - auth-service
+      - profile-service
+      - audit-service
+      - notification-service
+      - subscription-service
+      - tenant-service
+    environment:
+      VERSION: ${API_GATEWAY_VERSION}
+      ENV: ${API_GATEWAY_ENV}
+      LOG_LEVEL: ${API_GATEWAY_LOG_LEVEL}
+      APP_NAME: ${API_GATEWAY_APP_NAME}
+      APP_URL: ${API_GATEWAY_APP_URL}
+
+      # Ensure services that read KC_BOOTSTRAP_ADMIN_URL (e.g. JwtAuthGuard)
+      # get the correct Keycloak URL from the shared .env instead of
+      # falling back to http://localhost:8080
+      KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
+
+      # ANTISPOOFING: true
+
+      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL}
+      AUDIT_SERVICE_URL: ${AUDIT_SERVICE_URL}
+      PROFILE_SERVICE_URL: ${PROFILE_SERVICE_URL}
+      NOTIFICATION_SERVICE_URL: ${NOTIFICATION_SERVICE_URL}
+      SUBSCRIPTION_SERVICE_URL: ${SUBSCRIPTION_SERVICE_URL}
+      TENANT_SERVICE_URL: ${TENANT_SERVICE_URL}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+      FRONTEND_URL: ${FRONTEND_URL}
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: apps/backend/auth-service/Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - keycloak
+      - postgres
+      - audit-service
+    environment:
+      VERSION: ${AUTH_VERSION}
+      ENV: ${AUTH_ENV}
+      LOG_LEVEL: ${AUTH_LOG_LEVEL}
+      APP_NAME: ${AUTH_APP_NAME}
+      APP_URL: ${AUTH_APP_URL}
+      SESSION_SECRET: ${SESSION_SECRET}
+
+      # Ensure Keycloak bootstrap URL is available to services that use libs/common JwtAuthGuard
+      KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
+
+      KC_CLIENT_ID: ${KC_CLIENT_ID}
+      KC_CLIENT_SECRET: ${KC_CLIENT_SECRET}
+      # KC_REALM: ${KC_REALM}
+      KC_ADMIN_USERNAME: ${KC_ADMIN_USERNAME}
+      KC_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
+      AUDIT_SERVICE_URL: ${AUDIT_SERVICE_URL}
+      KEYCLOAK_ADMIN_CLIENT_ID: ${KEYCLOAK_ADMIN_CLIENT_ID}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      KEYCLOAK_CLIENT_NAME: ${KEYCLOAK_CLIENT_NAME}
+
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+
+      FRONTEND_URL: ${FRONTEND_URL}
+
+      NOTIFICATION_SERVICE_URL: ${NOTIFICATION_SERVICE_URL}
+
+      SERVICE_DB_CONNECTION_STR: ${AUTH_DB_CONNECTION_STR}
+
+      SMTP_CONNECTION_STR: ${SMTP_CONNECTION_STR}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+  audit-service:
+    build:
+      context: .
+      dockerfile: apps/backend/audit-service/Dockerfile
+    ports:
+      - 8001:8001
+    depends_on:
+      - postgres
+    environment:
+      VERSION: ${AUDIT_VERSION}
+      # LOG_TO_FILE: "true"
+      # LOG_FILE_PATH: /logs/audit.log
+      # LOG_FILE_MAX_SIZE: 10485760 # 10MB
+      # LOG_FILE_BACKUPS: 5
+      ENV: ${AUDIT_ENV}
+      LOG_LEVEL: ${AUDIT_LOG_LEVEL}
+      APP_NAME: ${AUDIT_APP_NAME}
+      APP_URL: ${AUDIT_APP_URL}
+
+      KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
+
+      POSTGRES_CONNECTION_STR: ${POSTGRES_CONNECTION_STR}
+      SERVICE_DB_CONNECTION_STR: ${SERVICE_DB_CONNECTION_STR}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+  profile-service:
+    build:
+      context: .
+      dockerfile: apps/backend/profile-service/Dockerfile
+    ports:
+      - 8002:8002
+    depends_on:
+      - postgres
+      - keycloak
+    environment:
+      VERSION: ${PROFILE_VERSION}
+      ENV: ${PROFILE_ENV}
+      LOG_LEVEL: ${PROFILE_LOG_LEVEL}
+      APP_NAME: ${PROFILE_APP_NAME}
+      APP_URL: ${PROFILE_APP_URL}
+      SESSION_SECRET: ${SESSION_SECRET}
+
+      KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
+
+      AUDIT_SERVICE_URL: ${AUDIT_SERVICE_URL}
+
+      POSTGRES_CONNECTION_STR: ${POSTGRES_CONNECTION_STR}
+      SERVICE_DB_CONNECTION_STR: ${PROFILE_DB_CONNECTION_STR}
+
+      JWT_SECRET: ${JWT_SECRET}
+      KC_ADMIN_USERNAME: ${KC_ADMIN_USERNAME}
+      KC_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
+      KC_CLIENT_SECRET: ${KC_CLIENT_SECRET}
+      KC_CLIENT_ID: ${KC_CLIENT_ID}
+      KEYCLOAK_ADMIN_CLIENT_ID: ${KEYCLOAK_ADMIN_CLIENT_ID}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      KEYCLOAK_CLIENT_NAME: ${KEYCLOAK_CLIENT_NAME}
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: apps/backend/notification-service/Dockerfile
+    ports:
+      - 8003:8003
+    environment:
+      VERSION: ${NOTIFICATION_VERSION}
+      ENV: ${NOTIFICATION_ENV}
+      LOG_LEVEL: ${NOTIFICATION_LOG_LEVEL}
+      APP_NAME: ${NOTIFICATION_APP_NAME}
+      APP_URL: ${NOTIFICATION_APP_URL}
+
+      KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
+
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_SECURE: ${SMTP_SECURE}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_CONNECTION_STR: ${SMTP_CONNECTION_STR}
+
+      FRONTEND_URL: ${FRONTEND_URL}
+
+      AUDIT_SERVICE_URL: ${AUDIT_SERVICE_URL}
+
+      POSTGRES_CONNECTION_STR: ${POSTGRES_CONNECTION_STR}
+      SERVICE_DB_CONNECTION_STR: ${NOTIFICATION_DB_CONNECTION_STR}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+  subscription-service:
+    build:
+      context: .
+      dockerfile: apps/backend/subscription-service/Dockerfile
+    ports:
+      - 8004:8004
+    depends_on:
+      - postgres
+    environment:
+      VERSION: ${SUBSCRIPTION_VERSION}
+      APP_NAME: ${SUBSCRIPTION_APP_NAME}
+      APP_URL: ${SUBSCRIPTION_APP_URL}
+      ENV: ${SUBSCRIPTION_ENV}
+      LOG_LEVEL: ${SUBSCRIPTION_LOG_LEVEL}
+
+      KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+
+      AUDIT_SERVICE_URL: ${AUDIT_SERVICE_URL}
+
+      FRONTEND_URL: ${FRONTEND_URL}
+
+      SERVICE_DB_CONNECTION_STR: ${SUBSCRIPTION_DB_CONNECTION_STR}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+  tenant-service:
+    build:
+      context: .
+      dockerfile: apps/backend/tenant-service/Dockerfile
+    ports:
+      - 8005:8005
+    depends_on:
+      - postgres
+    environment:
+      VERSION: ${TENANT_VERSION}
+      ENV: ${TENANT_ENV}
+      LOG_LEVEL: ${TENANT_LOG_LEVEL}
+      APP_NAME: ${TENANT_APP_NAME}
+      APP_URL: ${TENANT_APP_URL}
+
+      API_GATEWAY_BASE_URL: ${API_GATEWAY_BASE_URL}
+      AUDIT_SERVICE_URL: ${AUDIT_SERVICE_URL}
+
+      POSTGRES_CONNECTION_STR: ${POSTGRES_CONNECTION_STR}
+      SERVICE_DB_CONNECTION_STR: ${TENANT_DB_CONNECTION_STR}
+
+      JWT_SECRET: ${JWT_SECRET}
+      KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+
+  web-site:
+    build:
+      context: .
+      dockerfile: apps/frontend/web-site/Dockerfile
+    ports:
+      - 5172:5172
+    depends_on:
+      - postgres
+      - keycloak
+      - api-gateway
+    environment:
+      VERSION: ${WEBSITE_VERSION}
+      ENV: ${WEBSITE_ENV}
+      LOG_LEVEL: ${WEBSITE_LOG_LEVEL}
+      APP_NAME: ${WEBSITE_APP_NAME}
+      APP_URL: ${FRONTEND_URL}
+      SESSION_SECRET: ${SESSION_SECRET}
+      AUDIT_SERVICE_URL: ${AUDIT_SERVICE_URL}
+
+      API_GATEWAY_BASE_URL: ${API_GATEWAY_BASE_URL}
+
+      KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
+
+      KC_CLIENT_SECRET: ${KC_CLIENT_SECRET}
+
+      EMAIL_VERIFICATION_SECRET: ${EMAIL_VERIFICATION_SECRET}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+volumes:
+  postgres_data:

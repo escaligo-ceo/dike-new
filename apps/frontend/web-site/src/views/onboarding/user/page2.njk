@@ -1,0 +1,25 @@
+{% extends "../../layouts/onboarding.njk" %}
+
+{% block rightContent %}
+<h1>{{ title }}</h1>
+<form method="POST" action="{{ actionUrl }}">
+  <input type="hidden" name="token" value="{{ token }}">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+  <input type="checkbox" name="contacts" value="contacts"> Creare o sistemare una rubrica di contatti<br />
+  <input type="checkbox" name="calendar" value="calendar"> Creare od organizzare un calendario appuntamenti<br />
+  <input type="checkbox" name="archive" value="archive"> Creare od organizzare un archivio pratiche<br />
+  <input type="checkbox" name="deadlines" value="deadlines"> Calcolare scadenze e promemoria<br />
+  <input type="checkbox" name="interests" value="interests"> Calcolare interessi legali<br />
+  <input type="checkbox" name="currentLegislation" value="currentLegislation"> Consultare la normativa vigente<br />
+  <input type="checkbox" name="cassationSentences" value="cassationSentences"> Consultare le sentenze della Cassazione<br />
+  <input type="checkbox" name="accounting" value="accounting"> Gestire le contabilità e la fatturazione<br />
+  <input type="text" name="other" placeholder="Qualcos'altro...">
+
+  <button type="submit">Continua</button>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+</form>
+{% endblock %}

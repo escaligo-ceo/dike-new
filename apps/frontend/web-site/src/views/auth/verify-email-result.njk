@@ -1,0 +1,16 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+  <p>
+    {% if result and result.success %}
+      ✅ La tua email <b>{{ email }}</b> è stata verificata con successo!
+    {% else %}
+      ❌ La verifica della tua email <b>{{ email }}</b> non è andata a buon fine.
+      {% if result and result.message %}
+        <br><span style="color: #b00;">{{ result.message }}</span>
+      {% endif %}
+    {% endif %}
+  </p>
+  <a href="/login" class="button">Vai al login</a>
+{% endblock %}

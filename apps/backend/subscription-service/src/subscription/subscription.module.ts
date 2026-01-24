@@ -1,0 +1,30 @@
+import { AppLogger, DikeConfigService, DikeJwtService } from "@dike/common";
+import { HttpModule } from "@nestjs/axios";
+import { Module } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { entities } from "../database/entities";
+import { FeatureService } from "../feature/feature.service";
+import { PlanService } from "../plan/plan.service";
+import { SubscriptionController } from "./subscription.controller";
+import { SubscriptionService } from "./subscription.service";
+import { ApiGatewayService, KeycloakService, UserFactory } from "@dike/communication";
+
+@Module({
+  imports: [TypeOrmModule.forFeature(entities), HttpModule],
+  controllers: [SubscriptionController],
+  providers: [
+    SubscriptionService,
+    DikeConfigService,
+    ConfigService,
+    AppLogger,
+    PlanService,
+    FeatureService,
+    KeycloakService,
+    UserFactory,
+    ApiGatewayService,
+    DikeJwtService,
+  ],
+  exports: [SubscriptionService],
+})
+export class SubscriptionModule {}

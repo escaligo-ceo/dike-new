@@ -1,0 +1,24 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist",
+    "types": [
+      "node",
+      "jest"
+    ],
+    "lib": [
+      "es2019",
+      "dom"
+    ],
+    "target": "es2019",
+    "moduleResolution": "node",
+  },
+  "include": [
+    "src/**/*", "../../../libs/common/src/onboarding/startOnboardingResponse.ts", "../../../libs/common/src/onboarding/onboarding.type.ts",
+    // "src/**/*.json",
+    // "src/**/*.d.ts",
+    // "src/**/*.js"
+  ]
+}

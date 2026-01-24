@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Verifica Email</title>
+</head>
+<body>
+  <h1>Verifica il tuo indirizzo email</h1>
+  <p>Abbiamo bisogno che tu confermi la tua email: <strong>{{ email }}</strong></p>
+
+  {% if message %}
+    <p style="color:green">{{ message }}</p>
+  {% endif %}
+
+  <form action="/auth/resend-verification" method="POST">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    <button type="submit">Invia nuovo link di verifica</button>
+  </form>
+</body>
+</html>

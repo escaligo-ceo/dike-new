@@ -1,0 +1,29 @@
+# Database
+*.sql
+*.dump
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor/IDE (VS Code, JetBrains, ecc.)
+.vscode/
+.idea/
+*.swp
++.log
+
+# Dependencies
+node_modules/
+vendor/
+__pycache__/
+venv/
+bin/
+obj/
+dist/
+
+# Temporary files
+/temp/
+/data/local_storage/

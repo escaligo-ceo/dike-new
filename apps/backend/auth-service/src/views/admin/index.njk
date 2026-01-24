@@ -1,0 +1,19 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+<div class="admin-users-panel">
+  <div class="admin-users-header">
+    <h1 class="admin-users-title">Area Admin Audit</h1>
+  </div>
+  <div style="margin-bottom: 1.5em; background: #f8f8f8; border: 1px solid #ddd; padding: 1em; border-radius: 6px;">
+    <strong>Spiegazione:</strong>
+    <ul>
+      <li>Questa è l'area amministrativa del servizio audit.</li>
+      <li>Da qui puoi accedere alla consultazione dei log eventi e altre funzionalità di audit.</li>
+    </ul>
+  </div>
+  <ul>
+    <li><a href="/admin/logs">Consulta log eventi</a></li>
+  </ul>
+</div>
+{% endblock %}

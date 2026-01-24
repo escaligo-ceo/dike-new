@@ -1,0 +1,111 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+  <h1>Gestione Abbonamenti</h1>
+  
+  <div style="margin-bottom: 1.5em; background: #f8f8f8; border: 1px solid #ddd; padding: 1em; border-radius: 6px;">
+    <strong>Filtri:</strong>
+    <form method="GET" style="margin-top: 1em;">
+      <div style="margin-bottom: 1em;">
+        <label for="planId" style="display: inline-block; margin-right: 1em;">Piano:</label>
+        <select id="planId" name="planId" style="padding: 0.5em;">
+          <option value="">-- Tutti --</option>
+          {% for plan in plans %}
+            <option value="{{ plan.id }}" {% if selectedPlanId == plan.id %}selected{% endif %}>{{ plan.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div style="margin-bottom: 1em;">
+        <label for="status" style="display: inline-block; margin-right: 1em;">Stato:</label>
+        <select id="status" name="status" style="padding: 0.5em;">
+          <option value="">-- Tutti --</option>
+          <option value="ACTIVE" {% if selectedStatus == 'ACTIVE' %}selected{% endif %}>Attivo</option>
+          <option value="SUSPENDED" {% if selectedStatus == 'SUSPENDED' %}selected{% endif %}>Sospeso</option>
+          <option value="EXPIRED" {% if selectedStatus == 'EXPIRED' %}selected{% endif %}>Scaduto</option>
+          <option value="CANCELLED" {% if selectedStatus == 'CANCELLED' %}selected{% endif %}>Annullato</option>
+        </select>
+      </div>
+
+      <button type="submit" style="padding: 0.5em 1em; background: #232946; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+        Filtra
+      </button>
+      <a href="/admin/subscriptions" style="padding: 0.5em 1em; background: #ccc; color: #000; text-decoration: none; border-radius: 4px; margin-left: 0.5em;">
+        Ripristina
+      </a>
+    </form>
+  </div>
+
+  {% if subscriptions.length > 0 %}
+    <div style="overflow-x: auto;">
+      <table style="border-collapse: collapse; width: 100%; margin-top: 1em;">
+        <thead>
+          <tr style="background: #f0f0f0;">
+            <th style="border: 1px solid #ccc; padding: 0.75em; text-align: left;">ID Tenant</th>
+            <th style="border: 1px solid #ccc; padding: 0.75em; text-align: left;">Piano</th>
+            <th style="border: 1px solid #ccc; padding: 0.75em; text-align: left;">Stato</th>
+            <th style="border: 1px solid #ccc; padding: 0.75em; text-align: left;">Data Inizio</th>
+            <th style="border: 1px solid #ccc; padding: 0.75em; text-align: left;">Data Fine</th>
+            <th style="border: 1px solid #ccc; padding: 0.75em; text-align: left;">ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for subscription in subscriptions %}
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 0.75em;">{{ subscription.tenantId }}</td>
+              <td style="border: 1px solid #ccc; padding: 0.75em;">{{ subscription.planName }}</td>
+              <td style="border: 1px solid #ccc; padding: 0.75em;">
+                <span style="
+                  display: inline-block;
+                  padding: 0.25em 0.75em;
+                  border-radius: 4px;
+                  font-size: 0.9em;
+                  font-weight: bold;
+                  {% if subscription.status == 'ACTIVE' %}
+                    background: #d4edda;
+                    color: #155724;
+                  {% elif subscription.status == 'SUSPENDED' %}
+                    background: #fff3cd;
+                    color: #856404;
+                  {% elif subscription.status == 'EXPIRED' %}
+                    background: #f8d7da;
+                    color: #721c24;
+                  {% elif subscription.status == 'CANCELLED' %}
+                    background: #e2e3e5;
+                    color: #383d41;
+                  {% endif %}
+                ">
+                  {{ subscription.status }}
+                </span>
+              </td>
+              <td style="border: 1px solid #ccc; padding: 0.75em;">
+                {{ subscription.since | date('DD/MM/YYYY HH:mm') }}
+              </td>
+              <td style="border: 1px solid #ccc; padding: 0.75em;">
+                {% if subscription.to %}
+                  {{ subscription.to | date('DD/MM/YYYY HH:mm') }}
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+              <td style="border: 1px solid #ccc; padding: 0.75em; font-size: 0.85em; color: #666;">
+                {{ subscription.id | truncate(8, true, '') }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top: 1em; color: #666;">
+      <strong>Totale abbonamenti:</strong> {{ subscriptions.length }}
+    </p>
+  {% else %}
+    <div style="background: #e7e9ef; border: 1px solid #ddd; padding: 1.5em; border-radius: 6px; text-align: center;">
+      <p>Nessun abbonamento trovato con i filtri selezionati.</p>
+    </div>
+  {% endif %}
+
+  <div style="margin-top: 2em;">
+    <a href="/admin" style="color: #232946; text-decoration: none;">← Torna all'area admin</a>
+  </div>
+{% endblock %}

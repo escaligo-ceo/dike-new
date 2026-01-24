@@ -1,0 +1,29 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+<h1>Elenco Inviti</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Email</th>
+      <th>Stato</th>
+      <th>Inviato il</th>
+      <th>Accettato il</th>
+      <th>Azioni</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for invite in invites %}
+    <tr>
+      <td>{{ invite.id }}</td>
+      <td>{{ invite.email }}</td>
+      <td>{{ invite.status }}</td>
+      <td>{{ invite.sentAt }}</td>
+      <td>{{ invite.acceptedAt }}</td>
+      <td><!-- Azioni future --></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "./layouts/layout.njk" %}
+
+{% block content %}
+<style>
+.dashboard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard h1 {
+  margin: 0;
+  padding: 20px;
+  font-size: 28px;
+  font-weight: 600;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cardGrid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  overflow: auto;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cardHeader {
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cardHeader h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #323130;
+}
+
+.cardHeader .description {
+  margin: 0;
+  font-size: 12px;
+  color: #605e5c;
+}
+
+.cardContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.statNumber {
+  font-size: 48px;
+  font-weight: 700;
+  color: #0078d4;
+}
+</style>
+
+<div class="dashboard">
+  <h1>Dashboard</h1>
+  <div class="cardGrid">
+    <div class="card">
+      <div class="cardHeader">
+        <h3>Pratiche Attive</h3>
+        <p class="description">Numero di pratiche in corso</p>
+      </div>
+      <div class="cardContent">
+        <div class="statNumber">24</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardHeader">
+        <h3>Contatti</h3>
+        <p class="description">Totale contatti</p>
+      </div>
+      <div class="cardContent">
+        <div class="statNumber">156</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardHeader">
+        <h3>Documenti</h3>
+        <p class="description">Documenti caricati</p>
+      </div>
+      <div class="cardContent">
+        <div class="statNumber">342</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cardHeader">
+        <h3>Fatture</h3>
+        <p class="description">Fatture emesse questo mese</p>
+      </div>
+      <div class="cardContent">
+        <div class="statNumber">12</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

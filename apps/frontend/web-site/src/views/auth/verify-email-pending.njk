@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; padding: 2rem; text-align: center; }
+    .container { background: white; padding: 2rem; border-radius: 8px; display: inline-block; max-width: 500px; }
+    h1 { color: #333; }
+    p { color: #555; }
+    a.button { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #007bff; color: white; border-radius: 4px; text-decoration: none; }
+    a.button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Completare la verifica dell'email</h1>
+    <p>Ti abbiamo inviato un link di verifica al tuo indirizzo email (<b>{{ email }}</b>).</p>
+    <p>Controlla la posta in arrivo e segui le istruzioni per completare la registrazione.</p>
+    <a href="/auth/resend-verification?email={{ email }}" class="button">Rinvia email di verifica</a>
+  </div>
+</body>
+</html>

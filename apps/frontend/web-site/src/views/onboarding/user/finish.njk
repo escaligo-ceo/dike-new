@@ -1,0 +1,51 @@
+{% extends "../../layouts/onboarding.njk" %}
+
+{% block rightContent %}
+<h1>{{ title }}Ancora un ultimo passo, invita il tuo team.</h1>
+<form method="POST" action="{{ actionUrl }}" id="onboarding7-form">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  <label for="teamName">Nome del team</label>
+  <input type="text" id="teamName" name="teamName" placeholder="Studio {{ user.fullname }}" required>
+  <div id="emailFields">
+    <label>Invita i colleghi di lavoro</label>
+    <input type="email" name="teamEmail" placeholder="Indirizzo email">
+  </div>
+  <button type="button" id="addEmail">Aggiungine ancora</button>
+  <div style="margin: 1em 0;">
+    <a href="#" id="copyInviteLink" style="margin-right: 1em;">Copia link d'invito</a>
+    <span id="copyStatus" style="color: green; display: none;">Copiato!</span>
+  </div>
+  <button type="submit">Inizia!</button>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+</form>
+<script>
+  // Gestione aggiunta campi email
+  document.addEventListener('DOMContentLoaded', function() {
+    const addEmailBtn = document.getElementById('addEmail');
+    const emailFields = document.getElementById('emailFields');
+    addEmailBtn.addEventListener('click', function() {
+      const input = document.createElement('input');
+      input.type = 'email';
+      input.name = 'teamEmail';
+      input.placeholder = 'Indirizzo email';
+      input.required = true;
+      emailFields.appendChild(input);
+    });
+
+    // Copia link invito
+    const copyBtn = document.getElementById('copyInviteLink');
+    const copyStatus = document.getElementById('copyStatus');
+    copyBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const inviteLink = '{{ inviteLink or "https://dike.app/invite/" }}';
+      navigator.clipboard.writeText(inviteLink).then(function() {
+        copyStatus.style.display = 'inline';
+        setTimeout(() => copyStatus.style.display = 'none', 2000);
+      });
+    });
+  });
+</script>
+{% endblock %}

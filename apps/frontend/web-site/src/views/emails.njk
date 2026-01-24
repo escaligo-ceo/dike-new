@@ -1,0 +1,87 @@
+{% extends "layouts/layout.njk" %}
+
+{% block title %}Emails - Dike{% endblock %}
+
+{% block content %}
+<style>
+  .settings-container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+  .settings-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+  .settings-sidebar { position: sticky; top: 84px; background: white; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 12px; }
+  .settings-nav-group-title { font-size: 12px; color: #605e5c; margin: 8px 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .settings-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; color: #323130; text-decoration: none; font-size: 14px; }
+  .settings-nav-item:hover { background: #f7f7f7; }
+  .settings-nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+
+  .settings-card { background: white; border-radius: 8px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; }
+  .settings-section-title { font-size: 20px; font-weight: 600; color: #323130; margin: 0 0 16px 0; }
+  .description { font-size: 14px; color: #605e5c; line-height: 1.6; }
+  .email-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid #f3f2f1; }
+  .email-row .label { font-weight: 600; color: #323130; }
+  .email-row .value { color: #605e5c; }
+  .field { margin-top: 16px; }
+  .field label { display: block; font-weight: 600; color: #323130; margin-bottom: 6px; }
+  .field input[type="email"] { width: 100%; padding: 8px 10px; border: 1px solid #d2d0ce; border-radius: 4px; font-size: 14px; }
+  .radio-group { display: grid; gap: 12px; margin-top: 8px; }
+  .radio-option { display: flex; align-items: center; gap: 10px; }
+  .muted { color: #605e5c; font-size: 13px; }
+  .switch { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .switch input { transform: scale(1.1); }
+</style>
+
+<div class="settings-container">
+  <div class="settings-layout">
+    {% include "partials/settings-sidebar.njk" %}
+    <div>
+      <div class="settings-card">
+        <h2 class="settings-section-title">Emails</h2>
+        <p class="description">You have a single verified email associated with your GitHub account. Add an additional verified email address in case you lose access to your primary email.</p>
+        <p class="description">Emails you can use to sign in to your account. Verified emails can be used as the author or committer addresses for web-based Git operations, e.g. edits and merges.</p>
+
+        <div class="email-row">
+          <span class="label">{{ userProfile.email }}</span>
+          <span class="value">Primary · Verified</span>
+        </div>
+        <p class="muted">This email address is the default for GitHub notifications, such as replies to issues, pull requests, and similar activity.</p>
+
+        <div class="field">
+          <label for="add-email">Add email address *</label>
+          <input id="add-email" type="email" placeholder="Email address" />
+        </div>
+
+        <div class="field" style="margin-top: 16px;">
+          <label>Primary email address</label>
+          <p class="muted">Select an email to be used for account-related notifications and can be used for password reset.</p>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="primary-email" name="primary-email" checked />
+              <label for="primary-email">{{ userProfile.email }}</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top: 16px;">
+          <label>Backup email address</label>
+          <p class="muted">Your backup GitHub email address will be used as an additional destination for security-relevant account notifications and can also be used for password resets.</p>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="backup-email" name="backup-email" />
+              <label for="backup-email">Select email to become backup</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top: 16px;">
+          <label>Allow all verified emails</label>
+          <div class="switch">
+            <input type="checkbox" id="allow-all" />
+            <label for="allow-all">Keep my email addresses private</label>
+          </div>
+          <p class="muted">We’ll remove your public profile email and use 19185310+tcenturioni@users.noreply.github.com when performing web-based Git operations (e.g. edits and merges) and sending email on your behalf. If you want command line Git operations to use your private email you must set your email in Git.</p>
+          <p class="muted">Previously authored commits associated with a public email will remain public.</p>
+          <p class="muted">Off</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

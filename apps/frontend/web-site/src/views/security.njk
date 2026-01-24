@@ -1,0 +1,98 @@
+{% extends "layouts/layout.njk" %}
+
+{% block title %}Password & Autenticazione - Dike{% endblock %}
+
+{% block content %}
+<style>
+  .settings-container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+  .settings-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+  .settings-sidebar { position: sticky; top: 84px; background: white; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 12px; }
+  .settings-nav-group-title { font-size: 12px; color: #605e5c; margin: 8px 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .settings-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; color: #323130; text-decoration: none; font-size: 14px; }
+  .settings-nav-item:hover { background: #f7f7f7; }
+  .settings-nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+
+  .settings-card { background: white; border-radius: 8px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; }
+  .settings-section-title { font-size: 20px; font-weight: 600; color: #323130; margin: 0 0 16px 0; }
+  .subheading { font-size: 16px; font-weight: 600; color: #323130; margin: 20px 0 8px; }
+  .muted { color: #605e5c; font-size: 14px; line-height: 1.6; }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid #f3f2f1; }
+  .row .label { font-weight: 600; color: #323130; }
+  .row .value { color: #605e5c; }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .badge-success { background-color: #dff6dd; color: #107c10; }
+  .badge-info { background-color: #deecf9; color: #005a9e; }
+  .list { display: grid; gap: 8px; margin-top: 8px; }
+</style>
+
+<div class="settings-container">
+  <div class="settings-layout">
+    {% include "partials/settings-sidebar.njk" %}
+    <div>
+      <div class="settings-card">
+        <h2 class="settings-section-title">Sign in methods</h2>
+        <div class="row">
+          <span class="label">Email</span>
+          <span class="value">1 verified email configured</span>
+        </div>
+        <div class="row">
+          <span class="label">Password</span>
+          <span class="value">Configured</span>
+        </div>
+        <div class="row">
+          <span class="label">Passkeys</span>
+          <span class="value">Google</span>
+        </div>
+        <p class="muted">Sign in with your Google account</p>
+        <div class="row">
+          <span class="label">Apple</span>
+          <span class="value"></span>
+        </div>
+        <p class="muted">Sign in with your Apple account</p>
+      </div>
+
+      <div class="settings-card">
+        <h2 class="settings-section-title">Two-factor authentication</h2>
+        <p class="badge badge-success">Enabled</p>
+        <p class="muted">Because of your contributions on GitHub, two-factor authentication is required for your account. Thank you for helping keep the ecosystem safe! Learn more about our two-factor authentication initiative.</p>
+        <p class="muted">Two-factor authentication adds an additional layer of security to your account by requiring more than just a password to sign in. Learn more about two-factor authentication.</p>
+
+        <h3 class="subheading">Preferred 2FA method</h3>
+        <p class="muted">Set your preferred method to use for two-factor authentication when signing into GitHub.</p>
+        <p class="badge badge-info">Authenticator app</p>
+
+        <h3 class="subheading">Two-factor methods</h3>
+        <div class="list">
+          <div>
+            <strong>Authenticator app</strong>
+            <span class="badge badge-success" style="margin-left: 8px;">Configured</span>
+            <p class="muted">Use an authentication app or browser extension to get two-factor authentication codes when prompted.</p>
+          </div>
+          <div>
+            <strong>SMS/Text message</strong>
+            <span class="muted" style="margin-left: 8px;">Less secure</span>
+            <p class="muted">Get one-time codes sent to your phone via SMS to complete authentication requests. We strongly advise against using SMS because it is susceptible to interception, does not provide resistance against phishing attacks, and deliverability can be unreliable. It is recommended to use an Authenticator app instead of SMS.</p>
+          </div>
+          <div>
+            <strong>Security keys</strong>
+            <p class="muted">Security keys are webauthn credentials that can only be used as a second factor of authentication.</p>
+          </div>
+          <div>
+            <strong>GitHub Mobile</strong>
+            <p class="muted">GitHub Mobile can be used for two-factor authentication by installing the GitHub Mobile app and signing in to your account.</p>
+          </div>
+        </div>
+
+        <h3 class="subheading">Recovery options</h3>
+        <div class="list">
+          <div>
+            <strong>Recovery codes</strong>
+            <span class="value" style="margin-left: 8px;">Viewed</span>
+            <p class="muted">Recovery codes can be used to access your account in the event you lose access to your device and cannot receive two-factor authentication codes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

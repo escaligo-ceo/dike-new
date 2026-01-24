@@ -1,0 +1,47 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2021",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@dike/common": [
+        "libs/common/src/*"
+      ],
+      "@dike/communication": [
+        "libs/communication/src/*"
+      ],
+      "@dike/contracts": [
+        "libs/contracts/src/*"
+      ],
+      "@dike/internal": [
+        "libs/internal/src/*"
+      ],
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "tmp",
+    "apps/*/dist/**",
+    "libs/*/dist/**",
+    "docs",
+    "scripts"
+  ]
+}

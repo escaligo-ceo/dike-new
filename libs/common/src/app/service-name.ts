@@ -1,0 +1,15 @@
+export enum DikeServiceName {
+  UNDEFINED = '',
+  ApiGateway = 'api-gateway',
+  AuthService = 'auth-service',
+  AuditService = 'audit-service',
+  ProfileService = 'profile-service',
+  NotificationService = 'notification-service',
+  SubscriptionService = 'subscription-service',
+  TenantService = 'tenant-service',
+  TemplateService = 'template-service',
+  OnboardingService = 'onboarding-service',
+  // BillingService = 'billing-service',
+  // MatterService = 'matter-service',
+  WebSite = 'web-site',
+}

@@ -1,0 +1,23 @@
+{% extends "../../layouts/onboarding.njk" %}
+
+{% block rightContent %}
+<h1>{{ title }}.</h1>
+<form method="POST" action="{{ actionUrl }}">
+  <input type="hidden" name="token" value="{{ token }}">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+  <input type="text" name="fullName" placeholder="eg.: Mario Rossi">
+  <select name="jobRole">
+    <option value="LAWYER">Avvocato</option>
+    <option value="PRATICANTE">Praticante</option>
+    <option value="ASSITENTE">Assistente</option>
+    <option value="ADMIN">Amministratore di Sistema</option>
+    <option value="OTHER">Altro</option>
+  </select>
+  <button type="submit">Continua</button>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+</form>
+{% endblock %}

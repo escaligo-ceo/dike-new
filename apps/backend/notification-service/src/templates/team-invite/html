@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Invito a unirti al team</title>
+    <style>
+      .button {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 4px;
+        margin: 16px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Sei stato invitato a unirti al team <b>{{teamName}}</b>!</h2>
+    <p>Ciao,</p>
+    <p>
+      Hai ricevuto questo invito perché qualcuno ti ha aggiunto come membro del
+      team <b>{{teamName}}</b> sulla piattaforma Dike.
+    </p>
+    <p>
+      Per accettare l'invito e accedere al team, clicca sul pulsante qui sotto:
+    </p>
+    <a class="button" href="{{inviteLink}}">Accedi al team</a>
+    <p>Se il pulsante non funziona, copia e incolla questo link nel browser:</p>
+    <p><a href="{{inviteLink}}">{{inviteLink}}</a></p>
+    <p>
+      Il link contiene un token di invito che ti permetterà di completare la
+      procedura di accesso.
+    </p>
+    <p>Se non ti aspettavi questa email, puoi ignorarla.</p>
+    <br />
+    <p>Grazie,<br />Il team Dike</p>
+  </body>
+</html>

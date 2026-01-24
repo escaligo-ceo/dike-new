@@ -1,0 +1,17 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+  <h1>Area Admin Team</h1>
+  <div style="margin-bottom: 1.5em; background: #f8f8f8; border: 1px solid #ddd; padding: 1em; border-radius: 6px;">
+    <strong>Spiegazione:</strong>
+    <ul>
+      <li>Questa è l'area amministrativa del servizio Tenant.</li>
+      <li>Da qui puoi accedere alle varie sezioni di gestione team e inviti.</li>
+    </ul>
+  </div>
+  <ul>
+    <li><a href="/admin/teams">Elenco Team</a></li>
+    <li><a href="/admin/invites">Elenco Inviti</a></li>
+    <!-- Aggiungi qui altre sezioni admin in futuro -->
+  </ul>
+{% endblock %}

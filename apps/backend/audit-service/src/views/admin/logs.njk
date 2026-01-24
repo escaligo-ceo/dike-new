@@ -1,0 +1,35 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+<div class="admin-users-panel">
+  <div class="admin-users-header">
+    <h1 class="admin-users-title">Log eventi</h1>
+  </div>
+  <div class="admin-users-table-wrapper">
+    <table class="admin-users-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Timestamp</th>
+          <th>Utente</th>
+          <th>Evento</th>
+          <th>Dettagli</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td>{{ log.id }}</td>
+          <td>{{ log.timestamp }}</td>
+          <td>{{ log.user }}</td>
+          <td>{{ log.event }}</td>
+          <td>{{ log.details }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="admin-users-empty">Nessun log trovato.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

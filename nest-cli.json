@@ -1,0 +1,29 @@
+{
+  "monorepo": true,
+  "root": "apps/dike",
+  "sourceRoot": "apps/dike/src",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/dike/tsconfig.app.json"
+  },
+  "projects": {
+    "./backend/import-service": {
+      "type": "application",
+      "root": "apps/backend/import-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/backend/import-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/backend/import-service/tsconfig.app.json"
+      }
+    },
+    "dike": {
+      "type": "application",
+      "root": "apps/dike",
+      "entryFile": "main",
+      "sourceRoot": "apps/dike/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/dike/tsconfig.app.json"
+      }
+    }
+  }
+}

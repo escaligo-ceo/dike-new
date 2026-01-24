@@ -1,0 +1,10 @@
+Ciao ${options.username}!
+
+Benvenuto su Dike! Il tuo account è stato verificato con successo.
+
+Ora puoi accedere alla piattaforma: ${loginLink}
+
+Grazie per aver scelto Dike!
+
+Saluti,
+Il team Dike

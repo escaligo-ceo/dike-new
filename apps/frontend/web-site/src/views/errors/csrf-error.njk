@@ -1,0 +1,11 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+  <h1>Errore di sicurezza</h1>
+  <div class="alert alert-danger">
+    <strong>Token CSRF non valido o mancante.</strong>
+    <p>Per motivi di sicurezza la tua richiesta non può essere completata.</p>
+    <p>Ricarica la pagina e riprova. Se il problema persiste, contatta l'assistenza.</p>
+  </div>
+  <a href="/" class="btn btn-primary">Torna alla home</a>
+{% endblock %}

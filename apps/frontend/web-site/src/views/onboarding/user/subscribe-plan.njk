@@ -1,0 +1,53 @@
+{% extends "../../layouts/onboarding.njk" %}
+
+{% block rightContent %}
+<h1>{{ title }}.</h1>
+<form method="POST" action="{{ actionUrl }}">
+  <input type="hidden" name="token" value="{{ token }}">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  <input type="hidden" name="planKey" id="planKey" value="FREE">
+
+  <div class="plans-grid">
+    {% for plan in plans %}
+    <div class="plan">
+      <h1>{{ plan.name }}</h1>
+      <p>{{ plan.description }}</p>
+      <span>{{ plan.monthlyPrice }} € al mese per utente</span>
+      <span>{{ plan.yearlyPrice }} € all'anno per utente</span>
+      <span>
+        {% if plan.key == 'FREE' %}
+          sempre gratuito
+        {% else %}
+          per utente/mese, fatturato annualmente
+        {% endif %}
+      </span>
+      <button type="button" onclick="document.getElementById('planKey').value = '{{ plan.key }}'; document.querySelector('form').submit();">
+        {% if plan.key == 'FREE' %}
+          Continua con il piano gratuito
+        {% else %}
+          Prova ora
+        {% endif %}
+      </button>
+      {% if plan.key != 'FREE' %}
+        <p>Prova gratuita per 30 giorni</p>
+      {% endif %}
+
+      <h2>Caratteristiche</h2>
+      <ul>
+        {% for feature in plan.features %}
+          <li>{{ feature }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+
+  <a href="">Scopri di più sui piani a pagamento e sui vantaggi che offrono</a>
+
+  <button formaction="/onboarding/user?page=5&amp;csrfToken={{ csrfToken }}">Indietro</button>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+</form>
+{% endblock %}

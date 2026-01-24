@@ -1,0 +1,41 @@
+{% extends "layouts/layout.njk" %}
+
+{% block content %}
+<div class="admin-users-panel">
+  <div class="admin-users-header">
+    <h1 class="admin-users-title">Persone sotto osservazione</h1>
+  </div>
+  <div class="admin-users-table-wrapper">
+    <table class="admin-users-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Aggiunto il</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for person in watchedPersons %}
+        <tr>
+          <td>{{ person.id }}</td>
+          <td>
+            <div class="admin-users-usercell">
+              <span class="admin-users-avatar">👤</span>
+              <div class="admin-users-userinfo">
+                <div class="admin-users-username">{{ person.name }}</div>
+                <div class="admin-users-email">{{ person.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td>{{ person.email }}</td>
+          <td>{{ person.addedAt }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="admin-users-empty">Nessuna persona sotto osservazione.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

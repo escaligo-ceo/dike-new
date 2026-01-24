@@ -1,0 +1,43 @@
+<h1>Lista utenti Keycloak</h1>
+<table border="1" cellpadding="6" style="border-collapse:collapse; width:100%; background:#fff;">
+	<thead>
+		<tr style="background:#f0f0f0;">
+			<th>ID</th>
+			<th>Username</th>
+			<th>Email verificata</th>
+			<th>Admin temporaneo</th>
+			<th>Data creazione</th>
+			<th>Abilitato</th>
+			<th>TOTP</th>
+			<th>Credenziali disabilitabili</th>
+			<th>Azioni richieste</th>
+			<th>Non prima di</th>
+			<th>Gestione accesso</th>
+			<th>Azioni</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for user in users %}
+		<tr>
+			<td>{{ user.id }}</td>
+			<td>{{ user.username }}</td>
+			<td style="text-align:center">{% if user.emailVerified %}✔️{% else %}❌{% endif %}</td>
+			<td style="text-align:center">{% if user.attributes.is_temporary_admin and user.attributes.is_temporary_admin[0] == 'true' %}✔️{% else %}❌{% endif %}</td>
+			<td>{{ user.createdTimestamp }}</td>
+			<td style="text-align:center">{% if user.enabled %}✔️{% else %}❌{% endif %}</td>
+			<td style="text-align:center">{% if user.totp %}✔️{% else %}❌{% endif %}</td>
+			<td>{{ user.disableableCredentialTypes | join(', ') }}</td>
+			<td>{{ user.requiredActions | join(', ') }}</td>
+			<td>{{ user.notBefore }}</td>
+			<td>{{ user.access.manager }}</td>
+			<td>
+				<form method="POST" action="/admin/profiles/{{ user.id }}/delete" onsubmit="return confirm('Sei sicuro di voler cancellare questo utente?');" style="display:inline;">
+					<button type="submit">Elimina</button>
+				</form>
+			</td>
+		</tr>
+		{% else %}
+		<tr><td colspan="12" style="text-align:center;">Nessun utente trovato.</td></tr>
+		{% endfor %}
+	</tbody>
+</table>

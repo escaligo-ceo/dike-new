@@ -1,0 +1,50 @@
+{% extends "../../layouts/onboarding.njk" %}
+
+{% block rightContent %}
+<h1>{{ title }}.</h1>
+<form method="POST" action="{{ actionUrl }}">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  <div>
+  <h1>Base</h1>
+  <p>Se hai bisogno di organizzare il tuo lavoro quotidiano</p>
+  <span>14€</span><span>per posto/mese, fatturato annualmente</span>
+  <button>Prova ora</button> Prova gratuita per 30 giorni
+  <h2>Caratteristiche</h2>
+  <ul>
+    <li>Gestione attività</li>
+    <li>Integrazione calendario</li>
+    <li>Archivio documenti</li>
+  </ul>
+  </div>
+  <div>
+  <h1>Professionista</h1>
+  <p>Se hai bisogno di una gestione sicura dei ruoli e vuoi connettere diverse persone</p>
+  <span>28€</span><span>per posto/mese, fatturato annualmente</span>
+    <button>Prova ora</button> Prova gratuita per 30 giorni
+  <h2>Caratteristiche</h2>
+  <ul>
+    <li>Gestione attività</li>
+    <li>Integrazione calendario</li>
+    <li>Archivio documenti</li>
+  </ul>
+  </div>
+  <div>
+    <h1>Studio legale</h1>
+    <p>Per studi legali e professionisti del settore</p>
+      <span>49€</span><span>per posto/mese, fatturato annualmente</span>
+      <button>Prova ora</button> Prova gratuita per 30 giorni
+    <h2>Caratteristiche</h2>
+    <ul>
+      <li>Gestione attività</li>
+      <li>Integrazione calendario</li>
+      <li>Archivio documenti</li>
+    </ul>
+    </div>
+    </div>
+  </div>
+  <a href="/onboarding/user?page=7&amp;csrfToken={{ csrfToken }}" class="continue-free-link">Continua con il piano gratuito</a>
+  <a href="">Scopri di più sui piani a pagamento e sui vantaggi che offrono</a>
+
+  <button type="submit">Continua</button>
+</form>
+{% endblock %}

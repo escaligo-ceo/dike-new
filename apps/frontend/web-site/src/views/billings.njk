@@ -1,0 +1,106 @@
+{% extends "layouts/layout.njk" %}
+
+{% block title %}Fatturazione - Dike{% endblock %}
+
+{% block content %}
+<style>
+  .settings-container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+  .settings-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+  .settings-sidebar { position: sticky; top: 84px; background: white; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 12px; }
+  .settings-nav-group-title { font-size: 12px; color: #605e5c; margin: 8px 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .settings-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; color: #323130; text-decoration: none; font-size: 14px; }
+  .settings-nav-item:hover { background: #f7f7f7; }
+  .settings-nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+  .settings-card { background: white; border-radius: 8px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; }
+  .settings-section-title { font-size: 20px; font-weight: 600; color: #323130; margin: 0 0 16px 0; }
+  .subscription-card { background: #f9f9f9; border: 1px solid #e1dfdd; border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+  .subscription-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e1dfdd; }
+  .subscription-plan-name { font-size: 20px; font-weight: 600; color: #323130; margin: 0 0 8px 0; }
+  .subscription-plan-description { font-size: 14px; color: #605e5c; margin: 0 0 12px 0; line-height: 1.5; }
+  .status-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .status-active { background-color: #dff6dd; color: #107c10; }
+  .status-inactive { background-color: #fed9cc; color: #d13438; }
+  .subscription-price { text-align: right; }
+  .price-amount { font-size: 32px; font-weight: 700; color: #0078d4; }
+  .price-period { font-size: 14px; color: #605e5c; }
+  .subscription-details { margin-bottom: 20px; }
+  .subscription-detail-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; color: #605e5c; font-size: 14px; }
+  .subscription-detail-item svg { width: 16px; height: 16px; color: #0078d4; }
+  .subscription-actions { display: flex; gap: 12px; }
+  .btn-primary { background-color: #0078d4; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .btn-secondary { background-color: transparent; color: #323130; border: 1px solid #d2d0ce; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .profile-field { display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid #f3f2f1; }
+  .profile-field-label { font-weight: 600; color: #323130; }
+  .profile-field-value { color: #605e5c; }
+</style>
+
+<div class="settings-container">
+  <div class="settings-layout">
+    {% include "partials/settings-sidebar.njk" %}
+    <div>
+      <div class="settings-card">
+        <h2 class="settings-section-title">Fatturazione e Abbonamento</h2>
+        {% if subscription %}
+          <div class="subscription-card">
+            <div class="subscription-header">
+              <div>
+                <h3 class="subscription-plan-name">Piano {{ subscription.name | title }}</h3>
+                {% if subscription.description %}
+                <p class="subscription-plan-description">{{ subscription.description }}</p>
+                {% endif %}
+                <p class="subscription-status">
+                  <span class="status-badge {% if subscription.status == 'active' %}status-active{% else %}status-inactive{% endif %}">{{ subscription.status | title }}</span>
+                </p>
+              </div>
+              <div class="subscription-price">
+                <span class="price-amount">€{{ subscription.monthlyPrice | default(0) }}</span>
+                <span class="price-period">/mese</span>
+              </div>
+            </div>
+            <div class="subscription-details">
+              <div class="subscription-detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                </svg>
+                <span>Data di inizio: {{ subscription.startDate | date('DD/MM/YYYY') if subscription.startDate else 'N/A' }}</span>
+              </div>
+              {% if subscription.endDate %}
+              <div class="subscription-detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                </svg>
+                <span>Data di scadenza: {{ subscription.endDate | date('DD/MM/YYYY') }}</span>
+              </div>
+              {% endif %}
+            </div>
+            <div class="subscription-actions">
+              <button class="btn-primary">Aggiorna Piano</button>
+              <button class="btn-secondary" {% if subscription.key == 'FREE' %}disabled title="Il piano gratuito non può essere cancellato"{% endif %}>Cancella Abbonamento</button>
+            </div>
+          </div>
+        {% else %}
+          <div class="subscription-card">
+            <div class="subscription-header">
+              <div>
+                <h3 class="subscription-plan-name">Nessun piano attivo</h3>
+                <p class="subscription-plan-description">Non risultano informazioni di abbonamento per questo tenant.</p>
+              </div>
+              <div class="subscription-price">
+                <span class="price-amount">€0</span>
+                <span class="price-period">/mese</span>
+              </div>
+            </div>
+            <div class="subscription-actions">
+              <button class="btn-primary">Attiva Piano</button>
+            </div>
+          </div>
+        {% endif %}
+        <div class="profile-field" style="margin-top: 32px;">
+          <span class="profile-field-label">Metodo di Pagamento</span>
+          <span class="profile-field-value">•••• 4242</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

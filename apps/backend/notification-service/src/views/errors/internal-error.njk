@@ -1,0 +1,23 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+  <h1>Errore interno del server</h1>
+  <p>Si è verificato un errore imprevisto (500).</p>
+  <p>Il nostro team è stato informato e sta lavorando per risolvere il problema.</p>
+  <p>Puoi riprovare più tardi o tornare alla <a href="/">pagina principale</a>.</p>
+  {% if message %}
+    <div class="error-detail">
+      <strong>Dettagli:</strong> {{ message }}
+    </div>
+  {% endif %}
+  {% if error %}
+    <div class="error-detail">
+      <strong>Dettagli:</strong> {{ error.message }}
+    </div>
+  {% endif %}
+  {% if error && error.stack %}
+    <div class="error-stack">
+      <strong>Stack Trace:</strong> {{ error.stack }}
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "../layouts/layout.njk" %}
+
+{% block content %}
+<div class="admin-users-panel">
+  <div class="admin-users-header">
+    <h1 class="admin-users-title">Template Email Disponibili</h1>
+  </div>
+  <div style="margin-bottom: 1.5em; background: #f8f8f8; border: 1px solid #ddd; padding: 1em; border-radius: 6px;">
+    <strong>Spiegazione:</strong>
+    <ul>
+      <li>I template sono contenuti nella cartella <code>../templates</code></li>
+      <li>Ogni template ha le sue risorse:</li>
+      <ul>
+        <li>La versione <strong>html</strong> della mail è nel file <code>html</code></li>
+        <li>La versione <strong>testuale</strong> nel file <code>text</code></li>
+        <li>L'<strong>oggetto</strong> della mail nel file <code>subject</code></li>
+        <li>Le <strong>indicazioni</strong> del template sono nel file <code>README.md</code> che ne spiega i dettagli principali</li>
+      </ul>
+    </ul>
+  </div>
+  <div class="admin-users-table-wrapper">
+    <table class="admin-users-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>HTML</th>
+          <th>TXT</th>
+          <th>Subject</th>
+          <th>README</th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for template in templates %}
+        <tr>
+          <td>{{ template.name }}</td>
+          <td style="text-align:center">{% if template.html %}<span class="admin-users-badge admin-users-badge--success" title="{{ template.htmlContent | escape | truncate(500, true, '...') }}">✔</span>{% else %}<span class="admin-users-badge admin-users-badge--danger">✖</span>{% endif %}</td>
+          <td style="text-align:center">{% if template.text %}<span class="admin-users-badge admin-users-badge--success" title="{{ template.textContent | escape | truncate(500, true, '...') }}">✔</span>{% else %}<span class="admin-users-badge admin-users-badge--danger">✖</span>{% endif %}</td>
+          <td style="text-align:center">{% if template.subject %}<span class="admin-users-badge admin-users-badge--success" title="{{ template.subjectContent | escape | truncate(500, true, '...') }}">✔</span>{% else %}<span class="admin-users-badge admin-users-badge--danger">✖</span>{% endif %}</td>
+          <td style="text-align:center">
+            {% if template.readme %}
+              <a href="/admin/templates/{{ template.name }}/readme" target="_blank" title="{{ template.readmeContent | escape | truncate(500, true, '...') }}">README.md</a>
+            {% else %}<span class="admin-users-badge admin-users-badge--danger">✖</span>{% endif %}
+          </td>
+          <td style="text-align:center">
+            <button type="button" onclick="showSendTestForm('{{ template.name }}')">Invia template di prova</button>
+            <form id="sendTestForm-{{ template.name }}" style="display:none; margin-top:8px;" method="POST" action="/admin/templates/{{ template.name }}/send-test">
+              <input type="email" name="to" value="{{ userProfile.email }}" placeholder="Destinatario email" required style="width:220px;">
+              <button type="submit">Conferma invio</button>
+              <button type="button" onclick="hideSendTestForm('{{ template.name }}')">Annulla</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="admin-users-empty">Nessun template trovato.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+  function showSendTestForm(templateName) {
+    document.getElementById('sendTestForm-' + templateName).style.display = 'block';
+  }
+  function hideSendTestForm(templateName) {
+    document.getElementById('sendTestForm-' + templateName).style.display = 'none';
+  }
+</script>
+{% endblock %}

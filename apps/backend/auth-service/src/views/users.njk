@@ -1,0 +1,80 @@
+{% extends "layouts/layout.njk" %}
+
+{% block content %}
+<div class="admin-users-panel">
+  <div class="admin-users-header">
+    <h1 class="admin-users-title">Utenti</h1>
+    <form method="GET" class="admin-users-search">
+      <input type="search" name="q" placeholder="Cerca per nome, email o id" value="{{ q|default('') }}" aria-label="Cerca utenti" />
+      <button type="submit">Cerca</button>
+    </form>
+  </div>
+  <div class="admin-users-table-wrapper">
+    <table class="admin-users-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email verificata</th>
+          <th>Admin temporaneo</th>
+          <th>Data creazione</th>
+          <th>Abilitato</th>
+          <th>TOTP</th>
+          <th>Credenziali disabilitabili</th>
+          <th>Azioni richieste</th>
+          <th>Non prima di</th>
+          <th>Gestione accesso</th>
+          <th>Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>
+            <div class="admin-users-usercell">
+              <span class="admin-users-avatar">👤</span>
+              <div class="admin-users-userinfo">
+                <div class="admin-users-username">{{ user.username }}</div>
+                <div class="admin-users-email">{{ user.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            {% if user.emailVerified %}
+              <span class="admin-users-badge admin-users-badge--success">✔</span>
+            {% else %}
+              <span class="admin-users-badge admin-users-badge--danger">✖</span>
+            {% endif %}
+          </td>
+          <td>{{ user.attributes.is_temporary_admin[0] }}</td>
+          <td>{{ user.createdTimestamp }}</td>
+          <td>
+            {% if user.enabled %}
+              <span class="admin-users-badge admin-users-badge--success">Attivo</span>
+            {% else %}
+              <span class="admin-users-badge admin-users-badge--danger">Disabilitato</span>
+            {% endif %}
+          </td>
+          <td>{{ user.totp }}</td>
+          <td>{{ user.disableableCredentialTypes }}</td>
+          <td>{{ user.requiredActions }}</td>
+          <td>{{ user.notBefore }}</td>
+          <td>{{ user.access.manager }}</td>
+          <td class="admin-users-actions">
+            <form method="POST" action="/admin/profiles/{{ user.id }}/delete" onsubmit="return confirm('Sei sicuro di voler cancellare questo utente?');" style="display:inline">
+              <button type="submit" class="admin-users-action-btn admin-users-action-btn--danger" title="Elimina utente">🗑</button>
+            </form>
+            <form method="POST" action="/admin/profiles/{{ user.id }}/resend-verification" style="display:inline">
+              <button type="submit" class="admin-users-action-btn" title="Invia nuova mail di verifica">✉️</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="12" class="admin-users-empty">Nessun utente trovato.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

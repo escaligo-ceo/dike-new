@@ -1,0 +1,13 @@
+Ciao ${username}!
+
+Hai richiesto di reimpostare la password per il tuo account Dike.
+
+Clicca sul link seguente per reimpostare la password:
+${options.resetLink}
+
+Questo link è valido per 1 ora.
+
+Se non hai richiesto questa reimpostazione, puoi ignorare questa email.
+
+Saluti,
+Il team Dike

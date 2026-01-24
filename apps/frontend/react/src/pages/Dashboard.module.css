@@ -1,0 +1,40 @@
+.dashboard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard h1 {
+  margin: 0;
+  padding: 20px;
+  font-size: 28px;
+  font-weight: 600;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cardGrid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  overflow: auto;
+}
+
+.card {
+  height: 160px;
+}
+
+.cardContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.statNumber {
+  font-size: 48px;
+  font-weight: 700;
+  color: #0078d4;
+}

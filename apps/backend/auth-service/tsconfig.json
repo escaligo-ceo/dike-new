@@ -1,0 +1,25 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist",
+    "types": [
+      "node",
+      "jest"
+    ],
+    "lib": [
+      "es2019",
+      "dom"
+    ],
+    "target": "es2019",
+    "moduleResolution": "node",
+  },
+  "include": [
+    "src/**/*",
+    "../../../libs/common/src/access/keycloak.service.spec.ts", "../../../libs/common/src/exceptions/keycloak.exception.ts", "../../../libs/common/src/access/keycloak.interface.ts", "../../../libs/common/src/access/verification-token.interface.ts", "../../../libs/common/src/access/verification-token.service.ts",
+    // "src/**/*.json",
+    // "src/**/*.d.ts",
+    // "src/**/*.js"
+  ]
+}

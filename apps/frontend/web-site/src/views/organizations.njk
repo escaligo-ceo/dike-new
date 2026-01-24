@@ -1,0 +1,60 @@
+{% extends "layouts/layout.njk" %}
+
+{% block title %}Organizzazioni - Dike{% endblock %}
+
+{% block content %}
+<style>
+  .settings-container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+  .settings-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+  .settings-sidebar { position: sticky; top: 84px; background: white; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 12px; }
+  .settings-nav-group-title { font-size: 12px; color: #605e5c; margin: 8px 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .settings-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; color: #323130; text-decoration: none; font-size: 14px; }
+  .settings-nav-item:hover { background: #f7f7f7; }
+  .settings-nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+
+  .settings-card { background: white; border-radius: 8px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 24px; }
+  .settings-section-title { font-size: 20px; font-weight: 600; color: #323130; margin: 0 0 16px 0; }
+  .description { font-size: 14px; color: #605e5c; line-height: 1.6; }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid #f3f2f1; }
+  .row .label { font-weight: 600; color: #323130; }
+  .row .value { color: #605e5c; }
+</style>
+
+<div class="settings-container">
+  <div class="settings-layout">
+    {% include "partials/settings-sidebar.njk" %}
+    <div>
+      <div class="settings-card">
+        <h2 class="settings-section-title">Single sign-on</h2>
+        <div class="row">
+          <span class="label">Corvina-R-D</span>
+          <span class="value"></span>
+        </div>
+        <div class="row">
+          <span class="label">Corvina-R-DCorvina</span>
+          <span class="value"></span>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h2 class="settings-section-title">Studi Legali & Aziende</h2>
+        {% if memberships and memberships.length > 0 %}
+          {% for membership in memberships %}
+          <div class="row">
+            <span class="label">{{ membership.tenant.name }}</span>
+            <span class="value">{{ membership.role }}</span>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="description">Non sei membro di nessuna organizzazione.</p>
+        {% endif %}
+      </div>
+
+      <div class="settings-card">
+        <h2 class="settings-section-title">Transform account</h2>
+        <p class="description">You cannot transform this account into an organization until you leave all organizations that you’re a member of.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "../../layouts/onboarding.njk" %}
+
+{% block rightContent %}
+<h1>{{ title}}</h1>
+<form method="POST" action="{{ actionUrl }}">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+  <input type="text" name="name" placeholder="Nome dello studio">
+  <input type="text" name="address" placeholder="Indirizzo dello studio">
+  <input type="text" name="partitaIVA" placeholder="Partita IVA">
+  <button type="submit">Crea studio</button>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+</form>
+{% endblock %}

@@ -1,0 +1,665 @@
+{% extends "layouts/layout.njk" %}
+
+{% block title %}Profilo - Dike{% endblock %}
+
+{% block content %}
+<style>
+  .profile-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: flex;
+    gap: 32px;
+  }
+
+  .profile-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+  }
+
+  .profile-sidebar-sticky {
+    position: sticky;
+    top: 80px;
+  }
+
+  .profile-nav {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .profile-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    color: #323130;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid #f3f2f1;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .profile-nav-item:last-child {
+    border-bottom: none;
+  }
+
+  .profile-nav-item:hover {
+    background-color: #f3f2f1;
+    border-left-color: #0078d4;
+  }
+
+  .profile-nav-item.active {
+    background-color: #f3f2f1;
+    border-left-color: #0078d4;
+    font-weight: 600;
+    color: #0078d4;
+  }
+
+  .profile-nav-item svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .profile-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .profile-header {
+    position: relative;
+    margin-bottom: 80px;
+  }
+
+  .profile-background {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .profile-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profile-avatar-wrapper {
+    position: absolute;
+    bottom: -60px;
+    left: 40px;
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid white;
+    background-color: #0078d4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+
+  .profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profile-section-card {
+    background: white;
+    border-radius: 8px;
+    padding: 32px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+  }
+
+  .profile-section-card:last-child {
+    margin-bottom: 0;
+  }
+
+  .profile-name {
+    font-size: 32px;
+    font-weight: 600;
+    color: #323130;
+    margin: 0 0 8px 0;
+  }
+
+  .profile-title {
+    font-size: 16px;
+    color: #605e5c;
+    margin: 0 0 24px 0;
+  }
+
+  .profile-section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #323130;
+    margin: 0 0 24px 0;
+  }
+
+  .profile-field {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid #f3f2f1;
+  }
+
+  .profile-field:last-child {
+    border-bottom: none;
+  }
+
+  .profile-field-label {
+    font-weight: 600;
+    color: #323130;
+  }
+
+  .profile-field-value {
+    color: #605e5c;
+  }
+
+  .edit-profile-btn {
+    background-color: #0078d4;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .edit-profile-btn:hover {
+    background-color: #005a9e;
+  }
+
+  /* Dark mode support */
+  body.dark-mode .profile-nav,
+  body.dark-mode .profile-section-card {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+  }
+
+  body.dark-mode .profile-nav-item {
+    color: #e0e0e0;
+    border-bottom-color: #3d3d3d;
+  }
+
+  body.dark-mode .profile-nav-item:hover {
+    background-color: #3d3d3d;
+  }
+
+  body.dark-mode .profile-nav-item.active {
+    background-color: #3d3d3d;
+  }
+
+  body.dark-mode .profile-name,
+  body.dark-mode .profile-section-title,
+  body.dark-mode .profile-field-label {
+    color: #e0e0e0;
+  }
+
+  body.dark-mode .profile-title,
+  body.dark-mode .profile-field-value {
+    color: #a19f9d;
+  }
+
+  body.dark-mode .profile-field {
+    border-bottom-color: #3d3d3d;
+  }
+
+  /* Subscription Card Styles */
+  .subscription-card {
+    background: #f9f9f9;
+    border: 1px solid #e1dfdd;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .subscription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1dfdd;
+  }
+
+  .subscription-plan-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #323130;
+    margin: 0 0 8px 0;
+  }
+
+  .subscription-plan-description {
+    font-size: 14px;
+    color: #605e5c;
+    margin: 0 0 12px 0;
+    line-height: 1.5;
+  }
+
+  .subscription-status {
+    margin: 0;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .status-active {
+    background-color: #dff6dd;
+    color: #107c10;
+  }
+
+  .status-inactive {
+    background-color: #fed9cc;
+    color: #d13438;
+  }
+
+  .subscription-price {
+    text-align: right;
+  }
+
+  .price-amount {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0078d4;
+  }
+
+  .price-period {
+    font-size: 14px;
+    color: #605e5c;
+  }
+
+  .subscription-details {
+    margin-bottom: 20px;
+  }
+
+  .subscription-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    color: #605e5c;
+    font-size: 14px;
+  }
+
+  .subscription-detail-item svg {
+    width: 16px;
+    height: 16px;
+    color: #0078d4;
+  }
+
+  .subscription-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background-color: #0078d4;
+    color: white;
+    border-color: #0078d4;
+  }
+
+  .btn-primary:hover {
+    background-color: #106ebe;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: #323130;
+    border-color: #d2d0ce;
+  }
+
+  .btn-secondary:hover {
+    background-color: #f3f2f1;
+  }
+
+  body.dark-mode .subscription-card {
+    background: #3d3d3d;
+    border-color: #5a5a5a;
+  }
+
+  body.dark-mode .subscription-header {
+    border-bottom-color: #5a5a5a;
+  }
+
+  body.dark-mode .subscription-plan-name {
+    color: #e0e0e0;
+  }
+
+  body.dark-mode .subscription-plan-description {
+    color: #a19f9d;
+  }
+
+  body.dark-mode .subscription-detail-item {
+    color: #a19f9d;
+  }
+
+  body.dark-mode .btn-secondary {
+    color: #e0e0e0;
+    border-color: #5a5a5a;
+  }
+
+  body.dark-mode .btn-secondary:hover {
+    background-color: #4d4d4d;
+  }
+
+  @media (max-width: 768px) {
+    .profile-container {
+      flex-direction: column;
+    }
+
+    .profile-sidebar {
+      width: 100%;
+    }
+
+    .profile-sidebar-sticky {
+      position: static;
+    }
+
+    .subscription-header {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .subscription-price {
+      text-align: left;
+    }
+
+    .subscription-actions {
+      flex-direction: column;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="profile-container">
+  <!-- Sidebar Navigation -->
+  <aside class="profile-sidebar">
+    <div class="profile-sidebar-sticky">
+      <nav class="profile-nav">
+        <button class="profile-nav-item active" data-section="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          Panoramica
+        </button>
+        <button class="profile-nav-item" data-section="personal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Informazioni Personali
+        </button>
+        <button class="profile-nav-item" data-section="security">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Password & Autenticazione
+        </button>
+        <button class="profile-nav-item" data-section="emails">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Email
+        </button>
+        <button class="profile-nav-item" data-section="notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          Notifiche
+        </button>
+        <button class="profile-nav-item" data-section="billing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          Fatturazione
+        </button>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="profile-content">
+    <!-- Overview Section -->
+    <div id="section-overview" class="profile-section">
+      <div class="profile-header">
+        <div class="profile-background">
+          <!-- Background image placeholder -->
+        </div>
+        <div class="profile-avatar-wrapper">
+          <div class="profile-avatar">
+            {{ ((userProfile.fullName or userProfile.name or 'U') | string) | truncate(1, true, '') | upper }}
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section-card">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+          <div>
+            <h1 class="profile-name">{{ userProfile.fullName or userProfile.name }}</h1>
+            {% if userProfile.title or tenant %}
+            <p class="profile-title">{{ userProfile.title or '' }}{% if userProfile.title and tenant %} @ {% endif %}{{ tenant.name if tenant else '' }}</p>
+            {% endif %}
+          </div>
+          <button class="edit-profile-btn" onclick="window.location.href='/settings'">
+            Modifica Profilo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personal Information Section -->
+    <div id="section-personal" class="profile-section" style="display: none;">
+      <div class="profile-section-card">
+        <h2 class="profile-section-title">Informazioni Personali</h2>
+        <div class="profile-field">
+          <span class="profile-field-label">Nome Completo</span>
+          <span class="profile-field-value">{{ userProfile.fullName or userProfile.name }}</span>
+        </div>
+        <div class="profile-field">
+          <span class="profile-field-label">Email</span>
+          <span class="profile-field-value">{{ userProfile.email }}</span>
+        </div>
+        <div class="profile-field">
+          <span class="profile-field-label">Dipartimento</span>
+          <span class="profile-field-value">{{ userProfile.department or '—' }}</span>
+        </div>
+        <div class="profile-field">
+          <span class="profile-field-label">Organizzazione</span>
+          <span class="profile-field-value">{{ (tenant.name if tenant else userProfile.organization) or '—' }}</span>
+        </div>
+        <div class="profile-field">
+          <span class="profile-field-label">Sede</span>
+          <span class="profile-field-value">{{ userProfile.location or '—' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Section -->
+    <div id="section-security" class="profile-section" style="display: none;">
+      <div class="profile-section-card">
+        <h2 class="profile-section-title">Password & Autenticazione</h2>
+        <div class="profile-field">
+          <span class="profile-field-label">Password</span>
+          <button class="edit-profile-btn">Cambia Password</button>
+        </div>
+        <div class="profile-field">
+          <span class="profile-field-label">Autenticazione a due fattori</span>
+          <span class="profile-field-value">Non configurata</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emails Section -->
+    <div id="section-emails" class="profile-section" style="display: none;">
+      <div class="profile-section-card">
+        <h2 class="profile-section-title">Indirizzi Email</h2>
+        <div class="profile-field">
+          <span class="profile-field-label">Email Principale</span>
+          <span class="profile-field-value">{{ userProfile.email }}</span>
+        </div>
+        <div class="profile-field">
+          <span class="profile-field-label">Email Verificata</span>
+          <span class="profile-field-value" style="color: #107c10;">✓ Verificata</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications Section -->
+    <div id="section-notifications" class="profile-section" style="display: none;">
+      <div class="profile-section-card">
+        <h2 class="profile-section-title">Preferenze Notifiche</h2>
+        <div class="profile-field">
+          <span class="profile-field-label">Notifiche Email</span>
+          <span class="profile-field-value">Attive</span>
+        </div>
+        <div class="profile-field">
+          <span class="profile-field-label">Notifiche Push</span>
+          <span class="profile-field-value">Attive</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Billing Section -->
+    <div id="section-billing" class="profile-section" style="display: none;">
+      <div class="profile-section-card">
+        <h2 class="profile-section-title">Fatturazione e Abbonamento</h2>
+        
+        <!-- Subscription Plan -->
+        {% if subscription %}
+        <div class="subscription-card">
+          <div class="subscription-header">
+            <div>
+              <h3 class="subscription-plan-name">Piano {{ subscription.name | title }}</h3>
+              {% if subscription.description %}
+              <p class="subscription-plan-description">{{ subscription.description }}</p>
+              {% endif %}
+              <p class="subscription-status">
+                <span class="status-badge {% if subscription.status == 'active' %}status-active{% else %}status-inactive{% endif %}">
+                  {{ subscription.status | title }}
+                </span>
+              </p>
+            </div>
+            <div class="subscription-price">
+              <span class="price-amount">€{{ subscription.monthlyPrice | default(0) }}</span>
+              <span class="price-period">/mese</span>
+            </div>
+          </div>
+          
+          <div class="subscription-details">
+            <div class="subscription-detail-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+              </svg>
+              <span>Data di inizio: {{ subscription.startDate | date('DD/MM/YYYY') if subscription.startDate else 'N/A' }}</span>
+            </div>
+            {% if subscription.endDate %}
+            <div class="subscription-detail-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+              </svg>
+              <span>Data di scadenza: {{ subscription.endDate | date('DD/MM/YYYY') }}</span>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="subscription-actions">
+            <button class="btn-primary">Aggiorna Piano</button>
+            <button class="btn-secondary" {% if subscription.key == 'FREE' %}disabled title="Il piano gratuito non può essere cancellato"{% endif %}>Cancella Abbonamento</button>
+          </div>
+        </div>
+        {% else %}
+        <div class="subscription-card">
+          <div class="subscription-header">
+            <div>
+              <h3 class="subscription-plan-name">Nessun piano attivo</h3>
+              <p class="subscription-plan-description">Non risultano informazioni di abbonamento per questo tenant.</p>
+            </div>
+            <div class="subscription-price">
+              <span class="price-amount">€0</span>
+              <span class="price-period">/mese</span>
+            </div>
+          </div>
+          <div class="subscription-actions">
+            <button class="btn-primary">Attiva Piano</button>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Payment Method -->
+        <div class="profile-field" style="margin-top: 32px;">
+          <span class="profile-field-label">Metodo di Pagamento</span>
+          <span class="profile-field-value">•••• 4242</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Handle section navigation
+  document.querySelectorAll('.profile-nav-item').forEach(item => {
+    item.addEventListener('click', function() {
+      // Remove active class from all items
+      document.querySelectorAll('.profile-nav-item').forEach(nav => nav.classList.remove('active'));
+      
+      // Add active class to clicked item
+      this.classList.add('active');
+      
+      // Hide all sections
+      document.querySelectorAll('.profile-section').forEach(section => section.style.display = 'none');
+      
+      // Show selected section
+      const sectionId = this.getAttribute('data-section');
+      document.getElementById('section-' + sectionId).style.display = 'block';
+    });
+  });
+</script>
+{% endblock %}

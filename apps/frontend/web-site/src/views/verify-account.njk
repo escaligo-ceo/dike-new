@@ -1,0 +1,625 @@
+<html lang="en-US"><head><script type="text/javascript" src="https://cdn.segment.com/next-integrations/actions/amplitude-plugins/3b0a288ecd08e5d54cea.js" async="" status="loaded"></script><script type="text/javascript" async="" data-global-segment-analytics-key="cdp" src="https://evs.cdp.postman.com/6C88CYC9Neo3CfCCSD2BHa/xae7HN2EeK3mLEpFypgqAS.min.js"></script><script data-px="&lt;!-- CDP --&gt;">!function(){var i="cdp",cdp=window[i]=window[i]||[];if(!cdp.initialize)if(cdp.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{cdp.invoked=!0;cdp.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","screen","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware","register"];cdp.factory=function(e){return function(){if(window[i].initialized)return window[i][e].apply(window[i],arguments);var n=Array.prototype.slice.call(arguments);if(["track","screen","alias","group","page","identify"].indexOf(e)>-1){var c=document.querySelector("link[rel='canonical']");n.push({__t:"bpc",c:c&&c.getAttribute("href")||void 0,p:location.pathname,u:location.href,s:location.search,t:document.title,r:document.referrer})}n.unshift(e);cdp.push(n);return cdp}};for(var n=0;n<cdp.methods.length;n++){var key=cdp.methods[n];cdp[key]=cdp.factory(key)}cdp.load=function(key,n){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.setAttribute("data-global-segment-analytics-key",i);t.src="https://evs.cdp.postman.com/6C88CYC9Neo3CfCCSD2BHa/xae7HN2EeK3mLEpFypgqAS.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r);cdp._loadOptions=n};cdp._writeKey="9xLD58UfOuu8iiv5x8vH1nk6wsbEXMev";cdp._cdn = "https://evs.cdp.postman.com";cdp.SNIPPET_VERSION="5.2.0";}}();</script>
+    <script nonce="">
+    var version = "v&#x3D;1.58.0".split(';')[1],
+      analytics = {
+        config: {
+          env: "production",
+          propertyVersion: version,
+          url: "https://analytics.getpostman.com/event"
+        },
+        eventQueue: [],
+        recordEvent: function (event) {
+          event.timestamp = new Date();
+          this.eventQueue.push(event);
+        }
+      };
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Postman - Verify Account</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://identity-assets.getpostman.com/css/style.min.8b70360f.css">
+      <script nonce="" src="/js/analytics.min.js" async="" defer=""></script>
+      <script nonce="" src="https://identity-assets.getpostman.com/js/turnstile.min.bdeb6050.js"></script>
+      <script nonce="" src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" defer=""></script>
+
+    <style>
+        #verified-email-btn {
+          margin-top: var(--spacing-s);
+        }
+        #update-email-cta {
+          text-decoration: none;
+          color: var(--content-color-link);
+          cursor: pointer;
+        }
+        #resend-verification-code-cta {
+          text-decoration: none;
+          color: var(--content-color-link);
+          cursor: pointer;
+        }
+        #signup-email-text {
+          display: inline-block;
+          word-break: break-all;
+          overflow-wrap: anywhere;
+          max-width: 100%;
+        }
+    </style>
+  </head>
+  <body class="body-styles" data-trackclicks="default">
+    <div class="container">
+      <div class="main">
+        <div class="flex justify-center">
+          <img src="https://identity-assets.getpostman.com/images/logo-postman.svg" alt="Postman Logo">
+        </div>
+        <div class="card wd-4">
+          <h1 class="heading-1 text-center">Verify your account</h1>
+
+          <div id="notification-div" class="banner banner-critical spacing-top-xl notify-failure notification-container">
+            <p id="notification-message"></p>
+          </div>
+
+          <form id="validate-verification-form" class="spacing-top-xl">
+            <div class="input group pm-form-group">
+                <label for="verification-code" class="input-label">
+                  <h6 class="heading-6">Verification code</h6>
+                  <small class="text-small text-subdued">We have sent a verification code to 
+                    <strong id="signup-email-text">
+                      support@centurioni.eu
+                    </strong>
+                  </small>
+                </label>
+              <input type="text" class="input-field pm-form-control" name="verification-code" id="verification-code" placeholder="Enter 6 digit code" autofocus="" autocomplete="off" autocapitalize="off">
+
+              <span id="input-error-verification-code" class="input-validation-error"></span>
+            </div>
+            <div id="cloudflareTurnstile"><div><input type="hidden" name="cf-turnstile-response" id="cf-chl-widget-ijnt5_response" value="0.jtqbu8F-Mdd4pb2tFOcsnIBJgXOuOPWqQACXoEwWAqp46F-UUnfM1tCZFDd0quoSs3xvmG5efPGrUBDGRwMDulBtg9Ki7qtJoK3SbcrWT3MqKvjBghn88YRaLh4zX6_2prbWMK7yDsgJTOcsVghklLEz1hIAGCEj3PT12RVDUJNJXcnHfuvjx1i1v2s26iBToymjTkQo_ujUVNTyYrbqe2C3lzGgXnw4gXQI_Z6zg2A4lakkBYZInUpXesANqDCwmiGm8nc5W6VGulCFb1Lft18T_uOckbrFeBinoCw6I28Bv3voopouXKsFS8l_rE8y5knTYi_sUWpDF5GtESGzzMyxQM7CqTa5chWs7sz3iWB8dk72KGt0RM_ir7TeY5jsf2ZRzlTIuMiD-l7-U6zxNwmKQhNtQ8PZ-YBTYkfKoX-LGqPO1QjrXDSCMUKShH33ZvIfh60BVDIBS8fPHIdyBt6RI7b54DqLjygTXKyUq5gs2_6wtng_lGjftEGTo8E8-FkanQK1aNxsjwm5SrEJ4jg4ffMjM96RgY-yeeXo7z_al14hsBmAWaSbnUuhKpyn8jPuWI_polCSrgctYqH3Ci6lmurvATiBbknUu4j9Ix3nK05fSg0HOD9kbuHCNydycCx2otFGcxMD2hFHouLJ-Eaq_24S8I0aDcws6N3sw_RD3pmYC8TJGWVXFQ-hjyBV85i3mBnGJmUAT26JIB01NymwmgdGGthI9UEeA152c6Qcz_HrCwf1GIy3HNWf_LpAsRBA1oS879w1i-Pw5Vnm0EvpRWW2e03MFldeV3g3Ifr8p-BSGhLy1Zyo_CtLu3m9dRF4WxGCVHQ-9xVmp5gWPOzmm25VbtqlEKVeSAH4dmkUmYssbRclFcp_2zKh669nhFtr825CNBhCN3G-wBqRZP0fOmNjdtoQLQ8f_dtS0P2C5u9Jbg0_9wEmNZ1DKp94.87KuAn0RxLs7ORfuy0WEeg.dedecd1fb699bcd670a707d2b4e692482b8c37a7df8ebb00e28c1f311216ddeb"></div></div>
+            <div class="input group pm-form-group">
+              <button type="submit" class="btn btn-primary verify-btn" id="verify-btn">
+                Verify Account
+              </button>
+              <button type="button" class="btn btn-secondary verify-btn" id="verified-email-btn">
+                I've Verified My Account
+              </button>
+            </div>
+
+            <input type="hidden" name="csrfToken" value="">
+          </form>
+        </div>
+        <p class="text-center" id="recovery-code-info-block">
+            <span id="resend-otp-span">Didn't receive the email? <span id="resend-verification-code-cta">Resend verification code</span></span>
+            <span id="cooldown-timer" style="display: none;">Didn't receive the email? Resend verification code in <span id="timer-span"></span> seconds.</span>
+        </p>
+      </div>
+    <footer id="footer" class="footer">
+        <div class="flex justify-center">
+          <ul class="language-list" id="langsList"><li lang="en-US" title="Current language: English" class="active"><a href="https://identity.getpostman.com/verify-account?lang=en-US">English</a></li><li lang="ja" title="Use Postman in 日本語"><a href="https://identity.getpostman.com/verify-account?lang=ja">日本語</a></li></ul>
+        </div>
+        <script nonce="">
+             const i18nParam = 'lang',
+               href = new URL(window.location.href),
+               params = new URLSearchParams(href.search);
+        
+            function generateLanguageList(langsList, activeLang) {
+                const langItems = langsList.map((langObj) => {
+                    const langCode = Object.keys(langObj)[0];
+                    const langName = langObj[langCode];
+                    const isActive = langCode === activeLang;
+                    const title = isActive ? `Current language: ${langName}` : `Use Postman in ${langName}`;
+                    params.set(i18nParam, langCode);
+                    href.search = params.toString();
+        
+                    return `<li  lang="${langCode}" title="${title}" ${isActive ? ' class="active"' : ''}><a  href="${href}">${langName}</a></li>`;
+                });
+        
+          return langItems.join('');
+        }
+        
+            const langsList = [
+                { 'en-US': "English" },
+                { 'ja': "日本語" }
+            ];
+        
+            const activeLang = 'en-US';
+            document.querySelector('#langsList').innerHTML = generateLanguageList(langsList, activeLang);
+        
+        </script>
+      <span translate="no" class="text-subdued">©2025 Postman, Inc. All rights reserved.</span>
+        <i class="separator">·</i>
+        <a class="link-muted" href="https://www.postman.com/legal/eula" target="_blank">Terms of use</a>
+        <i class="separator">·</i>
+        <a class="link-muted" href="https://www.postman.com/legal/privacy-policy" target="_blank">Privacy policy</a>
+    </footer>
+      </div>
+    <script nonce="">
+      document.querySelector("#verify-btn").setAttribute("type", "submit");
+
+      var verificationCodeFormElement = document.getElementById('validate-verification-form'),
+          verificationCodeElement = document.getElementById('verification-code'),
+          verifyBtn = document.getElementById('verify-btn'),
+          alreadyVerifiedEmailBtn = document.getElementById('verified-email-btn'),
+          notificationDiv = document.getElementById('notification-div'),
+          notificationMsgElement = document.getElementById('notification-message'),
+          resendVerificationCodeElement = document.getElementById('resend-verification-code-cta'),
+          inputErrorVerificationCodeElement = document.getElementById('input-error-verification-code'),
+          turnstileEnabled = true || false,
+          VERIFY_ACCOUNT_EVENT_NAME = 'Verify Account - Verify Account - Clicked',
+          VALIDATE_VERIFICATION_CODE_ACTION = 'validate_verification_code',
+          isUpdateEmailRequested = false || false;
+          
+
+      function onInputHandler(e) {
+        e.target.value = e.target.value.replace(/[^\d]/g, '').slice(0, 6);
+      }
+
+      function hideGlobalNotification() {
+        notificationDiv.classList.add('banner-critical');
+        notificationDiv.classList.remove('banner-info');
+        notificationDiv.style.display = 'none';
+        notificationMsgElement.innerHTML = '';
+      }
+
+      function showGlobalNotification(message, isSuccess=false) {
+        if (isSuccess) {
+          notificationDiv.classList.remove('banner-critical');
+          notificationDiv.classList.add('banner-info');
+        }
+
+        notificationDiv.style.display = 'block';
+        showErrorContent(notificationMsgElement, message);
+      }
+
+      function hideErrorContent(errorField) {
+        errorField.style.display = 'none';
+      }
+
+      function showErrorContent(errorField, message) {
+        errorField.style.display = 'block';
+        errorField.innerHTML = message;
+      }
+      
+      // If turnstile is enabled, configure the turnstile widget.
+      (function configureTurnstile() {
+        if(!turnstileEnabled) {
+          return;
+        }
+
+        const turnstileConfig = Object.create(null);
+
+        turnstileConfig.enabled = true;
+        turnstileConfig.siteKey = "0x4AAAAAAAYx_CBZ0IJEN60P";
+        turnstileConfig.action = "verify_account";
+        turnstileConfig.language = "en-US".toLowerCase();
+        turnstileConfig.removeLoader = function () {
+          const verifyBtn = document.getElementById('verify-btn');
+
+          (verifyBtn && verifyBtn.classList) &&  verifyBtn.classList.remove('pm-btn-processing');
+        };
+        turnstileConfig.startTime = Date.now();
+        turnstileConfig.maxRetries = 5;
+        turnstileConfig.retries = 0;
+        turnstileConfig.delay = 1000;
+        turnstileConfig.identityMainHost = "identity.getpostman.com";
+
+        window.turnstileConfig = turnstileConfig;
+
+        // Set callback function in window object so that turnstile script can access it.
+        window.onloadTurnstileCallback = TurnstileUtils && TurnstileUtils.onloadTurnstileCallback;
+      })();
+
+
+      function getAmplitudeMetaData(eventName, eventProperties = {}) {
+        let amplitudeData = {};
+
+        try {
+          if (window.pmt && window.pmt('userId')) {
+            const pmTechCookie = window.pmt('userId').replaceAll('.', '');
+
+            amplitudeData = {
+              device_id: pmTechCookie,
+              event_type: eventName,
+              event_properties: eventProperties
+            }
+          }
+        }
+        catch (e) {
+          window.newrelic && window.newrelic.noticeError(e);
+        }
+
+        return amplitudeData;
+      }
+
+      function getTurnstileMetaData () {
+        let turnstileMeta = {}
+
+        try {
+          turnstileMeta  = (window.TurnstileUtils && window.TurnstileUtils.getTurnstileEventMeta) ? window.TurnstileUtils.getTurnstileEventMeta() : {};
+        }
+        catch (e) {
+          window.newrelic && window.newrelic.noticeError(e);
+        }
+
+        return turnstileMeta;
+      }
+
+
+      function sendRequest (api, xhr, formData, action) {
+        hideGlobalNotification();
+        if (turnstileEnabled  && !window.turnstile && action === VALIDATE_VERIFICATION_CODE_ACTION) {
+          analytics && analytics.recordEvent({
+            action: 'cloudflare_turnstile_script_load_failed',
+            label: 'verify_account',
+            meta: {
+              amplitude: getAmplitudeMetaData(VERIFY_ACCOUNT_EVENT_NAME, {
+                error_on_entity: null,
+                error_message: 'Unable to load turnstile script.'
+              }),
+              turnstile: getTurnstileMetaData()
+            }
+          });
+        }
+
+        // check if turnstile is enabled if it is enabled and check if cpatcha is solved or not
+        if (turnstileEnabled && window.turnstileConfig && !window.turnstileConfig.token && action === VALIDATE_VERIFICATION_CODE_ACTION) {
+          analytics && analytics.recordEvent({
+              action: 'premature_form_submit_no_captcha',
+              label: 'verify_account',
+              meta: {
+                amplitude: getAmplitudeMetaData(VERIFY_ACCOUNT_EVENT_NAME, {
+                  error_on_entity: null,
+                  error_message: 'Turnstile token is empty.'
+                }),
+                turnstile: getTurnstileMetaData()
+              }
+            });
+
+          return showGlobalNotification('Unable to verify the captcha. Please try again.', false);
+        }
+
+        hideErrorContent(inputErrorVerificationCodeElement);
+
+        xhr.onreadystatechange = function () {
+          if (this.readyState === XMLHttpRequest.DONE) {
+            var responseJSON;
+
+            try {
+              responseJSON = JSON.parse(this.responseText);
+            }
+            catch (e) {
+              window.newrelic && window.newrelic.noticeError(e);
+            }
+
+            if (this.status === 200 && responseJSON) {
+              analytics && analytics.recordEvent({
+                  action: `${action}_success`,
+                  label: 'verify_account',
+                  meta: {
+                    amplitude: getAmplitudeMetaData(`${action}_success`)
+                  }
+                });
+
+              if (responseJSON.action === 'resendVerificationCode') {
+                showGlobalNotification(
+                  'A new verification code has been sent to your email. Please check your inbox.', true
+                );
+                return
+              }
+
+              window.TurnstileUtils && window.TurnstileUtils.resetTurnstileData && window.TurnstileUtils.resetTurnstileData();
+              return location.assign(responseJSON.redirect);
+            }
+            else {
+              window.TurnstileUtils && window.TurnstileUtils.resetTurnstile && window.TurnstileUtils.resetTurnstile();
+
+              var errorMessage = responseJSON.error ? responseJSON.error.message : '';
+
+              analytics && analytics.recordEvent({
+                action: `${action}_error`,
+                label: 'verify_account',
+                meta: {
+                  errorMessage: errorMessage.replace(/[^\x00-\xFF]/g, ""),
+                  amplitude: getAmplitudeMetaData(`${action}_error`)
+                }
+              });
+
+              // Remove processing indicator.
+              (verifyBtn && verifyBtn.classList) &&  verifyBtn.classList.remove('pm-btn-processing');
+
+              showGlobalNotification(responseJSON.error.message || 'Something went wrong.');
+            }
+          }
+        }
+
+        xhr.open('POST', api, true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        window.turnstileConfig && window.turnstileConfig.token && (
+          xhr.setRequestHeader('X-Turnstile-Token', window.turnstileConfig.token)
+        );
+
+        // Add processing indicator.
+        xhr.send(JSON.stringify(formData));
+      }
+
+      document.addEventListener("DOMContentLoaded", function(e) {
+        verificationCodeElement.oninput = onInputHandler;
+      });
+
+      verificationCodeFormElement && verificationCodeFormElement.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        analytics && analytics.recordEvent({
+          action: 'submit_verification_code',
+          label: 'verify_account',
+          meta: {
+            amplitude: getAmplitudeMetaData(
+              'Submit Verification Code', { cta_text: 'Verify Account' })
+          }
+        })
+
+        if(verificationCodeElement.value.length !== 6 || /\d{6}/g.test(verificationCodeElement.value) === false) {
+          showErrorContent(inputErrorVerificationCodeElement, 'Verification code must contain six digits.');
+
+          return;
+        }
+
+        var formData = {
+              "method": isUpdateEmailRequested ? 'updateEmail' : 'validateOtp',
+              "data": {
+                "OTP": verificationCodeElement.value
+              }
+            },
+            xhr = new XMLHttpRequest();
+
+            (verifyBtn && verifyBtn.classList) && verifyBtn.classList.add('pm-btn-processing');
+
+          sendRequest('/confirm-email-verification', xhr, formData, VALIDATE_VERIFICATION_CODE_ACTION);
+      });
+
+      resendVerificationCodeElement && resendVerificationCodeElement.addEventListener('click', function() {
+        analytics && analytics.recordEvent({
+            action: 'resend_verification_code_initiate',
+            label: 'verify_account',
+            meta: {
+              amplitude: getAmplitudeMetaData('Resend verification code', { cta_text: 'Resend verification code' })
+            }
+          });
+
+        var formData = {
+              "method": 'resendVerificationCode'
+            },
+            xhr = new XMLHttpRequest();
+
+            sendRequest('/resend-verification-code', xhr, formData, 'resend_verification_code');
+      });
+
+        alreadyVerifiedEmailBtn && alreadyVerifiedEmailBtn.addEventListener('click', function() {
+          analytics && analytics.recordEvent({
+            action: 'already_verified',
+            label: 'verify_account',
+            meta: {
+              amplitude: getAmplitudeMetaData(
+                'Already Verified Account', { cta_text: 'Already Verified' })
+            }
+          });
+
+          var formData = {
+                "method": 'alreadyVerified'
+              },
+              xhr = new XMLHttpRequest();
+
+              sendRequest('/confirm-email-verification', xhr, formData, 'already_account_verified');
+        });
+      
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const resendSpan = document.getElementById("resend-otp-span"),
+          cooldownTimer = document.getElementById("cooldown-timer"),
+          timerSpan = document.getElementById("timer-span"),
+          resendCta = document.getElementById("resend-otp-span"),
+          cooldownTime = 30; // Cooldown time in seconds
+
+        let isCooldown = false;
+
+        function startCooldown() {
+            analytics && analytics.recordEvent({
+              action: 'resend_verification_code_cool_down_start',
+              label: 'verify_account',
+              meta: {
+                amplitude: getAmplitudeMetaData(
+                  'Resend Verification code cooldown started', { cta_text: 'Resend verification code' })
+              }
+            });
+
+            let remainingTime = cooldownTime;
+            cooldownTimer.style.display = 'inline';
+            resendSpan.style.display = 'none';
+
+            const timerInterval = setInterval(() => {
+                if (remainingTime > 0) {
+                    timerSpan.textContent = remainingTime;
+                    remainingTime--;
+                } else {
+                    clearInterval(timerInterval);
+                    cooldownTimer.style.display = 'none';
+                    resendSpan.style.display = 'inline';
+                    isCooldown = false;
+
+                    analytics && analytics.recordEvent({
+                      action: 'resend_verification_code_cool_down_completed',
+                      label: 'verify_account',
+                      meta: {
+                        amplitude: getAmplitudeMetaData(
+                          'Resend Verification code cooldown completed', { cta_text: 'Resend verification code' })
+                      }
+                    });
+                }
+              }, 1000);
+        }
+
+          resendCta.addEventListener('click', function () {
+              if (isCooldown) return;
+              isCooldown = true;
+
+              startCooldown();
+          });
+      });
+    </script>
+  
+  <script id="pmTechSDK" nonce="">
+  window.pmt=(function(){var aPmt = '*'.split(','); return aPmt[0] === '*' || aPmt.indexOf(window.location.pathname) !== -1})()&&function(){var t={version:"v2.0.75",log:function(e){t.output=t.output||[],t.output.push(e)},url:function(){return (URL && new URL(window.location.href).href).startsWith("http")&&(new URL(window.location.href).href)||""},set:function(e,o){t[e]=o},getPubId:function(){return(document.cookie.match("(^|;) ?_PUB_ID=([^;]*)(;|$)")||[])[2]},drivePubId:function(e){const o=t.url(),n="pub_id=";let a,i;if(o.match(n)){if(i=o.split(n).pop().split("&").shift(),a="_PUB_ID="+i+"; path=/",document.cookie=a,e){let t=o.replace(n+i,"");t=t.replace("?&","?"),t=t.replace("&&","&");t.split("?").pop()||(t=t.split("?").shift());const e=t.length-1;"&"===t.charAt(e)&&(t=t.substring(0,e)),window.location.replace(t)}return a}return t.getPubId()},driveCampaignId:function(e){let o;const n="dcid=",a=e&&e.dcid||window.location.search&&window.location.search.match(n)&&window.location.search.split(n).pop().split("&").shift()||(document.cookie.match("(^|;) ?dcid=([^;]*)(;|$)")||[])[2];let i,c;const r=e&&e.form,s=e&&e.url||t.url();return function(t){const e=t;let o;const i=a&&a.replace(n,"");t&&(e.tagName?a&&!e.driver_campaign_id&&(o=document.createElement("input"),o.type="hidden",o.name="driver_campaign_id",o.value=i,e.appendChild(o)):a&&(e.driver_campaign_id=i))}(r),s.match(n)?(i=s.split(n).pop().split("&").shift(),c=new Date,c.setDate(c.getDate()+30),o="dcid="+i+"; expires="+c.toUTCString()+"; path=/",document.cookie=o,o):e}};return t.enablePostmanAnalytics=function(e,o,n){if("function"!=typeof e||e.postmanAnalyticsEnabled||navigator.doNotTrack&&!o._disableDoNotTrack)return e;function a(t){return t.replace(/"/gi,'"')}function i(t){return"string"==typeof t&&t.split(window.location.host).pop()}return o||(o={}),e.postmanAnalyticsEnabled=!0,function(c,r,s,d,l){const p="load"!==r||t.url()!==t.currentURL;if(!p)return!1;e.apply(this,arguments);const u="gtm.uniqueEventId";let m,f,g,w;const h=r||n;t.initCategory||(t.initCategory=c);const y={category:c,action:h,indexType:"client-events",property:o._property||document.location.host,propertyId:document.location.host,traceId:t.getTraceId(null,o),timestamp:(new Date).toISOString()},I=i(t.currentURL)||document.referrer||t.externalURL||"",b=navigator.language||window.navigator.userLanguage||"?";function k(t,e){const o=t&&t.split(",")||[],n=o.length;let a,i;for(a=0;a<n;a+=1){const t=o[a];if(i=-1!==e.indexOf(t),i)break}return i}y.meta={url:i(I),language:b,user:t.user},s&&(y.entityId=s),l&&(y.meta.user=l),"load"===y.action&&y.entityId&&document.body&&document.body.id&&(y.entityId=y.entityId+"#"+document.body.id),d&&(m=parseInt(d,10),f=m&&!m.isNaN&&m||null,w="string"==typeof d,g=w&&d.match(":")&&d.split(":").pop()||w&&d||"object"==typeof d&&a(JSON.stringify(d))||"",f&&(y.value=f),g&&(s?y.entityId+=":"+g:y.entityId=g)),(Object.keys(o)||[]).forEach((function(t){"_"!==t.charAt(0)&&(y[t]=o[t])})),r||"object"!=typeof c||(y.action=c.action||c.event||c[Object.keys(c)[0]],c[u]&&(y.category=u+"-"+c[u])),"local"===y.env&&(y.env="beta"),"object"==typeof y.category&&y.category&&"string"==typeof y.category.category&&(y.category=y.category.category),["category","event","label"].forEach((function(t){"object"==typeof y[t]&&(y[t]=y[t]&&a(JSON.stringify(y[t])))})),y.userId=t.getPubId()||t.store()&&t.store().userId||y.userId,t.userId=y.userId;const _=t.getTraceId().split("|").pop();return t.traceId=t.getTraceId().split(_).shift()+t.userId,window.name&&!window.name.startsWith("pm")&&(window.name=t.getTraceId()),t.api().store(),setTimeout((function(){t.api()}),1e3),y.category&&y.action&&"function"==typeof o.fetch&&o.fetch(o._url,y)||y.entityId&&"object"==typeof document&&(()=>{const e=o._allow&&k(o._allow,document.location.pathname)||!o._allow&&!0,n=o._disallow&&k(o._disallow,document.location.pathname),a=btoa(JSON.stringify(y));if(e&&!n){if(fetch){if("load"===y.action){if(y.action&&!p)return t.trackIt(),!1;y.entityId=y.entityId.split("#").shift()}t.getTraceId(y),fetch(o._url,{method:"POST",headers:{Accept:"text/html","Content-Type":"text/html"},body:a,mode:"no-cors",keepalive:!0}).catch((function(e){t.log(e)})),t.event=y}else!function(t){const e=new XMLHttpRequest;e.open("POST",o._url),e.setRequestHeader("Accept","application/json"),e.setRequestHeader("Content-type","text/plain"),e.send(t)}(a);t.currentURL=t.url(),-1===y.meta.url.indexOf(document.location.host)&&(t.externalURL=y.meta.url)}})(),!0}},t.watch=function(){const e=(new Date).getTime();if(t.store().session>36e5){t.store("time",e),t.store("session",1);let o=t.getTraceId().split("|");o.shift(),o=o.join("|"),t.event&&window.pmt("setScalp",[{property:t.event.property,_traceId:"pm"+btoa((new Date).getTime())+"|"+o}])}else t.store("session",e-t.store().time);return t.store("time",e),t.stored},t.ga=function(){"function"==typeof window.ga&&window.ga.apply(this,arguments)},t.getEnv=function(t){let e;e="production";const o=t||document.location.hostname;return["beta","local","stag"].forEach((function(t){o.match(t)&&(e=t)})),e},t.setScalp=function(e){if("object"==typeof window){const o=(document.location.search&&document.location.search.match("dcid=([^;]*)(;|$)")||[])[1],n=o&&o.split("&").shift()||(document.cookie.match("(^|;) ?dcid=([^;]*)(;|$)")||[])[2],a=document.location.search.substr(1).split("&"),i=window.localStorage.getItem("utms"),c=i&&i.split(",")||[];a.forEach((t=>{const e=t.match("([UTM|utm].*)=([^;]*)(;|$)");e&&(-1!==e[0].indexOf("utm")||-1!==e[0].indexOf("UTM"))&&c.push(e[0])}));const r=c.length&&c.join(".")||"",s="PM."+btoa((new Date).toISOString()),d=t.getUserId()||window.name&&window.name.match("|PM.")&&window.name.split("|").pop()||t.store()&&t.store().userId;t.store("userId",d||s);const l=(document.cookie.match("(^|;) ?_pm.store=([^;]*)(;|$)")||[])[2],p=l&&JSON.parse(l)||{},u="pm"+btoa((new Date).getTime());"string"==typeof window.name&&"pm"===window.name.substring(0,2)||(n&&-1===window.name.indexOf("DCID.")?window.name=!t.scalpCount&&p.traceId||u+"|DCID."+n+(r&&"|"+r||"")+"|"+(d||s):window.name=!t.scalpCount&&p.traceId||u+(r&&"|"+r||"")+"|"+(d||s));const m=!t.scalpCount&&(t.getTraceIdFromUrl()||p.traceId)||e._traceId||window.parent&&window.parent.name||window.name,f=function(){t.scalpCount||(t.scalpCount=0),t.scalpCount+=1,t.watch()},g=t.getPubId()||d||window.name.split("|").pop(),w={env:"function"==typeof t.getEnv&&t.getEnv()||"production",type:"events-website",userId:g,_allow:!e.disallow&&e.allow,_disableDoNotTrack:void 0===e.disableDoNotTrack||e.disableDoNotTrack,_disallow:!e.allow&&e.disallow,_property:e.property||document.location.host,_traceId:m},h=w.env.match("prod")?"https://bi.pst.tech/events":"https://bi-beta.pst.tech/events";w._url=e.url||h,t.store("session",1),t.store("traceId",m),t.traceId=m,t.userId=g,t.scalp=t.enablePostmanAnalytics(f,w)}},t.getTraceUrl=function(e){const o=-1!==e.indexOf("?")?"&":"?",n=window.polaris&&"&_uuid="+window.polaris("uuid")||"";return e+o+"_pmt="+encodeURI(t.getTraceId())+n},t.trace=function(e,o){let n=t.getTraceUrl(e);-1!==n.indexOf("=pm")&&-1===n.indexOf("=pmt")&&(n=n.replace("=pm","=pmt")),o?window.open(n,"_blank").focus():document.location.href=n},t.getUtmUrl=function(e){const o=-1!==e.indexOf("?")?"&":"?",n=t.traceId.split(".").pop(),a=t.traceId.split("."+n).shift().substr(1).split("."),i=[];return a.forEach((t=>{const e=t.match("([UTM|utm].*)=([^;]*)(;|$)");e&&(-1!==e[0].indexOf("utm")||-1!==e[0].indexOf("UTM"))&&i.push(e[0])})),e+o+(i.length&&i.join("&")||"utm="+document.location.host)},t.utm=function(e){let o=t.getUtmUrl(e);o.match("_pmt=")||(o=o+"&_pmt="+encodeURI(t.traceId)),document.location.href=o},t.cdp=function(t){if(t&&t.target){let e="function"==typeof t.target.getAttribute&&t.target.getAttribute("data-cdp");const o="function"==typeof t.target.getAttribute&&t.target.getAttribute("data-event-prop");if(o){const t=o.charAt(0);if("["===t||"{"===t){const t=JSON.parse(o),n=!!t.cta_link_to&&!!t.cta_link_to.match("download"),a=!!t.cta_link_to;e=JSON.stringify({event:n?"Download Clicked":a&&"CTA Clicked",destination:t.cta_link_to,location:t.cta_style,text:t.cta_text,type:t.cta_type,url:t.url||document.location.href})}}if(e){const o=e.charAt(0),n="["===o||"{"===o,a=n&&JSON.parse(e)||{},i=n&&a.event||!n&&"string"==typeof e&&e||a.event;a.destination||(a.destination=t.target.href),a.location||(a.location="body"),a.text||(a.text=t.target.innerText),a.type||(a.type=t.target.tagName),a.url||(a.url=document.location.href),window.polaris&&(a.polaris=window.polaris("uuid")),a.location&&"primary"===a.location&&(a.location="body");const{event:c}=a;delete a.event,i&&(window.analytics||window.cdp).track(i,a)}}},t.trackClicks=function(e,o){t.driveTrace();const n=function(n){const a=document.body&&document.body.id&&"#"+document.body.id||"";if(e){const i=n.target.getAttribute(e);i&&t.scalp(o||t.initCategory,"click","target",a+i)}else if(!e&&("string"==typeof n.target.className||"string"==typeof n.target.id)){const e=n.target.className||n.target.id||n.target.parentNode.className||-1;if("string"==typeof e){const i=document.location.pathname+a+":"+n.target.tagName+"."+e.split(" ").join("_");try{t.scalp(o||t.initCategory,"click",i)}catch(e){t.log(e.message)}}}t.cdp(n)};document.body.getAttribute("data-trackClicks")||document.body.addEventListener("mousedown",n,!0),document.body.setAttribute("data-trackClicks",e||"default")},t.driveTrack=function(e){let o;const n="_track=",a=e&&e._track||window.location.search&&window.location.search.match(n)&&window.location.search.split(n).pop().split("&").shift()||(document.cookie.match("(^|;) ?"+n+"([^;]*)(;|$)")||[])[2],i=e&&e.url||t.url(),c=t.getEnv(),r=c.match("stag")?"stage":c;return t.tracking=!0,t.trackIt(),i.match(n)?(o="postman-"+r+".track="+a+"; path=/",document.cookie=o,o):e},t.driveTrace=function(){window.addEventListener("click",(t=>{const{href:e,target:o}=t.target,{href:n,target:a}=t.target.parentNode||{},i=e&&!e.match(/undefined/)&&e||n&&!n.match(/undefined/)&&n||"",c=!!i.match(/download/);!!i.match(/identity\.(get)?postman(-beta)?\.com/)&&!c&&(t.preventDefault(),window.pmt("trace",[i,a||o]))}))},t.trackIt=function(){const e=(document.cookie.match("(^|;) ?postman-[a-z]+.track=([^;]*)(;|$)")||[])[2];if(e&&t.tracking){let o=t.url();const n=-1===o.indexOf("?")?"?":"&";-1===o.indexOf("_track")&&"default"!==e&&(o=`${o}${n}_track=${e}`,document.location.replace(o))}},t.xhr=function(t,e){const o=new XMLHttpRequest,n="t="+(new Date).getTime(),a=-1===t.indexOf("?")?"?":"&",i=t+a+n;o.withCredentials=!0,o.addEventListener("readystatechange",(function(){4===this.readyState&&e(this.responseText)})),o.open("GET",i),o.send()},t.bff=function(e,o,n){const a=(n?"/mkapi/":"https://www.postman.com/mkapi/")+e+".json";t.xhr(a,o)},t.store=function(e,o){const n=(document.cookie.match("(^|;) ?_pm.store=([^;]*)(;|$)")||[])[2],a=n&&JSON.parse(n)||{};t.stored={...a},e&&o&&(t.stored[e]=o);const i=document.location.host.split("."),c=i.pop(),r=i.pop(),s=new Date;s.setDate(s.getDate()+1080);let d="_pm.store="+JSON.stringify(t.stored)+"; expires="+s.toUTCString()+"; domain=."+r+"."+c+"; path=/";if(!r){const t=d.split("domain=").pop().split(";").shift();d=d.replace(t,"localhost")}return document.cookie=d,t.stored},t.getTraceIdFromCookie=function(){return(document.cookie.match("(^|;) ?_pmt=([^;]*)(;|$)")||[])[2]},t.getTraceIdFromUrl=function(){const e="_pmt=",o=t.url(),n=o.match(e)&&o.split(e).pop().split("&").shift(),a=n&&decodeURI(n);if(a){t.store("traceId",a);let i=o.replace(e+n,"");i=i.replace("?&","?"),i=i.replace("&&","&");i.split("?").pop()||(i=i.split("?").shift());const c=i.length-1;"&"===i.charAt(c)&&(i=i.substring(0,c)),window.location.replace(i)}return a},t.getTraceId=function(e,o){const n=t.getTraceIdFromUrl()||t.getTraceIdFromCookie()||t.store().traceId||t.traceId||o&&o._traceId||"";return n&&e&&(e.traceId=n),n},t.getUserId=function(e){const o=t.getTraceId().split("|").pop()||t.store().userId||t.userId||"";return o&&e&&(e.userId=o),o},t.api=function(e){"object"==typeof e&&Object.keys(e).forEach((function(t){window[t]=e[t]}));const o=window.pm,n=o&&o.billing,a=n&&n.plan,i=a&&a.features;if(i){const e=i&&i.is_paid_plan_growth,o=e&&e.value,n=i&&i.is_enterprise_plan_growth,a=(n&&n.value?"enterprise":o&&"paid")||"free";t.store("plan",a)}return t},setTimeout((function(){const t=document.getElementById("pmtSDK"),e=t&&t.getAttribute("data-track-category")||"pm-analytics",o=t&&t.getAttribute("data-track-property"),n=t&&t.getAttribute("data-track-url"),a=t&&"false"!==t.getAttribute("data-track-disable-do-not-track"),i=t&&"true"===t.getAttribute("data-drive-track"),c=t&&"false"!==t.getAttribute("data-drive-campaign-id"),r=t&&"false"!==t.getAttribute("data-drive-pub-id"),s=t&&"false"!==t.getAttribute("data-track-load"),d=t&&"false"!==t.getAttribute("data-track-clicks"),l=d&&t.getAttribute("data-track-clicks-attribute")||null;if(o){const t={property:o};n&&(t.url=n),a&&(t.disableDoNotTrack=a),window.pmt("setScalp",[t]),s&&window.pmt("scalp",[e,"load",document.location.pathname]),d&&window.pmt("trackClicks",[l,e]),c&&window.pmt("driveCampaignId"),r&&window.pmt("drivePubId",[!0]),i&&window.pmt("driveTrack")}}),1e3),function(e,o){return t[e]?"function"==typeof t[e]?t[e].apply(t,o):t[e]:null}}();window&&(window.polaris=function(){var t={version:"v1.1.0",log:function(e){t.output=t.output||[],t.output.push(e)},_sesh:function(t){const e="pol.",o=(window.name,window.pmt("userId"));if(o){const n=window.pmt("traceId").split("|").shift(),i=t&&e+t||"",p=window.pmt("traceId").split(n).pop().split(o).shift();-1===window.name.indexOf(e)&&(window.name=n+p+i+"|"+o)}},url:function(){return window.location.href.startsWith("http")&&window.location.href||""},uuidFromUrl:function(){const e="_uuid=",o=t.url(),n=o.match(e)&&o.split(e).pop().split("&").shift();if(n){let t=o.replace(e+n,"");t=t.replace("?&","?"),t=t.replace("&&","&");t.split("?").pop()||(t=t.split("?").shift());const i=t.length-1;"&"===t.charAt(i)&&(t=t.substring(0,i)),window.location.replace(t)}return n},uuid:function(){const e="|pol.",o=window.name,n=t.uuidFromUrl()||-1!==o.indexOf(e)&&o.split(e).pop().split("|").shift()||!1,i=window.pmt&&window.pmt("store")||{};i.userId=i.userId||(new Date).getTime();const p=n||t._uuid||i.polaris||crypto&&"function"==typeof crypto.randomUUID&&crypto.randomUUID()||i.userId;return window.pmt&&window.pmt("store",["polaris",p]),t.log(`Polaris: ${p}`),t._uuid=p,t._sesh(p),p},convert:function(e){if("object"==typeof e){e.type="events-general";const o="https://eo2kpuahxhuvgexlueall7gqzq0fihon.lambda-url.us-east-1.on.aws",n=btoa(JSON.stringify(e));if(fetch)fetch(o,{method:"POST",headers:{Accept:"text/html","Content-Type":"text/html"},body:n,mode:"no-cors",keepalive:!0}).catch((function(e){t.log(e)}));else{const t=new XMLHttpRequest;t.open("POST",o),t.setRequestHeader("Accept","application/json"),t.setRequestHeader("Content-type","text/plain"),t.send(n)}}}};return function(e,o){return t[e]?"function"==typeof t[e]?t[e].apply(t,o):t[e]:null}}());const p = {"CDP":1,"SEG":"9xLD58UfOuu8iiv5x8vH1nk6wsbEXMev"};
+  const segJs = `!function(){var i="cdp",cdp=window[i]=window[i]||[];if(!cdp.initialize)if(cdp.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{cdp.invoked=!0;cdp.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","screen","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware","register"];cdp.factory=function(e){return function(){if(window[i].initialized)return window[i][e].apply(window[i],arguments);var n=Array.prototype.slice.call(arguments);if(["track","screen","alias","group","page","identify"].indexOf(e)>-1){var c=document.querySelector("link[rel='canonical']");n.push({__t:"bpc",c:c&&c.getAttribute("href")||void 0,p:location.pathname,u:location.href,s:location.search,t:document.title,r:document.referrer})}n.unshift(e);cdp.push(n);return cdp}};for(var n=0;n<cdp.methods.length;n++){var key=cdp.methods[n];cdp[key]=cdp.factory(key)}cdp.load=function(key,n){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.setAttribute("data-global-segment-analytics-key",i);t.src="https://evs.cdp.postman.com/6C88CYC9Neo3CfCCSD2BHa/xae7HN2EeK3mLEpFypgqAS.min.js";var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r);cdp._loadOptions=n};cdp._writeKey="${p['SEG']}";cdp._cdn = "https://evs.cdp.postman.com";cdp.SNIPPET_VERSION="5.2.0";}}();`;
+  
+  function sha256(str, cb) {
+    const buf2hex = function(buffer) {
+      return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+    }
+    const data = new TextEncoder().encode(str.toLowerCase());
+    window.crypto.subtle.digest('SHA-256', data)
+      .then(function(hashBytes){
+        if (typeof cb === 'function') {
+          cb(buf2hex(hashBytes));
+        }
+      });
+  }
+  
+  function cdpIdentify(email) {
+    window.sha256(email, function(usr){
+      window.cdp.identify(usr, {anonymousId: window.cdp.user().anonymousId()});
+    });
+  }
+  
+  function px(opts, cb) {
+    const e = document.createElement('script');
+    for (key in opts) {
+      if (key !== 'textContent' && key !== 'top') {
+        e.setAttribute(key, opts[key]);
+      }
+    }
+    const hasAlready = !!document.querySelector(`[data-px="${opts['data-px']}"]`);
+    e.onreadystatechange = function () {
+      if (this.readyState === 'complete' || this.readyState === 'loaded') {
+        if (typeof cb === 'function') {
+          cb();
+        }
+      }
+    };
+    if (opts.textContent) {
+      e.textContent = opts.textContent;
+      if (typeof cb === 'function') {
+        setTimeout(() => {
+          cb();
+        }, 1000);
+      }
+    }
+    e.onload = cb;
+    if (opts.dnt) {
+      e.removeAttribute('dnt', null);
+      if (
+        parseInt(navigator.doNotTrack, 10) === 1 ||
+        parseInt(window.doNotTrack, 10) === 1 ||
+        parseInt(navigator.msDoNotTrack, 10) === 1 ||
+        navigator.doNotTrack === 'yes'
+      ) {
+        return -1;
+      }
+    }
+    const head = document.getElementsByTagName('head')[0];
+    if (opts.top) {
+      if (!hasAlready) {
+        head.insertBefore(e, head.firstChild);
+      }
+    } else {
+      const lpx = [...document.querySelectorAll('[data-px]')].pop();
+      if (!hasAlready) {
+        if (lpx && lpx.parentNode) {
+          lpx.parentNode.insertBefore(e, lpx.nextElementSibling);
+        } else {
+          head.insertBefore(e, head.firstChild);
+        }
+      }
+    }
+    return e;
+  }
+  
+  const track = () => {
+    if (p['CDP'] !== 0) {
+      px({ 'data-px': '<!-- CDP -->', textContent: segJs }, () => {
+        window.polaris('uuid');
+        setTimeout(function () {
+          function getSegmentAnonymousId() {
+            const key = '|anon.';
+            const key2 = 'anon=';
+            const anon =
+             window.name.indexOf(key) !== -1 &&
+               window.name.split(key).pop().split('|').shift() ||
+             window.location.search.indexOf(key2) !== -1 &&
+               window.location.search.split(key2).pop().split('&').shift();
+  
+            return anon || (
+              (window.cdp &&
+                typeof window.cdp.user === 'function' &&
+                window.cdp.user().anonymousId()) ||
+              (document.cookie.match(
+                '(^|;) ?ajs_anonymous_id=([^;]*)(;|$)'
+              ) || [])[2]
+            );
+          }
+  
+          const segmentAnonymousId = getSegmentAnonymousId();
+  
+          // PMT
+          const user = {
+            polaris: window.polaris('uuid'),
+            segmentAnonymousId,
+            userAgent: navigator.userAgent
+          };
+          for (key in user) {
+            if (!user[key]) {
+              delete user[key];
+            }
+          }
+          if (typeof window.pmt === 'function') {
+            window.pmt('set', ['user', user]);
+          }
+  
+          // Segment
+          if (window.cdp) {
+            window.cdp.load(p['SEG']);
+            window.cdp.ready(()=>{
+              const userData = (typeof window.pmt === 'function') && { ...window.pmt('user') } || {};
+              delete userData.segmentAnonymousId;
+              delete userData.userAgent;
+              if (typeof window.pmt === 'function') {
+                window.pmt('log', [
+                  {
+                    '[CDP (Segment)]': userData
+                  }
+                ]);
+                window.cdp.user().anonymousId(window.polaris('uuid'));
+                window.cdp.page(userData);
+              }
+            });
+          }
+        }, 3100);
+      });
+    }
+  };
+  track();
+  
+  </script>
+  <script id="pmTechConfig" nonce="">
+  window.pmt('setScalp', [{
+    property: 'pm-identity'
+  }]);
+  window.pmt('scalp', [
+    'pm-analytics',
+    'load',
+    document.location.pathname
+  ]);
+  window.pmt('driveCampaignId');
+  window.pmt('trackClicks');
+  </script>
+
+<div syno-id="autofill-icon"></div><div syno-id="autofill-dropdown"></div></body></html>
