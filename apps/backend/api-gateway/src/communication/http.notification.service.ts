@@ -2,7 +2,6 @@ import {
   AppLogger,
   BaseUrl,
   DikeConfigService,
-  inspect,
   Invite,
   OriginDto,
   VerificationDto,
@@ -56,12 +55,12 @@ export class HttpNotificationService extends BaseHttpService {
     } catch (error) {
       // if user profile does not exist, log the error and create a new profile
       // this.httpAuditService.error(`Failed to sent verification email to address: ${dto.email}`, error, DikeServiceName.API_GATEWAY);
-      this.auditService.safeLog(
-        loggedUser,
-        "EMAIL_VERIFICATION",
-        `Failed to sent verification email to address: ${dto.email}`,
-        dto
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "EMAIL_VERIFICATION",
+      //   `Failed to sent verification email to address: ${dto.email}`,
+      //   dto
+      // );
 
       if (axios.isAxiosError(error) && error.response) {
         throw new HttpException(error.response.data, error.response.status);

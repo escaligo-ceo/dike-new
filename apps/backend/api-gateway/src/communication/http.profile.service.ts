@@ -57,12 +57,12 @@ export class HttpProfileService extends BaseHttpService {
     );
     const res = await this.patch(url, profileData, loggedUser.token.originDto);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "UPDATE_PROFILE",
-      `Updated profile for user ID: ${userId}`,
-      { profileData }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "UPDATE_PROFILE",
+    //   `Updated profile for user ID: ${userId}`,
+    //   { profileData }
+    // );
 
     return res.data;
   }
@@ -77,12 +77,12 @@ export class HttpProfileService extends BaseHttpService {
       dto,
       loggedUser.token.originDto
     );
-    this.auditService.safeLog(
-      loggedUser,
-      "UPDATE_ACCOUNT_SETTINGS",
-      `Updated account settings for user ID: ${loggedUser.id}`,
-      dto
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "UPDATE_ACCOUNT_SETTINGS",
+    //   `Updated account settings for user ID: ${loggedUser.id}`,
+    //   dto
+    // );
     return res.data;
   }
 

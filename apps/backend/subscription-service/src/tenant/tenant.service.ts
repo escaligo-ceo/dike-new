@@ -65,11 +65,11 @@ export class TenantService {
         subscription.disable();
         await this.subscriptionRepository.save(subscription);
 
-        this.auditService.safeLog(
-          loggedUser,
-          "SUBSCRIPTION_DISABLED",
-          `Closing subscription for tenant ${tenantId} with plan ${subscription.planId}`
-        );
+        // this.auditService.safeLog(
+        //   loggedUser,
+        //   "SUBSCRIPTION_DISABLED",
+        //   `Closing subscription for tenant ${tenantId} with plan ${subscription.planId}`
+        // );
       }
     }
 
@@ -80,11 +80,11 @@ export class TenantService {
     const instance = this.subscriptionRepository.create(entity);
     const subscription = await this.subscriptionRepository.save(instance);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "PLAN_SUBSCRIPTION",
-      `Subscribing plan ${planKey} to tenant ${tenantId}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "PLAN_SUBSCRIPTION",
+    //   `Subscribing plan ${planKey} to tenant ${tenantId}`
+    // );
 
     this.logger.log(
       `Subscribed plan ${planKey} to tenant ${tenantId}: ${inspect(subscription)}`
@@ -105,11 +105,11 @@ export class TenantService {
     const office: Office = this.officeRepository.create(entity);
     await this.officeRepository.save(office);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "OFFICE_CREATION",
-      `Creating office for tenant ${tenantId}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "OFFICE_CREATION",
+    //   `Creating office for tenant ${tenantId}`
+    // );
 
     this.logger.log(
       `Created office for tenant ${tenantId}: ${inspect(office)}`

@@ -9,7 +9,7 @@
 | web-site             | Sito web             | 5172  | Sito web                              |
 | react                | React App            | 5173  | Applicazione React                    |
 | api-gateway          | API Gateway          | 3000  | Entrypoint API                        |
-| process-service      | Process Service      | 3001  | Servizio di processo                  |
+| process-engine      | Process Service      | 3001  | Servizio di processo                  |
 | auth-service         | Auth Service         | 8000  | Servizio di autenticazione            |
 | audit-service        | Audit Service        | 8001  | Servizio di audit                     |
 | profile-service      | Profile Service      | 8002  | Servizio di profilazione              |
@@ -18,6 +18,11 @@
 | tenant-service       | Tenant Service       | 8005  | Servizio di gestione tenant           |
 | contact-service      | Contact Service      | 8006  | Servizio di gestione contatti         |
 | import-service       | Import Service       | 8007  | Servizio di gestione importazioni     |
+| template-service		 | Template Service     | 8008  | Servizio di gestione template         |
+
+```sh
+
+```
 
 | template-service | Template Service | 8008 | Servizio di gestione template |
 | billing-service | Billing Service | 8009 | Servizio di fatturazione |

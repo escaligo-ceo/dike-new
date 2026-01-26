@@ -1,0 +1,9 @@
+{
+	"scripts": {
+		"init": "yarn init:dokcer",
+		"init:docker": "cp .env.docker .env",
+		"init:example": "cp .env.example .env",
+		"build": "tsc -p tsconfig.build.json && yarn copy:templates",
+		"copy:templates": "test -d src/templates && cp -r src/templates dist/templates/ || true"
+	}
+}

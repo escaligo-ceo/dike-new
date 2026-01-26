@@ -1,8 +1,9 @@
-import { AppLogger, DikeConfigService, DikeJwtService } from "@dike/common";
-import { ApiGatewayService, AuditModule, UserFactory, KeycloakService } from "@dike/communication";
+import { AppLogger, DikeConfigService, DikeJwtService, DikeModule } from "@dike/common";
+import { ApiGatewayService, AuditModule, UserFactory, KeycloakService, JwtAuthGuard } from "@dike/communication";
 import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { Reflector } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { entities } from "../database/entities";
 import { ProfileController } from "./profile.controller";
@@ -15,15 +16,13 @@ import { ProfileInternalController } from "./profile-internal.controller";
     AuditModule,
     HttpModule,
     ConfigModule,
+    DikeModule,
   ],
   providers: [
     ProfileService,
-    AppLogger,
-    DikeConfigService,
     KeycloakService,
     UserFactory,
     ApiGatewayService,
-    DikeJwtService,
   ],
   controllers: [ProfileController, ProfileInternalController],
   exports: [ProfileService],

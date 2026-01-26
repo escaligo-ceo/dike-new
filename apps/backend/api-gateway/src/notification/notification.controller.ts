@@ -59,12 +59,12 @@ export class NotificationController extends BaseController {
       await this.httpNotificationService.sendEmailVerification(loggedUser, dto);
       return;
     } catch (error) {
-      this.auditService.safeLog(
-        loggedUser,
-        "SEND_EMAIL_VERIFICATION",
-        `Failed to update profile for user ID: ${loggedUser.id}`,
-        dto
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "SEND_EMAIL_VERIFICATION",
+      //   `Failed to update profile for user ID: ${loggedUser.id}`,
+      //   dto
+      // );
 
       // if user profile does not exist, log the error and create a new profile
       // this.auditService.error(`Failed to sent verification email to address: ${dto.email}`, error, DikeServiceName.API_GATEWAY);

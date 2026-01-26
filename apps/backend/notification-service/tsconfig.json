@@ -23,7 +23,7 @@
   },
   "include": [
     "src/**/*",
-    "src/migrations/*.ts",
+    "src/migrations/*.ts", "test",
     // "src/**/*.json",
     // "src/**/*.d.ts",
     // "src/**/*.js"

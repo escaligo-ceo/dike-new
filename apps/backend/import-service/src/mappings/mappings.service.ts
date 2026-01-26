@@ -40,12 +40,12 @@ export class MappingsService {
     };
     const instance = this.mappingRepo.create(entity);
     const mapping = await this.mappingRepo.save(instance);
-    this.auditService.safeLog(
-      loggedUser,
-      "MAPPING_CREATED",
-      mapping.id,
-      `Default mapping created with ID ${mapping.id}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "MAPPING_CREATED",
+    //   mapping.id,
+    //   `Default mapping created with ID ${mapping.id}`
+    // );
     this.logger.log("Default mappings created successfully.");
     return mapping;
   }
@@ -111,14 +111,14 @@ export class MappingsService {
     } else {
       this.logger.log("Existing mapping found.");
     }
-    this.auditService.safeLog(
-      loggedUser,
-      created ? "FIND_OR_CREATE_MAPPING" : "MAPPING_RETRIEVED",
-      mapping.id,
-      created
-        ? `Mapping created with ID ${mapping.id}`
-        : `Mapping retrieved with ID ${mapping.id}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   created ? "FIND_OR_CREATE_MAPPING" : "MAPPING_RETRIEVED",
+    //   mapping.id,
+    //   created
+    //     ? `Mapping created with ID ${mapping.id}`
+    //     : `Mapping retrieved with ID ${mapping.id}`
+    // );
     return [mapping, created];
   }
 
@@ -133,12 +133,12 @@ export class MappingsService {
         `Mapping with header hash ${headerHash} not found`
       );
     }
-    this.auditService.safeLog(
-      loggedUser,
-      "MAPPING_RETRIEVED",
-      headerHash,
-      `Mapping(s) retrieved with header hash ${headerHash}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "MAPPING_RETRIEVED",
+    //   headerHash,
+    //   `Mapping(s) retrieved with header hash ${headerHash}`
+    // );
     return res;
   }
 
@@ -153,12 +153,12 @@ export class MappingsService {
         tenantId: loggedUser.tenantId,
       },
     });
-    this.auditService.safeLog(
-      loggedUser,
-      "MAPPINGS_RETRIEVED",
-      headerHash,
-      `${mappings.length} mappings retrieved with header hash ${headerHash}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "MAPPINGS_RETRIEVED",
+    //   headerHash,
+    //   `${mappings.length} mappings retrieved with header hash ${headerHash}`
+    // );
     return mappings;
   }
 
@@ -169,12 +169,12 @@ export class MappingsService {
   ): Promise<Mapping | null> {
     this.logger.log("Updating mapping by hash...");
     const mapping = await this.mappingRepo.findOne({ where: { headerHash } });
-    this.auditService.safeLog(
-      loggedUser,
-      "MAPPING_UPDATED",
-      headerHash,
-      `Mapping updated with header hash ${headerHash}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "MAPPING_UPDATED",
+    //   headerHash,
+    //   `Mapping updated with header hash ${headerHash}`
+    // );
     return mapping
       ? this.mappingRepo.save({ ...mapping, ...mapperData })
       : null;
@@ -186,12 +186,12 @@ export class MappingsService {
   ): Promise<void> {
     this.logger.log("Deleting mapping by hash...");
     await this.mappingRepo.delete({ headerHash });
-    this.auditService.safeLog(
-      loggedUser,
-      "MAPPING_DELETED",
-      headerHash,
-      `Mapping deleted with header hash ${headerHash}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "MAPPING_DELETED",
+    //   headerHash,
+    //   `Mapping deleted with header hash ${headerHash}`
+    // );
   }
 
   async updateMappingRules(
@@ -215,12 +215,12 @@ export class MappingsService {
     const updated = await this.mappingRepo.save({ ...mapping, ...mappingData });
 
     this.logger.log("Mapping rules updated successfully.");
-    this.auditService.safeLog(
-      loggedUser,
-      "MAPPING_UPDATED",
-      headerHash,
-      `Mapping updated with header hash ${headerHash}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "MAPPING_UPDATED",
+    //   headerHash,
+    //   `Mapping updated with header hash ${headerHash}`
+    // );
     return updated;
   }
 
@@ -231,12 +231,12 @@ export class MappingsService {
   ): Promise<boolean> {
     this.logger.log("Validating mapping...");
     const mapping = await this.mappingRepo.findOne({ where: { headerHash } });
-    this.auditService.safeLog(
-      loggedUser,
-      mapping ? "MAPPING_VALIDATED" : "MAPPING_VALIDATION_FAILED",
-      headerHash,
-      `Mapping validated with header hash ${headerHash}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   mapping ? "MAPPING_VALIDATED" : "MAPPING_VALIDATION_FAILED",
+    //   headerHash,
+    //   `Mapping validated with header hash ${headerHash}`
+    // );
     if (!mapping) {
       return false;
     }
@@ -343,12 +343,12 @@ export class MappingsService {
         `Mapping with header hash ${headerHash} not found`
       );
     }
-    this.auditService.safeLog(
-      loggedUser,
-      "MAPPING_RULES_RETRIEVED",
-      headerHash,
-      `Mapping rules retrieved with header hash ${headerHash}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "MAPPING_RULES_RETRIEVED",
+    //   headerHash,
+    //   `Mapping rules retrieved with header hash ${headerHash}`
+    // );
     this.logger.debug(inspect(mapping))
     return mapping.rules || {};
   }

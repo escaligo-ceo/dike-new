@@ -32,10 +32,10 @@ describe("UserService", () => {
   };
 
   beforeAll(async () => {
-    const connectionStr = process.env.SERVICE_DB_CONNECTION_STR;
+    const connectionStr = process.env.PROFILE_DB_CONNECTION_STR;
     if (!connectionStr) {
       // "postgres://profile_admin:profile_password@localhost:5432/profile_db"
-      throw new EnvNotFoundException("SERVICE_DB_CONNECTION_STR");
+      throw new EnvNotFoundException("PROFILE_DB_CONNECTION_STR");
     }
     const connectionParams = new DbConnection(connectionStr);
     const moduleRef = await Test.createTestingModule({

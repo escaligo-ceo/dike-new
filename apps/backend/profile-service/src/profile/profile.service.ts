@@ -1,4 +1,4 @@
-import { AppLogger, inspect, OriginDto, Profile } from "@dike/common";
+import { AppLogger, inspect, Profile } from "@dike/common";
 import {
   ApiGatewayService,
   AuditService,
@@ -57,8 +57,12 @@ export class ProfileService {
     return res;
   }
 
-  async findInRepository(loggedUser: LoggedUser): Promise<Profile[]> {
-    return this.profileRepository.find();
+  async find(user: LoggedUser): Promise<Profile[]> {
+    return this.profileRepository.find({
+      where: { tenantId: user.tenantId },
+      order: { createdAt: "DESC" },
+      take: 100
+    });
   }
 
   async updateTeamSettings(): Promise<any> {
@@ -93,12 +97,12 @@ export class ProfileService {
     Object.assign(profile, profileData);
     const response = await this.profileRepository.save(profile);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "PROFILE_UPDATE",
-      `Profile updated for userId: ${loggedUser.id}`,
-      { userId: profile.userId }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "PROFILE_UPDATE",
+    //   `Profile updated for userId: ${loggedUser.id}`,
+    //   { userId: profile.userId }
+    // );
 
     return response;
   }
@@ -138,7 +142,7 @@ export class ProfileService {
       );
     }
 
-    let profile = await this.findByUserId(loggedUser);
+    let profile: Profile | null = await this.findByUserId(loggedUser);
     if (profile === null) {
       this.logger.log(`Creating new profile for userId: ${userId}`);
       const profileEntity = this.profileRepository.create({
@@ -147,22 +151,22 @@ export class ProfileService {
       });
       profile = await this.profileRepository.save(profileEntity);
 
-      this.auditService.safeLog(
-        loggedUser,
-        "PROFILE_FIND_OR_CREATE",
-        `Profile created for userId: ${userId}`,
-        { userId: profile.userId }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "PROFILE_FIND_OR_CREATE",
+      //   `Profile created for userId: ${userId}`,
+      //   { userId: profile.userId }
+      // );
 
       this.logger.log(`Profile created: ${inspect(profile)}`);
       return [profile, true];
     }
-    this.auditService.safeLog(
-      loggedUser,
-      "PROFILE_FIND_OR_CREATE",
-      `Profile found for userId: ${userId}`,
-      { userId: profile.userId }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "PROFILE_FIND_OR_CREATE",
+    //   `Profile found for userId: ${userId}`,
+    //   { userId: profile.userId }
+    // );
 
     this.logger.log(`Profile found: ${inspect(profile)}`);
     return [profile, false];
@@ -179,22 +183,22 @@ export class ProfileService {
       });
       profile = await this.profileRepository.save(profileEntity);
 
-      this.auditService.safeLog(
-        loggedUser,
-        "PROFILE_FIND_OR_CREATE",
-        `Profile created for userId: ${loggedUser.id}`,
-        { userId: profile.userId }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "PROFILE_FIND_OR_CREATE",
+      //   `Profile created for userId: ${loggedUser.id}`,
+      //   { userId: profile.userId }
+      // );
 
       this.logger.log(`Profile created: ${inspect(profile)}`);
       return [profile, true];
     }
-    this.auditService.safeLog(
-      loggedUser,
-      "PROFILE_FIND_OR_CREATE",
-      `Profile found for userId: ${loggedUser.id}`,
-      { userId: profile.userId }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "PROFILE_FIND_OR_CREATE",
+    //   `Profile found for userId: ${loggedUser.id}`,
+    //   { userId: profile.userId }
+    // );
 
     this.logger.log(`Profile found: ${inspect(profile)}`);
     return [profile, false];

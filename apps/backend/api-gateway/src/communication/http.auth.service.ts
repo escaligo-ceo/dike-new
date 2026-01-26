@@ -15,20 +15,22 @@ import {
 import { HttpService } from "@nestjs/axios";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import axios, { AxiosError } from "axios";
+import { config } from "process";
 
 @Injectable()
 export class HttpAuthService extends BaseHttpService {
   constructor(
     protected readonly httpService: HttpService,
     protected readonly logger: AppLogger,
-    protected readonly configService: DikeConfigService
+    protected readonly configService: DikeConfigService,
   ) {
     super(
       httpService,
       new AppLogger(HttpAuthService.name),
       configService,
-      configService.env("AUTH_SERVICE_URL")
+      configService.env("AUTH_SERVICE_URL", "http://localhost:8001/api")
     );
+    this.logger = new AppLogger(HttpAuthService.name);
   }
 
   async register(

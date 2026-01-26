@@ -5,13 +5,8 @@ import {
   VerificationTokenService,
 } from "@dike/common";
 import {
-  ApiGatewayService,
   AuditModule,
   AuditService,
-  HttpAuditService,
-  JwtAuthGuard,
-  KeycloakService,
-  UserFactory,
 } from "@dike/communication";
 import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
@@ -19,11 +14,9 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CommunicationModule } from "../communication/communication.module";
-import { HttpNotificationService } from "../communication/http.notification.service";
 import { EmailVerificationToken } from "../entities/email-verification-token.entity";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { HttpProcessService } from "../communication/http.process.service";
 
 @Module({
   imports: [
@@ -47,14 +40,7 @@ import { HttpProcessService } from "../communication/http.process.service";
     AppLogger,
     ConfigService,
     DikeConfigService,
-    HttpNotificationService,
     AuditService,
-    HttpAuditService,
-    KeycloakService,
-    ApiGatewayService,
-    UserFactory,
-    JwtAuthGuard,
-    HttpProcessService,
     DikeJwtService,
   ],
   exports: [VerificationTokenService],

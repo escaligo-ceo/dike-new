@@ -33,7 +33,7 @@ export class MappingsController extends BaseController {
 
   @Post("find-or-create")
   @Version("1")
-  @Audit(AuditCategory.MAPPING, AuditAction.FCREATE)
+  @Audit(AuditCategory.MAPPING, AuditAction.CREATE)
   @ApiOperation({ summary: "Find or create mapping by headers" })
   async findOrCreate(
     sourceType: ImportType,

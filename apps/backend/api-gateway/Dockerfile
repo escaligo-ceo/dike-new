@@ -5,7 +5,7 @@ RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 
 WORKDIR /app
 
-COPY .yarnrc.yml ./
+COPY ../../../.yarnrc.yml ./
 COPY .yarn ./.yarn
 COPY yarn.lock ./
 COPY package.json ./
@@ -15,7 +15,15 @@ COPY tsconfig.base.json ./
 COPY libs/ ./libs
 COPY apps/backend/api-gateway ./apps/backend/api-gateway
 
-RUN yarn install --inline-builds
+# RUN yarn install --inline-builds
+# RUN yarn workspace @dike/api-gateway build
+
+# Set timeout environment variable and install with retries
+RUN yarn config set httpTimeout 300000 && \
+    yarn install --inline-builds || \
+    yarn install --inline-builds || \
+    yarn install --inline-builds
+
 RUN yarn workspace @dike/api-gateway build
 
 # Stage 2: Runtime

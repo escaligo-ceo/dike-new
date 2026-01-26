@@ -1,63 +1,49 @@
 import {
   AppLogger,
-  DikeConfigService,
+  DikeModule,
   HttpServiceExceptionFilter,
 } from "@dike/common";
 import {
-  ApiGatewayService,
-  AuditModule,
-  KeycloakService,
+  CommunicationModule,
+  LoggedUserInterceptor,
   UserFactory,
 } from "@dike/communication";
 import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { APP_FILTER } from "@nestjs/core";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule } from "@nestjs/config";
+import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { AdminModule } from "./admin/admin.module";
-import { AdminService } from "./admin/admin.service";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { AuthModule } from "./auth/auth.module";
-import { CommunicationModule } from "./communication/communication.module";
-import { HttpNotificationService } from "./communication/http.notification.service";
 import { DatabaseModule } from "./database/database.module";
-import { entities } from "./database/entites";
-import { TokensModule } from "./tokens/tokens.module";
-import { WatchedPersonModule } from "./watched-person/watched-person.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [".env", "../.env", "../../.env", "../../../.env"],
+      envFilePath: ".env",
     }),
-    AuthModule,
+    DikeModule,
+    CommunicationModule.forRoot(),
+    DatabaseModule,
     AdminModule,
     HttpModule,
-    TokensModule,
-    CommunicationModule,
-    DatabaseModule,
-    TypeOrmModule.forFeature(entities),
-    WatchedPersonModule,
-    AuditModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    AdminService,
-    AppLogger,
-    HttpNotificationService,
     {
       provide: APP_FILTER,
       useFactory: (logger: AppLogger) => new HttpServiceExceptionFilter(logger),
       inject: [AppLogger],
     },
-    DikeConfigService,
-    KeycloakService,
-    ConfigService,
-    UserFactory,
-    ApiGatewayService,
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: (userFactory: UserFactory) => {
+        return new LoggedUserInterceptor(userFactory);
+      },
+      inject: [UserFactory],
+    },
   ],
 })
 export class AppModule {}

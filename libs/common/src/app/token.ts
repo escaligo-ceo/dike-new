@@ -45,6 +45,7 @@ Permette di identificare il client, il browser o il sistema che ha generato l'ev
 
   private _userId: string | undefined;
   private _logger = new AppLogger(Token.name);
+  private _emailVerified: boolean | undefined;
 
   constructor(
     originIp: string,
@@ -93,5 +94,14 @@ Permette di identificare il client, il browser o il sistema che ha generato l'ev
       throw new Error(`userId not found in token: ${inspect(this.accessToken)}`);
     }
     return this._userId!;
+  }
+
+  get emailVerified(): boolean | undefined {
+    if (!this._emailVerified) {
+      console.trace();
+      this._logger.error(`email verification status not found in token: ${inspect(this.accessToken)}`);
+      throw new Error(`email verification status not found in token: ${inspect(this.accessToken)}`);
+    }
+    return this._emailVerified!;
   }
 }

@@ -1,7 +1,8 @@
-import { AppLogger, DikeJwtService, DikeConfigService } from "@dike/common";
+import { AppLogger, DikeJwtService, DikeConfigService, DikeModule } from "@dike/common";
 import {
   ApiGatewayService,
   AuditService,
+  AuditModule,
   HttpAuditService,
   UserFactory, KeycloakService,
 } from "@dike/communication";
@@ -16,18 +17,10 @@ import { TenantService } from "./tenant.service";
 import { InternalTenantController } from "./internal-tenant.controller";
 
 @Module({
-  imports: [HttpModule, TypeOrmModule.forFeature(entities), PlanModule],
+  imports: [DikeModule, AuditModule, HttpModule, TypeOrmModule.forFeature(entities), PlanModule],
   providers: [
     TenantService,
-    ApiGatewayService,
-    AppLogger,
-    DikeConfigService,
     ConfigService,
-    AuditService,
-    HttpAuditService,
-    KeycloakService,
-    UserFactory,
-    DikeJwtService,
   ],
   controllers: [TenantController, InternalTenantController],
   exports: [TenantService],

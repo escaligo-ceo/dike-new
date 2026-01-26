@@ -67,31 +67,31 @@ export class HttpImportService extends BaseHttpService {
     } catch (error) {
       let errorMessage = `Failed to validate contact header`;
       if (axios.isAxiosError(error) && error.response) {
-        this.auditService.safeLog(
-          loggedUser,
-          "MAPPING_UPDATE_FAILURE",
-          errorMessage,
-          {
-            headers,
-            headerHash,
-            options,
-          });
+        // this.auditService.safeLog(
+        //   loggedUser,
+        //   "MAPPING_UPDATE_FAILURE",
+        //   errorMessage,
+        //   {
+        //     headers,
+        //     headerHash,
+        //     options,
+        //   });
         this.logger.error(errorMessage, error);
         console.trace();
         throw new HttpException(error.response.data, error.response.status);
       }
       errorMessage += " without error or response";
 
-      this.auditService.safeLog(
-        loggedUser,
-        "MAPPING_UPDATE_FAILURE",
-        errorMessage,
-        {
-          headers,
-          headerHash,
-          options,
-        }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "MAPPING_UPDATE_FAILURE",
+      //   errorMessage,
+      //   {
+      //     headers,
+      //     headerHash,
+      //     options,
+      //   }
+      // );
       this.logger.error(errorMessage, error);
       console.trace();
       throw new InternalServerErrorException(errorMessage);
@@ -112,22 +112,22 @@ export class HttpImportService extends BaseHttpService {
       this.logger.error("Failed to find mapping by hash", error);
       if (axios.isAxiosError(error) && error.response) {
         console.trace();
-        this.auditService.safeLog(
-          loggedUser,
-          "MAPPING_FIND_OR_CREATE_FAILURE",
-          errorMessage,
-          {
-            headerHash,
-          }
-        );
+        // this.auditService.safeLog(
+        //   loggedUser,
+        //   "MAPPING_FIND_OR_CREATE_FAILURE",
+        //   errorMessage,
+        //   {
+        //     headerHash,
+        //   }
+        // );
         throw new HttpException(error.response.data, error.response.status);
       }
       errorMessage += " without error or response";
 
-      this.auditService
-        .safeLog(loggedUser, "MAPPING_FIND_OR_CREATE_FAILURE", errorMessage, {
-          headerHash,
-        });
+      // this.auditService
+      //   .safeLog(loggedUser, "MAPPING_FIND_OR_CREATE_FAILURE", errorMessage, {
+      //     headerHash,
+      //   });
 
       this.logger.error(errorMessage, error);
       console.trace();
@@ -149,22 +149,22 @@ export class HttpImportService extends BaseHttpService {
       this.logger.error("Failed to find all mappings by hash", error);
       if (axios.isAxiosError(error) && error.response) {
         console.trace();
-        this.auditService
-          .safeLog(loggedUser, "MAPPING_FIND_FAILURE", errorMessage, {
-            headerHash,
-          })
-          .catch((err) =>
-            this.logger.error(`Audit log failed: ${inspect(err)}`)
-          );
+        // this.auditService
+        //   .safeLog(loggedUser, "MAPPING_FIND_FAILURE", errorMessage, {
+        //     headerHash,
+        //   })
+        //   .catch((err) =>
+        //     this.logger.error(`Audit log failed: ${inspect(err)}`)
+        //   );
         throw new HttpException(error.response.data, error.response.status);
       }
       errorMessage += " without error or response";
 
-      this.auditService
-        .safeLog(loggedUser, "MAPPING_FIND_FAILURE", errorMessage, {
-          headerHash,
-        })
-        .catch((err) => this.logger.error(`Audit log failed: ${inspect(err)}`));
+      // this.auditService
+      //   .safeLog(loggedUser, "MAPPING_FIND_FAILURE", errorMessage, {
+      //     headerHash,
+      //   })
+      //   .catch((err) => this.logger.error(`Audit log failed: ${inspect(err)}`));
 
       this.logger.error(errorMessage, error);
       console.trace();
@@ -214,40 +214,40 @@ export class HttpImportService extends BaseHttpService {
         throw error;
       }
       if (axios.isAxiosError(error) && error.response) {
-        this.auditService
-          .safeLog(
-            loggedUser,
-            "MAPPING_FIND_OR_CREATE_FAILURE",
-            errorMessage,
-            {
-              sourceType,
-              headers,
-              headerNormalized,
-              headerHash,
-              headerHashAlgorithm,
-            }
-          )
-          .catch((err) =>
-            this.logger.error(`Audit log failed: ${inspect(err)}`)
-          );
+        // this.auditService
+        //   .safeLog(
+        //     loggedUser,
+        //     "MAPPING_FIND_OR_CREATE_FAILURE",
+        //     errorMessage,
+        //     {
+        //       sourceType,
+        //       headers,
+        //       headerNormalized,
+        //       headerHash,
+        //       headerHashAlgorithm,
+        //     }
+        //   )
+        //   .catch((err) =>
+        //     this.logger.error(`Audit log failed: ${inspect(err)}`)
+        //   );
 
         this.logger.error(errorMessage, error);
         console.trace();
         throw new HttpException(error.response.data, error.response.status);
       }
       errorMessage += " without error or response";
-      this.auditService.safeLog(
-        loggedUser,
-        "MAPPING_FIND_OR_CREATE_FAILURE",
-        errorMessage,
-        {
-          sourceType,
-          headers,
-          headerNormalized,
-          headerHash,
-          headerHashAlgorithm,
-        }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "MAPPING_FIND_OR_CREATE_FAILURE",
+      //   errorMessage,
+      //   {
+      //     sourceType,
+      //     headers,
+      //     headerNormalized,
+      //     headerHash,
+      //     headerHashAlgorithm,
+      //   }
+      // );
 
       this.logger.error(errorMessage, error);
       console.trace();
@@ -295,30 +295,30 @@ export class HttpImportService extends BaseHttpService {
     } catch (error) {
       let errorMessage = `Failed to update mapping for headerHash: ${headerHash}`;
       if (axios.isAxiosError(error) && error.response) {
-        this.auditService.safeLog(
-          loggedUser,
-          "MAPPING_UPDATE_FAILURE",
-          errorMessage,
-          {
-            headerHash,
-            mappingData,
-          }
-        );
+        // this.auditService.safeLog(
+        //   loggedUser,
+        //   "MAPPING_UPDATE_FAILURE",
+        //   errorMessage,
+        //   {
+        //     headerHash,
+        //     mappingData,
+        //   }
+        // );
 
         this.logger.error(errorMessage, error);
         console.trace();
         throw new HttpException(error.response.data, error.response.status);
       }
       errorMessage += " without error or response";
-      this.auditService.safeLog(
-        loggedUser,
-        "MAPPING_UPDATE_FAILURE",
-        errorMessage,
-        {
-          headerHash,
-          mappingData,
-        }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "MAPPING_UPDATE_FAILURE",
+      //   errorMessage,
+      //   {
+      //     headerHash,
+      //     mappingData,
+      //   }
+      // );
       this.logger.error(errorMessage, error);
       console.trace();
       throw new InternalServerErrorException(errorMessage);

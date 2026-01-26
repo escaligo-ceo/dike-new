@@ -1,6 +1,7 @@
 import {
   AppLogger,
   AuthorizationBearer,
+  CurrentUser,
   DikeConfigService,
   OriginIp,
   OriginUserAgent,
@@ -40,7 +41,7 @@ export class AdminController extends BaseAdminController {
     protected readonly auditService: AuditService,
     protected readonly adminService: AdminService,
     protected readonly apiGatewayService: ApiGatewayService,
-    private readonly userService: ProfileService
+    private readonly profileService: ProfileService
   ) {
     super(
       new AppLogger(AdminController.name),
@@ -57,21 +58,10 @@ export class AdminController extends BaseAdminController {
   @ApiOperation({ summary: "Admin users view" })
   @Render("users")
   async users(
-    @OriginIp() originIp: string,
-    @OriginUserAgent() originUserAgent: string,
-    @AuthorizationBearer() authentication: string,
+    @CurrentUser() user: LoggedUser,
     @Req() req
   ) {
-    this.logRequest(
-      req,
-      `users called with originIp: ${originIp}, originUserAgent: ${originUserAgent}`
-    );
-    const loggedUser: LoggedUser = this.userFactory.fromToken(
-      req.decodedKeycloakToken,
-      originIp,
-      originUserAgent,
-      authentication,
-    );
-    return { users: await this.userService.findInRepository(loggedUser) };
+    this.logRequest(req, 'users');
+    return { users: await this.profileService.find(user) };
   }
 }

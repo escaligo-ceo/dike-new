@@ -229,6 +229,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get("dashboard")
   @Render("dashboard")
+  @Audit(AuditCategory.DASHBOARD, AuditAction.ACCESS)
   async getDashboard(
     @OriginIp() originIp: string,
     @OriginUserAgent() originUserAgent: string,
@@ -251,12 +252,12 @@ export class AppController {
       )}`
     );
 
-    this.auditService.safeLog(
-      loggedUser,
-      "DASHBOARD_ACCESSING",
-      `User with id: ${loggedUser.id} accessed the dashboard`,
-      { userId: loggedUser.id }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "DASHBOARD_ACCESSING",
+    //   `User with id: ${loggedUser.id} accessed the dashboard`,
+    //   { userId: loggedUser.id }
+    // );
 
     this.logger.error(inspect(profile));
     return {
@@ -269,6 +270,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get("notifications")
   @Render("notifications")
+  @Audit(AuditCategory.NOTIFICATIONS, AuditAction.ACCESS)
   async getNotifications(
     @OriginIp() originIp: string,
     @OriginUserAgent() originUserAgent: string,
@@ -291,12 +293,12 @@ export class AppController {
       )}`
     );
 
-    this.auditService.safeLog(
-      loggedUser,
-      "NOTIFICATIONS_ACCESSING",
-      `User with id: ${loggedUser.id} accessed notifications`,
-      { userId: loggedUser.id }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "NOTIFICATIONS_ACCESSING",
+    //   `User with id: ${loggedUser.id} accessed notifications`,
+    //   { userId: loggedUser.id }
+    // );
     this.logger.error(inspect(userProfile));
     return {
       title: "Notifications",
@@ -308,6 +310,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get("billings")
   @Render("billings")
+  @Audit(AuditCategory.DASHBOARD, AuditAction.ACCESS)
   async getBilling(
     @OriginIp() originIp: string,
     @OriginUserAgent() originUserAgent: string,
@@ -331,12 +334,12 @@ export class AppController {
       )}`
     );
 
-    this.auditService.safeLog(
-      loggedUser,
-      "DASHBOARD_ACCESSING",
-      `User with id: ${loggedUser.id} accessed the billing`,
-      { userId: loggedUser.id }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "DASHBOARD_ACCESSING",
+    //   `User with id: ${loggedUser.id} accessed the billing`,
+    //   { userId: loggedUser.id }
+    // );
 
     this.logger.error(inspect(userProfile));
 
@@ -358,6 +361,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get("emails")
   @Render("emails")
+  @Audit(AuditCategory.DASHBOARD, AuditAction.ACCESS)
   async getEmails(
     @OriginIp() originIp: string,
     @OriginUserAgent() originUserAgent: string,
@@ -380,12 +384,12 @@ export class AppController {
       )}`
     );
 
-    this.auditService.safeLog(
-      loggedUser,
-      "DASHBOARD_ACCESSING",
-      `User with id: ${loggedUser.id} accessed the billing`,
-      { userId: loggedUser.id }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "DASHBOARD_ACCESSING",
+    //   `User with id: ${loggedUser.id} accessed the billing`,
+    //   { userId: loggedUser.id }
+    // );
 
     this.logger.error(inspect(userProfile));
 
@@ -419,12 +423,12 @@ export class AppController {
 
     const accessToken = req.cookies?.access_token;
 
-    this.auditService.safeLog(
-      loggedUser,
-      "DASHBOARD_ACCESSING",
-      `User with id: ${loggedUser.id} accessed the dashboard`,
-      { userId: loggedUser.id }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "DASHBOARD_ACCESSING",
+    //   `User with id: ${loggedUser.id} accessed the dashboard`,
+    //   { userId: loggedUser.id }
+    // );
 
     this.logger.error(inspect(userProfile));
     return {

@@ -1,8 +1,8 @@
 import { UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { DikeConfigService } from "../app/load-env-value.js";
 import { AppLogger } from "../app/logger.js";
 import { IVerificationToken } from "../access/verification-token.interface.js";
+import { DikeConfigService } from "../app/load-env-values.js";
 
 export class DikeJwtService {
   constructor(

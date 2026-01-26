@@ -13,12 +13,9 @@ import { AdminModule } from "./admin/admin.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DatabaseModule } from "./database/database.module";
-import { EmailModule } from "./email/email.module";
+import { EmailModule } from "./channels/email/email.module";
 import { NotificationModule } from "./notification/notification.module";
-import { PrefController } from "./pref/pref.controller";
 import { PrefModule } from "./pref/pref.module";
-import { TemplateLoaderModule } from "./template-loader/template-loader.module";
-import { TestController } from "./test/test.controller";
 import { ApiGatewayService, CommunicationModule, KeycloakService, UserFactory } from "@dike/communication";
 
 @Module({
@@ -27,30 +24,22 @@ import { ApiGatewayService, CommunicationModule, KeycloakService, UserFactory } 
       isGlobal: true,
     }),
     DikeModule,
-    CommunicationModule,
+    CommunicationModule.forRoot(),
     DatabaseModule,
     AdminModule,
     EmailModule,
     NotificationModule,
     PrefModule,
-    TemplateLoaderModule,
     HttpModule,
   ],
-  controllers: [AppController, TestController, PrefController],
+  controllers: [AppController],
   providers: [
     AppService,
-    AppLogger,
     {
       provide: APP_FILTER,
       useFactory: (logger: AppLogger) => new HttpServiceExceptionFilter(logger),
       inject: [AppLogger],
     },
-    KeycloakService,
-    DikeConfigService,
-    ConfigService,
-    UserFactory,
-    ApiGatewayService,
-    DikeJwtService,
   ],
 })
 export class AppModule {}

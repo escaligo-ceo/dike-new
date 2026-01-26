@@ -10,7 +10,6 @@ import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import path from "path";
 import { Client } from "pg";
-import { Migration } from "typeorm";
 import { EmailVerificationToken } from "../entities/email-verification-token.entity";
 import { LoginSession } from "../entities/login-session.entity";
 import { WatchedPerson } from "../entities/watched-person.entity";
@@ -43,7 +42,7 @@ import { WatchedPerson } from "../entities/watched-person.entity";
         }
 
         const serviceDbConnectionStr = configService.env(
-          "SERVICE_DB_CONNECTION_STR",
+          "AUTH_DB_CONNECTION_STR",
           "postgres://auth-service_admin:auth-service_password@localhost:5432/auth_db"
         );
         const serviceDbParams = new DbConnection(serviceDbConnectionStr);
@@ -188,8 +187,7 @@ import { WatchedPerson } from "../entities/watched-person.entity";
           await AppDataSource.initialize();
           console.log("📦 DataSource initialized.");
 
-          const resultMigrations: Migration[] =
-            await AppDataSource.runMigrations();
+          const resultMigrations = await AppDataSource.runMigrations();
           if (resultMigrations.length === 0)
             console.log("there is no migration to be execute");
           else {

@@ -4,14 +4,29 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "module": "commonjs",
-    "moduleResolution": "node",
+    // "module": "ES2022",
+    // "types": [
+    //   "node"
+    // ],
+    // // "typesVersions": {
+    // //   "node": [
+    // //     "22"
+    // //   ]
+    // // },
+    // // "moduleResolution": "node",
+    // "moduleResolution": "node16",
+    // "lib": [
+    //   "es2022",
+    //   "dom"
+    // ],
+
     "declaration": true,
     "declarationMap": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2021",
+    "target": "es2022",
     "sourceMap": true,
     "baseUrl": "./",
     "incremental": true,

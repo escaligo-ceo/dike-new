@@ -6,12 +6,12 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class HttpNotificationService extends BaseHttpService {
   constructor(
-    protected readonly httpService: HttpService,
-    protected readonly logger: AppLogger,
-    protected readonly configService: DikeConfigService
+    httpService: HttpService,
+    logger: AppLogger,
+    configService: DikeConfigService
   ) {
     super(
-      httpService,
+      httpService as any,
       new AppLogger(HttpNotificationService.name),
       configService,
       configService.env("NOTIFICATION_SERVICE_URL", "http://localhost:8007/api")

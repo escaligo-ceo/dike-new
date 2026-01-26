@@ -71,21 +71,21 @@ services:
       KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
       REDIS_URL: redis://redis_broker:6379
 
-  process-service:
+  process-engine:
     build:
       context: .
-      dockerfile: apps/backend/process-service/Dockerfile
+      dockerfile: apps/backend/process-engine/Dockerfile
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/process-service
+    command: npm run dev --workspace=apps/backend/process-engine
     ports:
       - 3001:3001
     depends_on:
       - postgres
     environment:
       <<: *common-env
-      SERVICE_DB_CONNECTION_STR: ${PROCESS_DB_CONNECTION_STR}
+      PROCESS_ENGINE_DB_CONNECTION_STR: ${PROCESS_ENGINE_DB_CONNECTION_STR}
 
   auth-service:
     build:
@@ -103,7 +103,7 @@ services:
       - audit-service
     environment:
       <<: *common-env
-      SERVICE_DB_CONNECTION_STR: ${AUTH_DB_CONNECTION_STR}
+      AUTH_DB_CONNECTION_STR: ${AUTH_DB_CONNECTION_STR}
       # ... altre env specifiche ...
 
   audit-service:
@@ -122,7 +122,7 @@ services:
     environment:
       <<: *common-env
       POSTGRES_CONNECTION_STR: ${POSTGRES_CONNECTION_STR}
-      SERVICE_DB_CONNECTION_STR: ${SERVICE_DB_CONNECTION_STR}
+      AUDIT_DB_CONNECTION_STR: ${AUDIT_DB_CONNECTION_STR}
 
   profile-service:
     build:
@@ -138,7 +138,7 @@ services:
       - postgres
     environment:
       <<: *common-env
-      SERVICE_DB_CONNECTION_STR: ${PROFILE_DB_CONNECTION_STR}
+      PROFILE_DB_CONNECTION_STR: ${PROFILE_DB_CONNECTION_STR}
 
   notification-service:
     build:
@@ -152,7 +152,7 @@ services:
       - 8003:8003
     environment:
       <<: *common-env
-      SERVICE_DB_CONNECTION_STR: ${NOTIFICATION_DB_CONNECTION_STR}
+      NOTIFICATION_DB_CONNECTION_STR: ${NOTIFICATION_DB_CONNECTION_STR}
 
   tenant-service:
     build:
@@ -166,7 +166,63 @@ services:
       - 8005:8005
     environment:
       <<: *common-env
-      SERVICE_DB_CONNECTION_STR: ${TENANT_DB_CONNECTION_STR}
+      TENANT_DB_CONNECTION_STR: ${TENANT_DB_CONNECTION_STR}
+
+  contact-service:
+    build:
+      context: .
+      dockerfile: apps/backend/contact-service/Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev --workspace=apps/backend/contact-service
+    ports:
+      - 8006:8006
+    environment:
+      <<: *common-env
+      CONTACT_DB_CONNECTION_STR: ${CONTACT_DB_CONNECTION_STR}
+
+  import-service:
+    build:
+      context: .
+      dockerfile: apps/backend/import-service/Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev --workspace=apps/backend/import-service
+    ports:
+      - 8007:8007
+    environment:
+      <<: *common-env
+      IMPORT_DB_CONNECTION_STR: ${IMPORT_DB_CONNECTION_STR}
+
+  # templarte-service:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/backend/template-service/Dockerfile
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   command: npm run dev --workspace=apps/backend/template-service
+  #   ports:
+  #     - 8008:8008
+  #   environment:
+  #     <<: *common-env
+  #     TEMPLATE_DB_CONNECTION_STR: ${TEMPLATE_DB_CONNECTION_STR}
+
+  subscription-service:
+    build:
+      context: .
+      dockerfile: apps/backend/subscription-service/Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev --workspace=apps/backend/subscription-service
+    ports:
+      - 8004:8004
+    environment:
+      <<: *common-env
+      SUBSCRIPTION_DB_CONNECTION_STR: ${SUBSCRIPTION_DB_CONNECTION_STR}
 
   web-site:
     build:
@@ -179,6 +235,20 @@ services:
     command: npm run dev --workspace=apps/frontend/web-site
     ports:
       - 5172:5172
+    environment:
+      <<: *common-env
+
+  react:
+    build:
+      context: .
+      dockerfile: apps/frontend/react/Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    # Per il frontend (Vite/Next), npm run dev di solito gestisce già l'hot reload
+    command: npm run dev --workspace=apps/frontend/react
+    ports:
+      - 5173:5173
     environment:
       <<: *common-env
 

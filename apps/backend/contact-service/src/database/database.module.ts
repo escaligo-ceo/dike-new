@@ -41,7 +41,7 @@ import { entities } from "./entities";
         }
 
         const serviceDbConnectionStr = configService.env(
-          "SERVICE_DB_CONNECTION_STR",
+          "CONTACT_DB_CONNECTION_STR",
           "postgres://contact-service_admin:contact-service_password@localhost:5432/contact_db"
         );
         const serviceDbParams = new DbConnection(serviceDbConnectionStr);
@@ -187,8 +187,7 @@ import { entities } from "./entities";
           await AppDataSource.initialize();
           console.log("📦 DataSource initialized.");
 
-          const resultMigrations: Migration[] =
-            await AppDataSource.runMigrations();
+          const resultMigrations = await AppDataSource.runMigrations();
           if (resultMigrations.length === 0)
             console.log("there is no migration to be execute");
           else {

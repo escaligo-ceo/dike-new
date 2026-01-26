@@ -24,8 +24,8 @@ import {
   PasswordResetEmailOptions,
   VerificationEmailOptions,
   WelcomeEmailOptions,
-} from "../email/email.interface";
-import { EmailChannel } from "../email/email.service";
+} from "../channels/email/email.interface";
+import { EmailChannel } from "../channels/email/email.service";
 import { NotificationService } from "./notification.service";
 import { SendNotificationDto } from "./send-notification.dto";
 
@@ -47,23 +47,23 @@ export class NotificationController extends BaseController {
     );
   }
 
-  @Post()
-  @Version("1")
-  @Audit(AuditCategory.NOTIFICATION, AuditAction.SEND)
-  @ApiOperation({
-    summary: "Invia una notifica su uno o più canali (email, sms, system)",
-  })
-  async sendNotification(
-    @CurrentUser() loggedUser: LoggedUser,
-    @Body() dto: SendNotificationDto,
-    @Req() req,
-  ): Promise<EmailGenericResponse> {
-    this.logRequest(req, `sendNotification`);
-    this.logger.log(
-      `Invio notifica di tipo ${dto.type} sui canali: ${dto.channels.join(", ")}`,
-    );
-    return this.notificationService.sendNotification(loggedUser, dto);
-  }
+  // @Post()
+  // @Version("1")
+  // @Audit(AuditCategory.NOTIFICATION, AuditAction.SEND)
+  // @ApiOperation({
+  //   summary: "Invia una notifica su uno o più canali (email, sms, system)",
+  // })
+  // async sendNotification(
+  //   @CurrentUser() loggedUser: LoggedUser,
+  //   @Body() dto: SendNotificationDto,
+  //   @Req() req,
+  // ): Promise<EmailGenericResponse> {
+  //   this.logRequest(req, `sendNotification`);
+  //   this.logger.log(
+  //     `Invio notifica di tipo ${dto.type} sui canali: ${dto.channels.join(", ")}`,
+  //   );
+  //   return this.notificationService.sendNotification(loggedUser, dto);
+  // }
 
   @Post("email")
   @Version("1")
@@ -78,44 +78,44 @@ export class NotificationController extends BaseController {
     return this.notificationService.sendGeneric(loggedUser, emailOptions);
   }
 
-  @Post("verification")
-  @Version("1")
-  @Audit(AuditCategory.EMAIL, AuditAction.SEND_EMAIL_VERIFICATION)
-  @ApiOperation({ summary: "Invia email di verifica account" })
-  async sendVerification(
-    @CurrentUser() loggedUser: LoggedUser,
-    @Body() options: VerificationEmailOptions,
-    @Req() req,
-  ): Promise<EmailGenericResponse> {
-    this.logRequest(req, `sendVerification`);
-    return this.notificationService.sendVerification(loggedUser, options);
-  }
+  // @Post("verification")
+  // @Version("1")
+  // @Audit(AuditCategory.EMAIL, AuditAction.SEND_EMAIL_VERIFICATION)
+  // @ApiOperation({ summary: "Invia email di verifica account" })
+  // async sendVerification(
+  //   @CurrentUser() loggedUser: LoggedUser,
+  //   @Body() options: VerificationEmailOptions,
+  //   @Req() req,
+  // ): Promise<EmailGenericResponse> {
+  //   this.logRequest(req, `sendVerification`);
+  //   return this.notificationService.sendVerification(loggedUser, options);
+  // }
 
-  @Post("welcome")
-  @Version("1")
-  @Audit(AuditCategory.EMAIL, AuditAction.SEND_WELCOME_EMAIL)
-  @ApiOperation({ summary: "Invia email di benvenuto" })
-  async sendWelcome(
-    @CurrentUser() loggedUser: LoggedUser,
-    @Body() options: WelcomeEmailOptions,
-    @Req() req,
-  ): Promise<EmailGenericResponse> {
-    this.logRequest(req, `sendWelcome`);
-    return this.notificationService.sendWelcome(loggedUser, options);
-  }
+  // @Post("welcome")
+  // @Version("1")
+  // @Audit(AuditCategory.EMAIL, AuditAction.SEND_WELCOME_EMAIL)
+  // @ApiOperation({ summary: "Invia email di benvenuto" })
+  // async sendWelcome(
+  //   @CurrentUser() loggedUser: LoggedUser,
+  //   @Body() options: WelcomeEmailOptions,
+  //   @Req() req,
+  // ): Promise<EmailGenericResponse> {
+  //   this.logRequest(req, `sendWelcome`);
+  //   return this.notificationService.sendWelcome(loggedUser, options);
+  // }
 
-  @Post("password-reset")
-  @Version("1")
-  @Audit(AuditCategory.EMAIL, AuditAction.SEND_PASSWORD_RESET)
-  @ApiOperation({ summary: "Invia email di reset password" })
-  async sendPasswordReset(
-    @CurrentUser() loggedUser: LoggedUser,
-    @Body() options: PasswordResetEmailOptions,
-    @Req() req,
-  ): Promise<EmailGenericResponse> {
-    this.logRequest(req, `sendPasswordReset`);
-    return this.notificationService.sendPasswordReset(loggedUser, options);
-  }
+  // @Post("password-reset")
+  // @Version("1")
+  // @Audit(AuditCategory.EMAIL, AuditAction.SEND_PASSWORD_RESET)
+  // @ApiOperation({ summary: "Invia email di reset password" })
+  // async sendPasswordReset(
+  //   @CurrentUser() loggedUser: LoggedUser,
+  //   @Body() options: PasswordResetEmailOptions,
+  //   @Req() req,
+  // ): Promise<EmailGenericResponse> {
+  //   this.logRequest(req, `sendPasswordReset`);
+  //   return this.notificationService.sendPasswordReset(loggedUser, options);
+  // }
 
   @Post("test-smtp-connection")
   @Version("1")
@@ -129,16 +129,16 @@ export class NotificationController extends BaseController {
     return this.notificationService.testConnection(loggedUser);
   }
 
-  @Post("already-registered")
-  @Version("1")
-  @Audit(AuditCategory.EMAIL, AuditAction.SEND_ALREADY_REGISTERED_EMAIL)
-  @ApiOperation({ summary: "Invia email di verifica account" })
-  async sendAlreadyRegistered(
-    @CurrentUser() loggedUser: LoggedUser,
-    @Body() options: AlreadyRegisteredEmailOptions,
-    @Req() req,
-  ): Promise<EmailGenericResponse> {
-    this.logRequest(req, `sendAlreadyRegistered`);
-    return this.notificationService.sendAlreadyRegistered(loggedUser, options);
-  }
+  // @Post("already-registered")
+  // @Version("1")
+  // @Audit(AuditCategory.EMAIL, AuditAction.SEND_ALREADY_REGISTERED_EMAIL)
+  // @ApiOperation({ summary: "Invia email di verifica account" })
+  // async sendAlreadyRegistered(
+  //   @CurrentUser() loggedUser: LoggedUser,
+  //   @Body() options: AlreadyRegisteredEmailOptions,
+  //   @Req() req,
+  // ): Promise<EmailGenericResponse> {
+  //   this.logRequest(req, `sendAlreadyRegistered`);
+  //   return this.notificationService.sendAlreadyRegistered(loggedUser, options);
+  // }
 }

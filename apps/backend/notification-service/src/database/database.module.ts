@@ -47,7 +47,7 @@ import { Template } from "../entities/template.entity";
         }
 
         const serviceDbConnectionStr = configService.env(
-          "SERVICE_DB_CONNECTION_STR",
+          "NOTIFICATION_DB_CONNECTION_STR",
           "postgres://notification-service_admin:notification-service_password@localhost:5432/notification_db"
         );
         const serviceDbParams = new DbConnection(serviceDbConnectionStr);
@@ -192,8 +192,7 @@ import { Template } from "../entities/template.entity";
           await AppDataSource.initialize();
           console.log("📦 DataSource initialized.");
 
-          const resultMigrations: Migration[] =
-            await AppDataSource.runMigrations();
+          const resultMigrations = await AppDataSource.runMigrations();
           if (resultMigrations.length === 0)
             console.log("there is no migration to be execute");
           else {

@@ -1,4 +1,4 @@
-import { AppLogger, DikeConfigService } from "@dike/common";
+import { AppLogger } from "@dike/common";
 import { ApiGatewayService, AuditLog, AuditStatsDto, BaseAdminService, LoggedUser, UserFactory } from "@dike/communication";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";

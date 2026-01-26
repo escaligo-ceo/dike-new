@@ -61,12 +61,12 @@ export class HttpSubscriptionService extends BaseHttpService {
       const response = await this.get(requestUrl, loggedUser.token.originDto);
       return response.data;
     } catch (error) {
-      this.auditService.safeLog(
-        loggedUser,
-        "REGISTER_USER_SUCCESS",
-        `Failed to get subscription for tenant: ${tenantId}`,
-        { tenantId, featureName }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "REGISTER_USER_SUCCESS",
+      //   `Failed to get subscription for tenant: ${tenantId}`,
+      //   { tenantId, featureName }
+      // );
 
       if (axios.isAxiosError(error) && error.response) {
         throw new HttpException(error.response.data, error.response.status);

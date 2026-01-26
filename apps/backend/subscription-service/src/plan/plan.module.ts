@@ -1,4 +1,4 @@
-import { AppLogger, DikeJwtService, DikeConfigService } from "@dike/common";
+import { AppLogger, DikeJwtService, DikeConfigService, DikeModule } from "@dike/common";
 import {
   ApiGatewayService,
   AuditModule,
@@ -16,6 +16,7 @@ import { PlanService } from "./plan.service";
 
 @Module({
   imports: [
+    DikeModule,
     TypeOrmModule.forFeature(entities),
     FeatureModule,
     AuditModule,
@@ -25,14 +26,7 @@ import { PlanService } from "./plan.service";
   controllers: [PlanController],
   providers: [
     PlanService,
-    AppLogger,
-    ApiGatewayService,
-    DikeConfigService,
     ConfigService,
-    KeycloakService,
-    UserFactory,
-    ApiGatewayService,
-    DikeJwtService,
   ],
   exports: [PlanService],
 })

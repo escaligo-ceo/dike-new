@@ -1,5 +1,5 @@
 {
-  "name": "react",
+  "name": "@dike/react",
   "private": true,
   "version": "0.0.17",
   "type": "module",

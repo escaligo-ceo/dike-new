@@ -169,17 +169,17 @@ export const ImportContactsDialog: React.FC<ImportContactsDialogProp> = ({
 
     return baseValue;
   };
-  const CONTACT_FIELD_OPTIONS: { value: string; label: string }[] = [
-    { value: "firstName", label: "Nome" },
-    { value: "lastName", label: "Cognome" },
-    { value: "fullName", label: "Nome completo" },
-    { value: "email", label: "Email" },
-    { value: "phone", label: "Telefono" },
-    { value: "address", label: "Indirizzo" },
-    { value: "city", label: "Città" },
-    { value: "country", label: "Paese" },
-    { value: "postalCode", label: "CAP" },
-  ];
+  // const CONTACT_FIELD_OPTIONS: { value: string; label: string }[] = [
+  //   { value: "firstName", label: "Nome" },
+  //   { value: "lastName", label: "Cognome" },
+  //   { value: "fullName", label: "Nome completo" },
+  //   { value: "email", label: "Email" },
+  //   { value: "phone", label: "Telefono" },
+  //   { value: "address", label: "Indirizzo" },
+  //   { value: "city", label: "Città" },
+  //   { value: "country", label: "Paese" },
+  //   { value: "postalCode", label: "CAP" },
+  // ];
 
   const [currentColumnIndex, setCurrentColumnIndex] = useState<number>(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

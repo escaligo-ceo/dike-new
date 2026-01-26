@@ -54,7 +54,7 @@ import { Migration } from "typeorm";
         }
 
         const serviceDbConnectionStr = configService.env(
-          "SERVICE_DB_CONNECTION_STR",
+          "PROFILE_DB_CONNECTION_STR",
           "postgres://profile-service_admin:profile-service_password@postgres:5432/profile_db"
         );
         const serviceDbParams = new DbConnection(serviceDbConnectionStr);
@@ -214,8 +214,7 @@ import { Migration } from "typeorm";
           await AppDataSource.initialize();
           console.log("📦 DataSource initialized.");
 
-          const resultMigrations: Migration[] =
-            await AppDataSource.runMigrations();
+          const resultMigrations = await AppDataSource.runMigrations();
           if (resultMigrations.length === 0)
             console.log("there is no migration to be execute");
           else {
@@ -233,8 +232,8 @@ import { Migration } from "typeorm";
             resultSeeds.forEach((seed) => console.log(`→ ${seed.name}`));
           }
 
-          if (AppDataSource.isInitialized) {
-            await AppDataSource.destroy();
+          if ((AppDataSource as any).isInitialized) {
+            await (AppDataSource as any).destroy();
           }
           console.log("🔌 DataSource closed.");
         } catch (error) {

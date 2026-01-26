@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import * as crypto from "crypto";
-import { DikeConfigService } from "../app/load-env-value.js";
+import { DikeConfigService } from "../app/load-env-values.js";
 import { AppLogger } from "../app/logger.js";
 import { inspect } from "../app/utils.js";
 import {

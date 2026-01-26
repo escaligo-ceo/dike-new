@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WatchedPerson } from '../entities/watched-person.entity';
 import { WatchedPersonService } from './watched-person.service';
-import { ApiGatewayService, UserFactory } from '@dike/communication';
+import { ApiGatewayService } from './api-gateway.service';
+import { UserFactory } from './user.factory';
 import { HttpModule } from '@nestjs/axios';
-import { AppLogger } from '@dike/common';
+import { AppLogger, DikeConfigService } from '@dike/common';
 
 @Module({
   imports: [TypeOrmModule.forFeature([WatchedPerson]), HttpModule],
-  providers: [WatchedPersonService, UserFactory, ApiGatewayService, AppLogger],
+  providers: [WatchedPersonService, UserFactory, ApiGatewayService, AppLogger, DikeConfigService],
   exports: [WatchedPersonService]
 })
 export class WatchedPersonModule {}

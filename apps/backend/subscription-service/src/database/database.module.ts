@@ -3,28 +3,14 @@ import {
   DikeConfigService,
   DikeDataSource,
   DikeModule,
-  Feature,
-  Invite,
-  JobRole,
-  Member,
-  Membership,
-  Office,
-  Plan,
-  PlanFeature,
-  Profile,
-  Role,
   Seed,
-  Subscription,
-  Team,
-  Tenant,
 } from "@dike/common";
 import { HttpStatus, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import path from "path";
 import { Client } from "pg";
-import { Migration } from "typeorm";
-// import { entities } from "./entities";
+import { entities } from "./entities";
 
 @Module({
   imports: [
@@ -54,7 +40,7 @@ import { Migration } from "typeorm";
         }
 
         const serviceDbConnectionStr = configService.env(
-          "SERVICE_DB_CONNECTION_STR",
+          "SUBSCRIPTION_DB_CONNECTION_STR",
           "postgres://subscription-service_admin:subscription-service_password@postgres:5432/subscription_db"
         );
         const serviceDbParams = new DbConnection(serviceDbConnectionStr);
@@ -193,29 +179,13 @@ import { Migration } from "typeorm";
             type: "postgres",
             migrations: [migrationPath],
             seeds: [seedPath],
-            entities: [
-              Profile,
-              JobRole,
-              Plan,
-              PlanFeature,
-              Feature,
-              Subscription,
-              Tenant,
-              Invite,
-              Membership,
-              Office,
-              Team,
-              Member,
-              Role,
-            ],
             synchronize: false,
           });
 
           await AppDataSource.initialize();
           console.log("📦 DataSource initialized.");
 
-          const resultMigrations: Migration[] =
-            await AppDataSource.runMigrations();
+          const resultMigrations = await AppDataSource.runMigrations();
           if (resultMigrations.length === 0)
             console.log("there is no migration to be execute");
           else {
@@ -245,21 +215,7 @@ import { Migration } from "typeorm";
         return {
           ...dataSourceOptions,
           type: "postgres",
-          entities: [
-            Profile,
-            JobRole,
-            Plan,
-            PlanFeature,
-            Feature,
-            Subscription,
-            Tenant,
-            Invite,
-            Membership,
-            Office,
-            Team,
-            Member,
-            Role,
-          ],
+          entities,
           // synchronize: process.env.NODE_ENV !== "production",
           synchronize: false,
           autoLoadEntities: true,

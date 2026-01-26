@@ -1,8 +1,6 @@
 import {
   AccessResponse,
-  AccessStep,
   AppLogger,
-  AuthGuard,
   AuthorizationBearer,
   DikeConfigService,
   inspect,
@@ -19,6 +17,7 @@ import {
   BaseController,
   LoggedUser,
   UserFactory,
+  AuthGuard,
 } from "@dike/communication";
 import {
   Body,
@@ -152,8 +151,8 @@ export class AuthController extends BaseController {
     }
 
     // 5️⃣ Redirect finale
-    let redirectUrl = typeof accessResponse.redirectUrl === "string"
-      ? accessResponse.redirectUrl
+    let redirectUrl = typeof accessResponse.context?.redirectUrl === "string"
+      ? accessResponse.context.redirectUrl
       : "/dashboard";
     if (!redirectUrl.startsWith("/")) redirectUrl = `/${redirectUrl}`;
     res.redirect(redirectUrl);

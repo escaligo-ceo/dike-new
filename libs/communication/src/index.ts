@@ -31,3 +31,5 @@ export * from './app/base-admin.service.js';
 export * from './process/step.interface.js';
 export * from './decorators/audit.decorator';
 export * from './audit/audit.enum.js';
+export * from './guards/auth.guard.js';
+

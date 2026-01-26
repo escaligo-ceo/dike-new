@@ -1,0 +1,26 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist",
+    "types": [
+      "node",
+      "jest"
+    ],
+    "lib": [
+      "es2019",
+      "dom"
+    ],
+    "target": "es2019",
+    "moduleResolution": "node",
+  },
+  "include": [
+    "src/**/*",
+    "../../../libs/common/**/*.ts",
+    "../../../libs/communication/**/*.ts",
+    // "src/**/*.json",
+    // "src/**/*.d.ts",
+    // "src/**/*.js"
+  ]
+}

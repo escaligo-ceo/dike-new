@@ -7,7 +7,6 @@ import {
   BaseNotificationChannel,
   DeliveryResult,
 } from "../notification/base-notification-channel.type";
-import { TemplateLoaderService } from "../template-loader/template-loader.service";
 
 export class EmailNotificationChannel extends BaseNotificationChannel {
   private transporter: nodemailer.Transporter;
@@ -33,7 +32,6 @@ export class EmailNotificationChannel extends BaseNotificationChannel {
     },
     private readonly logger: AppLogger,
     private readonly configService: DikeConfigService,
-    private readonly templateLoader: TemplateLoaderService
   ) {
     super();
     this.logger = new AppLogger(EmailNotificationChannel.name);

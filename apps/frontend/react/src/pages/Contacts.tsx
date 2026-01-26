@@ -1088,7 +1088,7 @@ function Contacts() {
                   {isDeleted && (
                     <Button
                       size="small"
-                      appearance="danger"
+                      appearance="secondary"
                       style={{
                         position: "absolute",
                         right: 0,

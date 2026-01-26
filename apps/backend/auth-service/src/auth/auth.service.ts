@@ -1,4 +1,5 @@
 import {
+  AccessStatus,
   AppLogger,
   DikeJwtService,
   EnvNotFoundException,
@@ -181,10 +182,10 @@ export class AuthService {
       const message = error?.message ?? "Keycloak login failed";
       this.logger.error(message);
 
-      await this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-      });
+      // await this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      // });
       throw new UnauthorizedException(message);
     }
 
@@ -193,10 +194,10 @@ export class AuthService {
     // 3️⃣ Controllo token
     if (!access_token) {
       const message = "Login failed: No access token returned";
-      await this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-      });
+      // await this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      // });
       throw new UnauthorizedException(message);
     }
 
@@ -213,20 +214,24 @@ export class AuthService {
     if (!userInfo.id) {
       const message =
         "Login failed: No userId returned from Keycloak user info";
-      await this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-      });
+
+      // await this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      // });
+
       throw new UnauthorizedException(message);
     }
 
     if (!userInfo.emailVerified) {
       const message = "Login failed: Email not verified";
-      await this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-        userId: userInfo.id,
-      });
+
+      // await this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      //   userId: userInfo.id,
+      // });
+
       throw new UnauthorizedException({
         code: LoginStatus.EMAIL_NOT_VERIFIED,
         message,
@@ -246,13 +251,13 @@ export class AuthService {
     //   refresh_token
     // );
 
-    // 7️⃣ Audit login successo
-    await this.auditService.safeLog(
-      loggedUser,
-      "LOGIN_USER_SUCCESS",
-      `User logged in: ${userIdentifier} (userId: ${userInfo.id})`,
-      { email, username },
-    );
+    // // 7️⃣ Audit login successo
+    // await this.auditService.safeLog(
+    //   loggedUser,
+    //   "LOGIN_USER_SUCCESS",
+    //   `User logged in: ${userIdentifier} (userId: ${userInfo.id})`,
+    //   { email, username },
+    // );
 
     // 8️⃣ Costruzione risultato
     const loginResult: ILoginResult = {
@@ -263,7 +268,8 @@ export class AuthService {
       success: true,
       status: HttpStatus.OK,
       message: "Login successful",
-      loginStatus: LoginStatus.SUCCESS,
+      // loginStatus: LoginStatus.SUCCESS,
+      loginStatus: AccessStatus.SUCCESS,
       // redirectUrl: '/dashboard', // opzionale, il controller decide
     };
 
@@ -290,10 +296,10 @@ export class AuthService {
       const { message } = error;
       this.logger.error(message);
 
-      this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-      });
+      // this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      // });
 
       throw new UnauthorizedException(message);
     }
@@ -315,10 +321,10 @@ export class AuthService {
     if (!userId) {
       const message = "Login failed: No userId returned from user info";
 
-      this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-      });
+      // this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      // });
 
       throw new UnauthorizedException(message);
     }
@@ -326,11 +332,11 @@ export class AuthService {
     if (!info.emailVerified) {
       const message = "Login failed: Email not verified";
 
-      this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-        userId,
-      });
+      // this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      //   userId,
+      // });
 
       throw new UnauthorizedException({
         code: LoginStatus.EMAIL_NOT_VERIFIED,
@@ -341,11 +347,11 @@ export class AuthService {
     if (!access_token) {
       const message = "Login failed: No access token returned";
 
-      this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-        userId,
-      });
+      // this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      //   userId,
+      // });
 
       throw new UnauthorizedException(message);
     }
@@ -377,7 +383,8 @@ export class AuthService {
       success: true,
       status: HttpStatus.OK,
       message: "Login successful",
-      loginStatus: LoginStatus.SUCCESS,
+      // loginStatus: LoginStatus.SUCCESS,
+      loginStatus: AccessStatus.SUCCESS,
       access_token,
       refresh_token,
       emailVerified: info.emailVerified,
@@ -387,21 +394,21 @@ export class AuthService {
     if (!loginResult) {
       const message = "Login failed: No result returned";
 
-      this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
-        email,
-        username,
-        userId,
-      });
+      // this.auditService.safeLog(loggedUser, "LOGIN_FAILURE", message, {
+      //   email,
+      //   username,
+      //   userId,
+      // });
 
       throw new InternalServerErrorException(message);
     }
 
-    this.auditService.safeLog(
-      loggedUser,
-      "LOGIN_ADMIN_USER_SUCCESS",
-      `User logged in: ${email || username} (userId: ${userId})`,
-      { email, username, userId },
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "LOGIN_ADMIN_USER_SUCCESS",
+    //   `User logged in: ${email || username} (userId: ${userId})`,
+    //   { email, username, userId },
+    // );
 
     return loginResult;
   }
@@ -628,7 +635,7 @@ export class AuthService {
       const result: ILoginResult = {
         success: true,
         status: HttpStatus.OK,
-        loginStatus: LoginStatus.SUCCESS,
+        loginStatus: AccessStatus.SUCCESS,
         message: "Token refreshed",
         access_token: refreshed.access_token,
         refresh_token: refreshed.refresh_token,

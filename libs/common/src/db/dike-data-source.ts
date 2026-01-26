@@ -1,23 +1,20 @@
 import fs from "fs";
 import path from "path";
 import { DataSource, DataSourceOptions, MixedList } from "typeorm";
-import { BaseDataSourceOptions } from "typeorm/data-source/BaseDataSourceOptions.js";
-import { PostgresConnectionCredentialsOptions } from "typeorm/driver/postgres/PostgresConnectionCredentialsOptions.js";
 import { Seed } from "./seed.js";
 
-export interface DikeConnectionOptions
-  extends BaseDataSourceOptions,
-    PostgresConnectionCredentialsOptions {
+export type DikeConnectionOptions = DataSourceOptions & {
   /**
    * Seeds to be loaded for this connection.
    * Accepts both seed classes and glob patterns representing seed files.
    */
   readonly seeds?: MixedList<Function | string>;
-}
+};
 
 export class DikeDataSource extends DataSource {
   private readonly seeds?: MixedList<Function | string>;
   private seedFiles: string[] = [];
+
   constructor(options: DikeConnectionOptions) {
     const { seeds, ...restOptions } = options;
     super(restOptions as DataSourceOptions);
@@ -37,6 +34,14 @@ export class DikeDataSource extends DataSource {
 
   public initialize() {
     return super.initialize();
+  }
+
+  isIstantiated(): boolean {
+    return this.isInitialized;
+  }
+
+  public runMigrations() {
+    return super.runMigrations();
   }
 
   public runSeeds = async (): Promise<Seed[]> => {

@@ -6,6 +6,8 @@ import {
   Membership,
   Office,
   OfficeDto,
+  Onboarding,
+  OnboardingPages,
   Profile,
   Role,
   Team,
@@ -93,12 +95,12 @@ export class TenantService {
       const message = `findProfileByUserId: ${ownerId} - Not found`;
       this.logger.error(message);
 
-      this.auditService.safeLog(
-        loggedUser,
-        "PROFILE_BY_USER_ID_NOT_FOUND",
-        message,
-        { ownerId }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "PROFILE_BY_USER_ID_NOT_FOUND",
+      //   message,
+      //   { ownerId }
+      // );
 
       throw new NotFoundException(message);
     }
@@ -136,22 +138,22 @@ export class TenantService {
         );
       }
 
-      this.auditService.safeLog(
-        loggedUser,
-        "TENANT_CREATED",
-        `Tenant created for ownerId: ${ownerId}`,
-        { tenantId: tenant.id, ownerId }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "TENANT_CREATED",
+      //   `Tenant created for ownerId: ${ownerId}`,
+      //   { tenantId: tenant.id, ownerId }
+      // );
 
       return [tenant, true];
     }
     tenant = tenants[0]; // FIXME: ensure that this is the correct one
-    this.auditService.safeLog(
-      loggedUser,
-      "TENANT_RETRIEVED",
-      `Tenant retrieved for ownerId: ${ownerId}`,
-      { tenantId: tenant.id, ownerId }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "TENANT_RETRIEVED",
+    //   `Tenant retrieved for ownerId: ${ownerId}`,
+    //   { tenantId: tenant.id, ownerId }
+    // );
 
     return [tenant, false];
   }
@@ -182,11 +184,11 @@ export class TenantService {
     const teamInstance = this.teamRepository.create(entity);
     const team: Team = await this.teamRepository.save(teamInstance);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "TEAM_CREATION",
-      `Creating team for tenant ${tenantId}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   OnboardingPages.TEAM_CREATION,
+    //   `Creating team for tenant ${tenantId}`
+    // );
 
     this.logger.log(`Created team for tenant ${tenantId}: ${inspect(team)}`);
     return team;
@@ -229,11 +231,11 @@ export class TenantService {
       }
     );
     if (membership) {
-      this.auditService.safeLog(
-        loggedUser,
-        "MEMBERSHIP_RETRIEVED",
-        `Retrieving membership for tenant ${tenantId} and user ${membershipData.userId}`
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "MEMBERSHIP_RETRIEVED",
+      //   `Retrieving membership for tenant ${tenantId} and user ${membershipData.userId}`
+      // );
 
       this.logger.log(
         `Retrieved membership for tenant ${tenantId}: ${inspect(membership)}`
@@ -248,11 +250,12 @@ export class TenantService {
     const membershipInstance = this.membershipRepository.create(entity);
     membership = await this.membershipRepository.save(membershipInstance);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "MEMBERSHIP_CREATED",
-      `Creating membership for tenant ${tenantId} and user ${membershipData.userId}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   OnboardingPages.MEMBERSHIP_CREATION,
+    //   `Creating membership for tenant ${tenantId} and user ${membershipData.userId}`
+    // );
+
     this.logger.log(
       `Created membership for tenant ${tenantId}: ${inspect(membership)}`
     );
@@ -279,11 +282,12 @@ export class TenantService {
       relations: ["tenant"],
     });
     if (office) {
-      this.auditService.safeLog(
-        loggedUser,
-        "OFFICE_RETRIEVED",
-        `Retrieving office for tenant ${tenantId} with name ${officeData.name}`
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   OnboardingPages.OFFICE_CREATION,
+      //   // "OFFICE_RETRIEVED",
+      //   `Retrieving office for tenant ${tenantId} with name ${officeData.name}`
+      // );
 
       this.logger.log(
         `Retrieved office for tenant ${tenantId}: ${inspect(office)}`
@@ -298,11 +302,11 @@ export class TenantService {
     const officeInstance = this.officeRepository.create(entity);
     office = await this.officeRepository.save(officeInstance);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "OFFICE_CREATED",
-      `Creating office for tenant ${tenantId} with name ${officeData.name}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   OnboardingStatus.OFFICE_CREATED,
+    //   `Creating office for tenant ${tenantId} with name ${officeData.name}`
+    // );
 
     this.logger.log(
       `Created office for tenant ${tenantId}: ${inspect(office)}`

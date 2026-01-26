@@ -123,17 +123,17 @@ export class ContactService {
 
     const items = contacts.map((contact) => ContactMapper.toDto(contact));
 
-    this.auditService.safeLog(
-      loggedUser,
-      "GET_CONTACT",
-      `Fetched contacts\nFilters: ${JSON.stringify({
-        createdBy: resolvedCreatedBy,
-        assignedTo: resolvedAssignedTo,
-        search: filters.search,
-        page,
-        limit,
-      })}\nResult count: ${items.length} / Total: ${total}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "GET_CONTACT",
+    //   `Fetched contacts\nFilters: ${JSON.stringify({
+    //     createdBy: resolvedCreatedBy,
+    //     assignedTo: resolvedAssignedTo,
+    //     search: filters.search,
+    //     page,
+    //     limit,
+    //   })}\nResult count: ${items.length} / Total: ${total}`
+    // );
 
     return { items, total, page, limit };
   }
@@ -168,12 +168,12 @@ export class ContactService {
         // "webSites", // FIXME: da implementare
       ],
     });
-    this.auditService.safeLog(
-      loggedUser,
-      "GET_CONTACT",
-      `Fetched contact for contactId: ${contactId}`,
-      { contactId, tenantId, filters }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "GET_CONTACT",
+    //   `Fetched contact for contactId: ${contactId}`,
+    //   { contactId, tenantId, filters }
+    // );
     return res;
   }
 
@@ -248,21 +248,21 @@ export class ContactService {
         taxIdentifierDtos
       );
 
-    this.auditService.safeLog(
-      loggedUser,
-      "CREATE_CONTACT",
-      `Created new contact with ID: ${contactId}`,
-      {
-        ...contact,
-        company,
-        addresses,
-        phones,
-        emails,
-        websites,
-        chats,
-        taxIdentifiers,
-      }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "CREATE_CONTACT",
+    //   `Created new contact with ID: ${contactId}`,
+    //   {
+    //     ...contact,
+    //     company,
+    //     addresses,
+    //     phones,
+    //     emails,
+    //     websites,
+    //     chats,
+    //     taxIdentifiers,
+    //   }
+    // );
     return contact;
   }
 
@@ -285,12 +285,12 @@ export class ContactService {
       Object.assign(res, companyDataWithoutDtos);
       res.updatedAt = new Date();
       await this.companyRepository.save(res);
-      this.auditService.safeLog(
-        loggedUser,
-        "UPDATE_COMPANY",
-        `Updated company with ID: ${res.id}`,
-        { ...res }
-      );
+      // this.auditService.safeLog(
+      //   loggedUser,
+      //   "UPDATE_COMPANY",
+      //   `Updated company with ID: ${res.id}`,
+      //   { ...res }
+      // );
       return res;
     }
     const { addresses, phones, emails, ...companyDataWithoutDtos } = CompanyDto;
@@ -595,12 +595,12 @@ export class ContactService {
 
     await this.contactRepository.save(contact);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "REPLACE_CONTACT",
-      `Updated contact with ID: ${contactId}`,
-      { ...contact }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "REPLACE_CONTACT",
+    //   `Updated contact with ID: ${contactId}`,
+    //   { ...contact }
+    // );
 
     return contact;
   }
@@ -638,11 +638,11 @@ export class ContactService {
     }
 
     // Audit log
-    this.auditService.safeLog(
-      loggedUser,
-      "DELETE_CONTACT",
-      `Deleted contact ${id}, deletedAt: ${now.toISOString()}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "DELETE_CONTACT",
+    //   `Deleted contact ${id}, deletedAt: ${now.toISOString()}`
+    // );
 
     return contact;
   }
@@ -687,11 +687,11 @@ export class ContactService {
     }
 
     // Audit log
-    this.auditService.safeLog(
-      loggedUser,
-      "RESTORE_CONTACT",
-      `Restored contact ${id}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "RESTORE_CONTACT",
+    //   `Restored contact ${id}`
+    // );
 
     return contact;
   }
@@ -719,12 +719,12 @@ export class ContactService {
 
     await this.contactRepository.save(contact);
 
-    this.auditService.safeLog(
-      loggedUser,
-      "UPDATE_CONTACT",
-      `Updated contact with ID: ${contactId}`,
-      { ...contact }
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "UPDATE_CONTACT",
+    //   `Updated contact with ID: ${contactId}`,
+    //   { ...contact }
+    // );
 
     return contact;
   }
@@ -773,11 +773,11 @@ export class ContactService {
       total++;
     }
 
-    this.auditService.safeLog(
-      loggedUser,
-      "IMPORT_CONTACTS",
-      `Imported ${total} contacts`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "IMPORT_CONTACTS",
+    //   `Imported ${total} contacts`
+    // );
 
     return {
       total, // numero totale righe processate
@@ -901,11 +901,11 @@ export class ContactService {
       }
     }
 
-    this.auditService.safeLog(
-      loggedUser,
-      "BULK_CREATE_CONTACTS",
-      `Bulk created ${createdContacts.length} contacts`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "BULK_CREATE_CONTACTS",
+    //   `Bulk created ${createdContacts.length} contacts`
+    // );
 
     return {
       total: chunkData.data.length,
@@ -993,17 +993,16 @@ export class ContactService {
       take: limit,
     });
 
-    // Audit log
-    this.auditService.safeLog(
-      loggedUser,
-      "GET_TRASHED_CONTACT",
-      `Fetched trashed contacts\nFilters: ${JSON.stringify({
-        createdBy: resolvedCreatedBy,
-        assignedTo: resolvedAssignedTo,
-        page,
-        limit,
-      })}\nResult count: ${items.length} / Total: ${total}`
-    );
+    // this.auditService.safeLog(
+    //   loggedUser,
+    //   "GET_TRASHED_CONTACT",
+    //   `Fetched trashed contacts\nFilters: ${JSON.stringify({
+    //     createdBy: resolvedCreatedBy,
+    //     assignedTo: resolvedAssignedTo,
+    //     page,
+    //     limit,
+    //   })}\nResult count: ${items.length} / Total: ${total}`
+    // );
 
     return { items, total, page, limit };
   }

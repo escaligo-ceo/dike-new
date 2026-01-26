@@ -11,10 +11,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
+import { ModuleRef, Reflector } from "@nestjs/core";
+import { KeycloakService } from "../keycloak/keycloak.service";
 import * as jwt from "jsonwebtoken";
 import { DecodedKeycloakToken } from "../keycloak/keycloak.interface";
-import { KeycloakService } from "../keycloak/keycloak.service";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -24,7 +24,7 @@ export class JwtAuthGuard implements CanActivate {
 
   constructor(
     private readonly logger: AppLogger,
-    protected readonly reflector: Reflector,
+    private readonly moduleRef: ModuleRef,
     private readonly keycloakService: KeycloakService,
     private readonly jwtService: DikeJwtService
   ) {
@@ -32,8 +32,11 @@ export class JwtAuthGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Get Reflector dynamically from module context
+    const reflector = this.moduleRef.get(Reflector, { strict: false });
+    
     // Check if route is marked as public
-    const isPublic = this.reflector.get<boolean>(
+    const isPublic = reflector.get<boolean>(
       "isPublic",
       context.getHandler()
     );

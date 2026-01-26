@@ -1,5 +1,5 @@
-import { AppLogger, DikeConfigService, DikeJwtService } from "@dike/common";
-import { ApiGatewayService, AuditModule, KeycloakService, UserFactory } from "@dike/communication";
+import { DikeModule } from "@dike/common";
+import { AuditModule, KeycloakService, UserFactory, JwtAuthGuard, ApiGatewayService } from "@dike/communication";
 import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
@@ -23,16 +23,14 @@ import { OnboardingService } from "./onboarding.service";
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: "1h" },
     }),
+    DikeModule,
   ],
   providers: [
-    OnboardingService,
     ProfileService,
-    AppLogger,
+    OnboardingService,
     ApiGatewayService,
     KeycloakService,
     UserFactory,
-    DikeConfigService,
-    DikeJwtService,
   ],
   exports: [OnboardingService],
   controllers: [OnboardingController],

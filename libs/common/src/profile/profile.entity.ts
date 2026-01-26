@@ -1,15 +1,17 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Plan } from "../subscription/plan.entity.js";
 import { Membership } from "../tenant/membership.entity.js";
-import { Tenant } from "../tenant/tenant.entity.js";
 import { JobRole } from "./job-role.enum.js";
 
 export const profileTableName = "profiles";
@@ -201,4 +203,21 @@ export class Profile {
   //   description: "Tenant associato al profilo",
   // })
   // tenant!: Tenant;
+
+  @CreateDateColumn({ name: "created_at" })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ name: "updated_at" })
+  updatedAt!: Date;
+
+  @DeleteDateColumn({ name: "deleted_at", nullable: true, default: null })
+  deletedAt?: Date | null;
+
+  softDelete(): void {
+    this.deletedAt = new Date();
+  }
+
+  restore() {
+    this.deletedAt = null;
+  }
 }
