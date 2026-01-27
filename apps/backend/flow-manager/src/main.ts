@@ -19,7 +19,7 @@ export let logger: AppLogger;
 
   const ENV = configService.env("ENV", "development");
 
-  const appName = configService.env("APP_NAME", "process-engine");
+  const appName = configService.env("APP_NAME", "flow-manager");
 
   logger = new AppLogger(appName);
 
@@ -70,7 +70,7 @@ export let logger: AppLogger;
     // .addServer('/api/v1')
     // .addServer('api/v1') // Aggiunge il server di base per la versione 1
     .addBearerAuth() // Aggiunge il supporto all'Authorization: Bearer <token>
-    .addTag("process-engine")
+    .addTag("flow-manager")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

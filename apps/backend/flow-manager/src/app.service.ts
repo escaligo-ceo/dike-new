@@ -20,7 +20,7 @@ export class AppService {
     return {
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
-      name: this.configService.env("APP_NAME", "process-engine"),
+      name: this.configService.env("APP_NAME", "flow-manager"),
       version: this.configService.env("VERSION", "0.0.1"),
       copyright: `Copyright © ${this.copyrightPeriod} Escaligo s.r.l.`,
       services: {

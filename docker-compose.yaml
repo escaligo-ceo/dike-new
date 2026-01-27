@@ -53,7 +53,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/api-gateway
+    command: npm run dev --workspace=apps/backend/api-gateway -- --host 0.0.0.0
     ports:
       - 3000:3000
     depends_on:
@@ -71,14 +71,14 @@ services:
       KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
       REDIS_URL: redis://redis_broker:6379
 
-  process-engine:
+  flow-manager:
     build:
       context: .
-      dockerfile: apps/backend/process-engine/Dockerfile
+      dockerfile: apps/backend/flow-manager/Dockerfile
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/process-engine
+    command: npm run dev --workspace=apps/backend/flow-manager -- --host 0.0.0.0
     ports:
       - 3001:3001
     depends_on:
@@ -94,7 +94,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/auth-service
+    command: npm run dev --workspace=apps/backend/auth-service -- --host 0.0.0.0
     ports:
       - 8000:8000
     depends_on:
@@ -113,7 +113,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/audit-service
+    command: npm run dev --workspace=apps/backend/audit-service -- --host 0.0.0.0
     ports:
       - 8001:8001
     depends_on:
@@ -131,7 +131,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/profile-service
+    command: npm run dev --workspace=apps/backend/profile-service -- --host 0.0.0.0
     ports:
       - 8002:8002
     depends_on:
@@ -147,7 +147,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/notification-service
+    command: npm run dev --workspace=apps/backend/notification-service -- --host 0.0.0.0
     ports:
       - 8003:8003
     environment:
@@ -161,7 +161,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/tenant-service
+    command: npm run dev --workspace=apps/backend/tenant-service -- --host 0.0.0.0
     ports:
       - 8005:8005
     environment:
@@ -175,7 +175,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/contact-service
+    command: npm run dev --workspace=apps/backend/contact-service -- --host 0.0.0.0
     ports:
       - 8006:8006
     environment:
@@ -189,7 +189,7 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/import-service
+    command: npm run dev --workspace=apps/backend/import-service -- --host 0.0.0.0
     ports:
       - 8007:8007
     environment:
@@ -203,7 +203,7 @@ services:
   #   volumes:
   #     - .:/usr/src/app
   #     - /usr/src/app/node_modules
-  #   command: npm run dev --workspace=apps/backend/template-service
+  #   command: npm run dev --workspace=apps/backend/template-service -- --host 0.0.0.0
   #   ports:
   #     - 8008:8008
   #   environment:
@@ -217,7 +217,8 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/subscription-service
+    # command: npm run dev --workspace=apps/backend/subscription-service -- --host 0.0.0.0
+    command: npm run dev --workspace=apps/backend/subscription-service -- --host 0.0.0.0 -- --host 0.0.0.0
     ports:
       - 8004:8004
     environment:
@@ -232,7 +233,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     # Per il frontend (Vite/Next), npm run dev di solito gestisce già l'hot reload
-    command: npm run dev --workspace=apps/frontend/web-site
+    command: npm run dev --workspace=apps/frontend/web-site -- --host 0.0.0.0
     ports:
       - 5172:5172
     environment:
@@ -246,7 +247,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     # Per il frontend (Vite/Next), npm run dev di solito gestisce già l'hot reload
-    command: npm run dev --workspace=apps/frontend/react
+    command: npm run dev --workspace=apps/frontend/react -- --host 0.0.0.0
     ports:
       - 5173:5173
     environment:

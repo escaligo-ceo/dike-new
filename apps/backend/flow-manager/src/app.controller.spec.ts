@@ -29,7 +29,7 @@ describe("AppController", () => {
       const response: IPingResponse = controller.ping('','','','');
       expect(response).toHaveProperty("name");
       expect(response.name).toBeDefined();
-      expect(response.name).toBe("process-engine");
+      expect(response.name).toBe("flow-manager");
       expect(response).toHaveProperty("version");
       expect(response.version).toBeDefined();
       expect(response.version).toBe(process.env.VERSION);

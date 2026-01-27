@@ -9,7 +9,7 @@
 | web-site             | Sito web             | 5172  | Sito web                              |
 | react                | React App            | 5173  | Applicazione React                    |
 | api-gateway          | API Gateway          | 3000  | Entrypoint API                        |
-| process-engine      | Process Service      | 3001  | Servizio di processo                  |
+| flow-manager      | Process Service      | 3001  | Servizio di processo                  |
 | auth-service         | Auth Service         | 8000  | Servizio di autenticazione            |
 | audit-service        | Audit Service        | 8001  | Servizio di audit                     |
 | profile-service      | Profile Service      | 8002  | Servizio di profilazione              |

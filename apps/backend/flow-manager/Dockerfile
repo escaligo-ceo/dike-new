@@ -13,10 +13,10 @@ COPY tsconfig.base.json ./
 
 # Copia solo i workspace necessari
 COPY libs/ ./libs
-COPY apps/backend/process-engine ./apps/backend/process-engine
+COPY apps/backend/flow-manager ./apps/backend/flow-manager
 
 RUN yarn install --inline-builds
-RUN yarn workspace @dike/process-engine build
+RUN yarn workspace @dike/flow-manager build
 
 # Stage 2: Runtime
 FROM node:22-alpine
@@ -29,4 +29,4 @@ COPY --from=builder /app /app
 
 EXPOSE 3001
 
-CMD ["node", "apps/backend/process-engine/dist/main"]
+CMD ["node", "apps/backend/flow-manager/dist/main"]

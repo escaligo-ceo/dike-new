@@ -1,5 +1,5 @@
 {
-  "name": "@dike/process-engine",
+  "name": "@dike/flow-manager",
   "version": "0.0.1",
   "description": "Process engine - Flow orchestrator",
   "main": "src/main.ts",
@@ -10,6 +10,7 @@
     "init:docker": "cp .env.docker .env",
     "init:example": "cp .env.example .env",
     "build": "tsc -p tsconfig.build.json",
+    "dev": "ts-node-dev --respawn --transpile-only --poll src/main.ts",
     "clean": "rm -rf dist node_modules tsconfig.build.tsbuildinfo",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
