@@ -860,3 +860,11 @@
 ## [0.6.379] - 2026-01-27
 
 - links to api-gateway tranfered to api.dike.cloud
+
+## [0.6.380] - 2026-01-27
+
+- reverse proxy added and configured
+
+## [0.6.380] - 2026-01-27
+
+- reverse proxy added and configured
