@@ -38,6 +38,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { ImportContactsDialog } from "../components/ImportContacts";
 import styles from "./Contacts.module.css";
+import { API_CONFIG } from "../config/api";
 
 export async function loadContactAvatarBlob(
   contactId: string,
@@ -47,14 +48,10 @@ export async function loadContactAvatarBlob(
     const token = localStorage.getItem("token");
     if (!token) return null;
 
-    const baseUrl =
-      (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-      "http://localhost:3000/api";
-
     const queryString = deleted ? "?deleted=true" : "";
 
     const response = await fetch(
-      `${baseUrl}/v1/contacts/${contactId}/avatar${queryString}`,
+      `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/${contactId}/avatar${queryString}`,
       {
         method: "GET",
         headers: {
@@ -95,12 +92,8 @@ function Contacts() {
       const token = localStorage.getItem("token");
       if (!token) return null;
 
-      const baseUrl =
-        (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-        "http://localhost:3000/api";
-
       const response = await fetch(
-        `${baseUrl}/v1/contacts/trash/${contactId}`,
+        `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/trash/${contactId}`,
         {
           method: "DELETE",
           headers: {
@@ -208,12 +201,8 @@ function Contacts() {
 
   const loadContactDetails = async (contactId: string) => {
     try {
-      const baseUrl =
-        (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-        "http://localhost:3000/api";
-
       const response = await fetch(
-        `${baseUrl.replace(/\/$/, "")}/v1/contacts/${contactId}`,
+        `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/${contactId}`,
         {
           method: "GET",
           headers: {
@@ -285,12 +274,8 @@ function Contacts() {
       setLoading(true);
       setError(null);
 
-      const baseUrl =
-        (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-        "http://localhost:3000/api";
-
       const response = await fetch(
-        `${baseUrl.replace(/\/$/, "")}/v1/contacts?page=${pageNum}&limit=25`,
+        `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts?page=${pageNum}&limit=25`,
         {
           method: "GET",
           headers: {
@@ -465,17 +450,14 @@ function Contacts() {
 
     try {
       setLoading(true);
-      const baseUrl =
-        (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-        "http://localhost:3000/api";
 
       // Trimma tutti i campi del contatto
       const trimmedContact = trimObject(editingContact);
 
       const isNew = !editingContact.id;
       const url = isNew
-        ? `${baseUrl.replace(/\/$/, "")}/v1/contacts`
-        : `${baseUrl.replace(/\/$/, "")}/v1/contacts/${editingContact.id}`;
+        ? `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts`
+        : `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/${editingContact.id}`;
 
       if (isNew && trimmedContact.id === "") {
         delete trimmedContact.id;
@@ -560,11 +542,8 @@ function Contacts() {
     try {
       setLoading(true);
       setIsDeleting(true);
-      const baseUrl =
-        (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-        "http://localhost:3000/api";
 
-      const deleteUrl = `${baseUrl.replace(/\/$/, "")}/v1/contacts/${editingContact.id}`;
+      const deleteUrl = `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/${editingContact.id}`;
 
       const response = await fetch(deleteUrl, {
         method: "DELETE",

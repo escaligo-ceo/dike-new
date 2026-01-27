@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardPreview } from "@fluentui/react-components";
 import { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
+import API_CONFIG from "../config/api";
 
 interface DashboardData {
   contactsCount: number;
@@ -20,11 +21,8 @@ function Dashboard() {
         setLoading(true);
         setError(null);
 
-        const baseUrl =
-          (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-          "http://localhost:3000/api";
         const contactsRes = await fetch(
-          `${baseUrl.replace(/\/$/, "")}/v1/contacts/count`,
+          `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/count`,
           {
             method: "GET",
             headers: {

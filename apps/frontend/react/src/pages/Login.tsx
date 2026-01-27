@@ -10,6 +10,7 @@ import {
 } from "@fluentui/react-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_CONFIG } from "../config/api";
 
 const useStyles = makeStyles({
   container: {
@@ -61,11 +62,8 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const baseUrl =
-        (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-        "http://localhost:3000/api";
       const response = await fetch(
-        `${baseUrl.replace(/\/$/, "")}/v1/auth/login`,
+        `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/auth/login`,
         {
           method: "POST",
           headers: {

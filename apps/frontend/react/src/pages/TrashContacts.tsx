@@ -29,6 +29,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadContactAvatarBlob } from "./Contacts";
 import styles from "./Contacts.module.css";
+import API_CONFIG from "../config/api";
 
 function TrashContacts() {
   const [trashContacts, setTrashContacts] = useState<IContact[]>([]);
@@ -55,12 +56,8 @@ function TrashContacts() {
       setLoading(true);
       setError(null);
 
-      const baseUrl =
-        (import.meta as any).env?.API_GATEWAY_BASE_URL ||
-        "http://localhost:3000/api";
-
       const response = await fetch(
-        `${baseUrl.replace(/\/$/, "")}/v1/contacts/trash?page=${pageNum}&limit=25`,
+        `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/trash?page=${pageNum}&limit=25`,
         {
           method: "GET",
           headers: {

@@ -63,3 +63,7 @@
 ## [0.0.18] - 2026-01-27
 
 - links to api-gateway tranfered to api.dike.cloud
+
+## [0.0.19] - 2026-01-27
+
+- links to api-gateway tranfered to api.dike.cloud

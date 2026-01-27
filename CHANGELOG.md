@@ -856,3 +856,7 @@
 ## [0.6.378] - 2026-01-27
 
 - links to api-gateway tranfered to api.dike.cloud
+
+## [0.6.379] - 2026-01-27
+
+- links to api-gateway tranfered to api.dike.cloud
