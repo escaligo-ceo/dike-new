@@ -852,3 +852,7 @@
 ## [0.6.377] - 2026-01-06
 
 - removed spa frontend useless service
+
+## [0.6.378] - 2026-01-27
+
+- links to api-gateway tranfered to api.dike.cloud

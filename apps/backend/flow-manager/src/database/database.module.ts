@@ -41,8 +41,8 @@ import { entities } from "./entites";
         }
 
         const serviceDbConnectionStr = configService.env(
-          "PROCESS_ENGINE_DB_CONNECTION_STR",
-          "postgres://process-engine_admin:process-engine_password@localhost:5432/process_db"
+          "FLOW_MANAGER_DB_CONNECTION_STR",
+          "postgres://flow-manager_admin:flow-manager_password@localhost:5432/flow_manager_db"
         );
         const serviceDbParams = new DbConnection(serviceDbConnectionStr);
 

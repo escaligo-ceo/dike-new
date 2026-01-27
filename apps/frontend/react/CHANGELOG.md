@@ -59,3 +59,7 @@
 ## [0.0.17] - 2026-01-03
 
 - contatto rimovibile permanentemente
+
+## [0.0.18] - 2026-01-27
+
+- links to api-gateway tranfered to api.dike.cloud
