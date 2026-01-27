@@ -172,3 +172,7 @@
 ## [0.1.44] - 2026-01-05
 
 - initializeViewEngine function introdud
+
+## [0.1.45] - 2026-01-27
+
+- process-service renaming to flow-manager fix

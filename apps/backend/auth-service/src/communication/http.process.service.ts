@@ -14,7 +14,7 @@ export class HttpProcessService extends BaseHttpService {
       httpService as any,
       new AppLogger(HttpProcessService.name),
       configService,
-      configService.env("PROCESS_ENGINE_URL", "http://localhost:8005/api")
+      configService.env("FLOW_MANAGER_URL", "http://localhost:8005/api")
     );
   }
 

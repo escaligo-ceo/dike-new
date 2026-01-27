@@ -868,3 +868,7 @@
 ## [0.6.380] - 2026-01-27
 
 - reverse proxy added and configured
+
+## [0.6.381] - 2026-01-27
+
+- process-service renaming to flow-manager fix

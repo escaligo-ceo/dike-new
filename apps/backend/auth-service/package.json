@@ -1,6 +1,6 @@
 {
   "name": "@dike/auth-service",
-  "version": "0.1.44",
+  "version": "0.1.45",
   "description": "Authorization Service",
   "author": "Tommaso Centurioni",
   "main": "src/main.ts",
