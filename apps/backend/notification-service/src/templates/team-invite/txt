@@ -1,0 +1,15 @@
+Sei stato invitato a unirti al team {{teamName}}!
+
+Ciao,
+
+Hai ricevuto questo invito perché qualcuno ti ha aggiunto come membro del team {{teamName}} sulla piattaforma Dike.
+
+Per accettare l'invito e accedere al team, usa questo link:
+{{inviteLink}}
+
+Il link contiene un token di invito che ti permetterà di completare la procedura di accesso.
+
+Se non ti aspettavi questa email, puoi ignorarla.
+
+Grazie,
+Il team Dike

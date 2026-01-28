@@ -1,0 +1,13 @@
+Ciao ${userName}!
+
+Grazie per esserti registrato su Dike.
+
+Per completare la registrazione, clicca sul link seguente per verificare il tuo indirizzo email:
+${verificationLink}
+
+Questo link è valido per 24 ore.
+
+Se non hai richiesto questa registrazione, puoi ignorare questa email.
+
+Saluti,
+Il team Dike
