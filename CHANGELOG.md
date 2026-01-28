@@ -872,3 +872,7 @@
 ## [0.6.381] - 2026-01-27
 
 - process-service renaming to flow-manager fix
+
+## [0.6.382] - 2026-01-28
+
+- integrazione hot-reload
