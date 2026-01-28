@@ -23,7 +23,7 @@ export async function bootstrapKeycloakClient(
       success = true;
     } catch (err) {
       logger.log(
-        `Tentativo ${attempt}/${maxAttempts}: Keycloak non sembra ancora attivo o non risponde correttamente. Ritento tra ${delayMs / 1000} secondi...`
+        `Tentativo ${attempt}/${maxAttempts}: Connessione a ${KeycloakService.baseUrl} fallita. Ritento...`
       );
       if (attempt === maxAttempts) {
         logger.error(

@@ -951,4 +951,10 @@ export class ApiGatewayService extends BaseHttpService {
     const response = await this.post(url, keycloakToken, originDto);
     return response.data;
   }
+
+  bootstrap(
+    loggedUser: LoggedUser
+  ): void {
+    this.logger.log(`${ApiGatewayService.name} bootstraped`);
+  }
 }

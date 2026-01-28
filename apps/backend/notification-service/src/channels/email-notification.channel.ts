@@ -1,12 +1,8 @@
-import { AppLogger, BaseUrl, DikeConfigService, EnvNotFoundException } from "@dike/common";
-import { ConfigService } from "@nestjs/config";
+import { AppLogger, BaseUrl, DikeConfigService } from "@dike/common";
 import * as nodemailer from "nodemailer";
 import { Notification } from "../entities/notification.entity";
 import { ResourceType } from "../entities/resource.entity";
-import {
-  BaseNotificationChannel,
-  DeliveryResult,
-} from "../notification/base-notification-channel.type";
+import { BaseNotificationChannel, DeliveryResult } from "../notification/base-notification-channel.type";
 
 export class EmailNotificationChannel extends BaseNotificationChannel {
   private transporter: nodemailer.Transporter;

@@ -4,7 +4,7 @@
   "version": "0.0.20",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "nest start --watch",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "init": "yarn init:dokcer",

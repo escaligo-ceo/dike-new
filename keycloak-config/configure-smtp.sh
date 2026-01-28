@@ -9,7 +9,7 @@ echo "🔧 Configurazione SMTP per Keycloak..."
 
 # Attendiamo che Keycloak sia pronto
 echo "⏳ Attendo che Keycloak sia pronto..."
-until curl -s http://localhost:8080/realms/master/.well-known/openid_configuration > /dev/null; do
+until curl -s http://${KEYCLOAK_URL}/realms/master/.well-known/openid_configuration > /dev/null; do
   sleep 2
   echo "   ... ancora in attesa ..."
 done
@@ -18,7 +18,7 @@ echo "✅ Keycloak è pronto!"
 
 # Otteniamo il token admin
 echo "🔑 Ottengo token di amministrazione..."
-ADMIN_TOKEN=$(curl -s -X POST http://localhost:8080/realms/master/protocol/openid-connect/token \
+ADMIN_TOKEN=$(curl -s -X POST http://${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=${KEYCLOAK_ADMIN:-admin}" \
   -d "password=${KEYCLOAK_ADMIN_PASSWORD:-admin}" \
@@ -34,7 +34,7 @@ echo "✅ Token ottenuto!"
 
 # Configuriamo l'SMTP
 echo "📧 Configuro server SMTP..."
-curl -s -X PUT "http://localhost:8080/admin/realms/master" \
+curl -s -X PUT "http://${KEYCLOAK_URL}/admin/realms/master" \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   -H "Content-Type: application/json" \
   -d "{

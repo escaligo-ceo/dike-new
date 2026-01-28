@@ -20,8 +20,7 @@ services:
       retries: 10
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.2.4
-    command: start-dev --hostname=${KEYCLOAK_URL} --hostname-admin=${KEYCLOAK_URL}
+    image: quay.io/keycloak/keycloak:26.5
     environment:
       KC_DB_URL: ${KC_DB_URL}
       KC_DB: ${KC_DB}
@@ -37,6 +36,17 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # command: start-dev --hostname-strict=false --http-enabled=true --http-host=0.0.0.0
+    command: >
+      start-dev 
+      --http-enabled=true 
+      --hostname-strict=false 
+      --db-schema=public
 
   redis:
     image: redis:latest
@@ -44,7 +54,6 @@ services:
     ports:
       - "6379:6379"
     restart: always
-    # Nessun volume necessario se lo usi solo come cache/broker temporaneo
 
   reverse-proxy:
     image: traefik:v3.0
@@ -55,167 +64,128 @@ services:
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-      - "8081:8080" # Dashboard di Traefik (opzionale)
+      - "8081:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+  # --- TEMPLATE PER I SERVIZI BACKEND ---
   api-gateway:
-    build:
-      context: .
-      dockerfile: apps/backend/api-gateway/Dockerfile
+    build: { context: ., dockerfile: apps/backend/api-gateway/Dockerfile }
+    working_dir: /app
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/api-gateway -- --host 0.0.0.0
-    # ports:
-    #   - 3000:3000
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api-gateway.rule=Host(`${API_GATEWAY_HOST}`)"
-      # - "traefik.http.routers.api-gateway.rule=Host(`api.dike.cloud`)"
-      - "traefik.http.routers.api-gateway.entrypoints=web"
-      - "traefik.http.services.api-gateway.loadbalancer.server.port=`${API_GATEWAY_PORT}`"
-    depends_on:
-      - postgres
-      - keycloak
-      - auth-service
-      - profile-service
-      - audit-service
-    environment:
-      &common-env
+      - .:/app
+      - /app/node_modules
+    env_file: .env
+    environment: &common-env
       VERSION: ${API_GATEWAY_VERSION}
       ENV: ${API_GATEWAY_ENV}
       LOG_LEVEL: ${API_GATEWAY_LOG_LEVEL}
       JWT_SECRET: ${JWT_SECRET}
       KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
       REDIS_URL: redis://redis_broker:6379
-
-  flow-manager:
-    build:
-      context: .
-      dockerfile: apps/backend/flow-manager/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/flow-manager -- --host 0.0.0.0
-    ports:
-      - 3001:3001
-    depends_on:
-      - postgres
-    environment:
-      <<: *common-env
-      FLOW_MANAGER_DB_CONNECTION_STR: ${FLOW_MANAGER_DB_CONNECTION_STR}
+    command: npm run dev --workspace=apps/backend/api-gateway -- --host 0.0.0.0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-gateway.rule=Host(`${API_GATEWAY_HOST}`)"
+      - "traefik.http.routers.api-gateway.entrypoints=web"
+      - "traefik.http.services.api-gateway.loadbalancer.server.port=${API_GATEWAY_PORT}"
+    depends_on: [postgres, keycloak, auth-service, profile-service, audit-service]
 
   auth-service:
-    build:
-      context: .
-      dockerfile: apps/backend/auth-service/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/auth-service -- --host 0.0.0.0
-    ports:
-      - 8000:8000
-    depends_on:
-      - keycloak
-      - postgres
-      - audit-service
+    build: { context: ., dockerfile: apps/backend/auth-service/Dockerfile }
+    working_dir: /app
+    volumes: &common-volumes
+      - .:/app
+      - /app/node_modules
+    env_file: .env
     environment:
       <<: *common-env
       AUTH_DB_CONNECTION_STR: ${AUTH_DB_CONNECTION_STR}
-      # ... altre env specifiche ...
+    command: npm run dev --workspace=apps/backend/auth-service -- --host 0.0.0.0
+    ports: ["8000:8000"]
+    depends_on: [postgres, keycloak, audit-service]
 
   audit-service:
-    build:
-      context: .
-      dockerfile: apps/backend/audit-service/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/audit-service -- --host 0.0.0.0
-    ports:
-      - 8001:8001
-    depends_on:
-      - postgres
-      - redis
+    build: { context: ., dockerfile: apps/backend/audit-service/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
     environment:
       <<: *common-env
       POSTGRES_CONNECTION_STR: ${POSTGRES_CONNECTION_STR}
       AUDIT_DB_CONNECTION_STR: ${AUDIT_DB_CONNECTION_STR}
+    command: npm run dev --workspace=apps/backend/audit-service -- --host 0.0.0.0
+    ports: ["8001:8001"]
+    depends_on: [postgres, redis]
 
   profile-service:
-    build:
-      context: .
-      dockerfile: apps/backend/profile-service/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/profile-service -- --host 0.0.0.0
-    ports:
-      - 8002:8002
-    depends_on:
-      - postgres
+    build: { context: ., dockerfile: apps/backend/profile-service/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
     environment:
       <<: *common-env
       PROFILE_DB_CONNECTION_STR: ${PROFILE_DB_CONNECTION_STR}
+    command: npm run dev --workspace=apps/backend/profile-service -- --host 0.0.0.0
+    ports: ["8002:8002"]
+    depends_on: [postgres]
 
   notification-service:
-    build:
-      context: .
-      dockerfile: apps/backend/notification-service/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/notification-service -- --host 0.0.0.0
-    ports:
-      - 8003:8003
+    build: { context: ., dockerfile: apps/backend/notification-service/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
     environment:
       <<: *common-env
       NOTIFICATION_DB_CONNECTION_STR: ${NOTIFICATION_DB_CONNECTION_STR}
+    command: npm run dev --workspace=apps/backend/notification-service -- --host 0.0.0.0
+    ports: ["8003:8003"]
+
+  subscription-service:
+    build: { context: ., dockerfile: apps/backend/subscription-service/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
+    environment:
+      <<: *common-env
+      SUBSCRIPTION_DB_CONNECTION_STR: ${SUBSCRIPTION_DB_CONNECTION_STR}
+    command: npm run dev --workspace=apps/backend/subscription-service -- --host 0.0.0.0
+    ports: ["8004:8004"]
 
   tenant-service:
-    build:
-      context: .
-      dockerfile: apps/backend/tenant-service/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/tenant-service -- --host 0.0.0.0
-    ports:
-      - 8005:8005
+    build: { context: ., dockerfile: apps/backend/tenant-service/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
     environment:
       <<: *common-env
       TENANT_DB_CONNECTION_STR: ${TENANT_DB_CONNECTION_STR}
+    command: npm run dev --workspace=apps/backend/tenant-service -- --host 0.0.0.0
+    ports: ["8005:8005"]
 
   contact-service:
-    build:
-      context: .
-      dockerfile: apps/backend/contact-service/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/contact-service -- --host 0.0.0.0
-    ports:
-      - 8006:8006
+    build: { context: ., dockerfile: apps/backend/contact-service/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
     environment:
       <<: *common-env
       CONTACT_DB_CONNECTION_STR: ${CONTACT_DB_CONNECTION_STR}
+    command: npm run dev --workspace=apps/backend/contact-service -- --host 0.0.0.0
+    ports: ["8006:8006"]
 
   import-service:
-    build:
-      context: .
-      dockerfile: apps/backend/import-service/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run dev --workspace=apps/backend/import-service -- --host 0.0.0.0
-    ports:
-      - 8007:8007
+    build: { context: ., dockerfile: apps/backend/import-service/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
     environment:
       <<: *common-env
       IMPORT_DB_CONNECTION_STR: ${IMPORT_DB_CONNECTION_STR}
+    command: npm run dev --workspace=apps/backend/import-service -- --host 0.0.0.0
+    ports: ["8007:8007"]
 
-  # templarte-service:
+  # template-service:
   #   build:
   #     context: .
   #     dockerfile: apps/backend/template-service/Dockerfile
@@ -229,53 +199,36 @@ services:
   #     <<: *common-env
   #     TEMPLATE_DB_CONNECTION_STR: ${TEMPLATE_DB_CONNECTION_STR}
 
-  subscription-service:
-    build:
-      context: .
-      dockerfile: apps/backend/subscription-service/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    # command: npm run dev --workspace=apps/backend/subscription-service -- --host 0.0.0.0
-    command: npm run dev --workspace=apps/backend/subscription-service -- --host 0.0.0.0 -- --host 0.0.0.0
-    ports:
-      - 8004:8004
-    environment:
-      <<: *common-env
-      SUBSCRIPTION_DB_CONNECTION_STR: ${SUBSCRIPTION_DB_CONNECTION_STR}
 
+  # --- FRONTEND SERVICES ---
   web-site:
-    build:
-      context: .
-      dockerfile: apps/frontend/web-site/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    # Per il frontend (Vite/Next), npm run dev di solito gestisce già l'hot reload
-    command: npm run dev --workspace=apps/frontend/web-site -- --host 0.0.0.0
-    ports:
-      - 5172:5172
+    build: { context: ., dockerfile: apps/frontend/web-site/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
     environment:
       <<: *common-env
+    command: npm run dev --workspace=apps/frontend/web-site
+    ports: ["5172:5172"]
+    depends_on:
+      keycloak:
+        condition: service_healthy
 
   react:
-    build:
-      context: .
-      dockerfile: apps/frontend/react/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    # Per il frontend (Vite/Next), npm run dev di solito gestisce già l'hot reload
-    command: npm run dev --workspace=apps/frontend/react -- --host 0.0.0.0
-    # ports:
-    #   - 5173:5173
+    build: { context: ., dockerfile: apps/frontend/react/Dockerfile }
+    working_dir: /app
+    volumes: *common-volumes
+    env_file: .env
+    # CAMBIO QUI: Usa direttamente il comando dev del workspace
+    command: yarn workspace @dike/react dev --host 0.0.0.0
+    # Se usi npm: command: npm run dev --workspace=apps/frontend/react -- --host 0.0.0.0
+    environment:
+      <<: *common-env
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`${FRONTEND_HOST}`)"
       - "traefik.http.routers.frontend.entrypoints=web"
       - "traefik.http.services.frontend.loadbalancer.server.port=${REACT_PORT}"
-    environment:
-      <<: *common-env
 
 volumes:
   postgres_data:

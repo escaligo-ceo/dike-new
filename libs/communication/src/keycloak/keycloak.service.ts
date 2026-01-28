@@ -51,7 +51,7 @@ export class KeycloakService {
 
     const KeycloakServiceUrlStr = this.configService.env(
       "KC_BOOTSTRAP_ADMIN_URL",
-      "http://localhost:8080"
+      "http://keycloak:8080"
     );
     this._clientSecret = this.configService.env("KC_CLIENT_SECRET", "secret");
     this._clientId = this.configService.env("KEYCLOAK_CLIENT_ID", "dike-cli");
