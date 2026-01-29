@@ -3,28 +3,39 @@ FROM node:22-alpine AS builder
 RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 WORKDIR /app
 
-# Riferimenti alla ROOT (Lanciare build da root!)
+# 1. Configurazione ROOT
 COPY .yarnrc.yml yarn.lock package.json tsconfig.base.json ./
 COPY .yarn ./.yarn
 
-# Copia libs e il workspace react
+# 2. Workspace Check (Aggiungiamo il package del frontend)
+COPY libs/contracts/package.json ./libs/contracts/
+COPY libs/common/package.json ./libs/common/
+COPY libs/communication/package.json ./libs/communication/
+COPY apps/frontend/react/package.json ./apps/frontend/react/
+
+# 3. Installazione
+RUN yarn install --inline-builds
+
+# 4. Copia librerie e sorgenti frontend
 COPY libs/ ./libs
 COPY apps/frontend/react ./apps/frontend/react
 
-RUN yarn install --inline-builds
+# 5. Build (Qui React genera la cartella /dist con gli statici)
 RUN yarn workspace @dike/react build
 
-# Stage 2: Runtime
+# Stage 2: Runtime (Software della Madonna Style)
 FROM node:22-alpine
-RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 WORKDIR /app
 
-# Copia solo il necessario (node_modules e dist)
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/frontend/react/dist ./apps/frontend/react/dist
+# Non serve corepack enable qui se usiamo 'serve' o node direttamente
+# Installiamo 'serve' globalmente (metodo veloce)
+RUN npm install -g serve
 
-EXPOSE 3001
+# Copiamo SOLO la cartella dist (il risultato del build)
+# Non copiare node_modules qui! Sono 500MB+ inutili per il browser
+COPY --from=builder /app/apps/frontend/react/dist ./dist
 
-# Nota: Assicurati che 'dist/main' sia effettivamente l'entrypoint per servire la SPA
-CMD ["node", "apps/frontend/react/dist/main"]
+EXPOSE 5173
+
+# Avviamo il server statico
+CMD ["serve", "-s", "dist", "-l", "5173"]

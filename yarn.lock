@@ -1145,7 +1145,6 @@ __metadata:
     "@dike/common": "npm:*"
     "@dike/communication": "npm:*"
     "@dike/contracts": "npm:*"
-    "@dike/internal": "npm:*"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@nestjs/axios": "npm:^4.0.1"
@@ -1458,7 +1457,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dike/internal@npm:*, @dike/internal@workspace:libs/internal":
+"@dike/internal@workspace:libs/internal":
   version: 0.0.0-use.local
   resolution: "@dike/internal@workspace:libs/internal"
   dependencies:
@@ -1701,7 +1700,6 @@ __metadata:
     "@dike/common": "npm:*"
     "@dike/communication": "npm:*"
     "@dike/contracts": "npm:*"
-    "@dike/internal": "npm:*"
     "@eslint/eslintrc": "npm:^3.2.0"
     "@eslint/js": "npm:^9.18.0"
     "@nestjs/axios": "npm:^4.0.1"

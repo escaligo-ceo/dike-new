@@ -18,6 +18,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+      - dike-net
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.5
@@ -41,12 +43,13 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
-    # command: start-dev --hostname-strict=false --http-enabled=true --http-host=0.0.0.0
     command: >
       start-dev 
       --http-enabled=true 
       --hostname-strict=false 
       --db-schema=public
+    networks:
+      - dike-net
 
   redis:
     image: redis:latest
@@ -54,27 +57,29 @@ services:
     ports:
       - "6379:6379"
     restart: always
+    networks:
+      - dike-net
 
   reverse-proxy:
     image: traefik:v3.0
     command:
       - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
+      - "--api.dashboard=true"
+      # Disabilitiamo il provider docker temporaneamente per pulire i log
+      - "--providers.docker=false" 
+      - "--providers.file.directory=/etc/traefik/dynamic"
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
       - "8081:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik_dynamic:/etc/traefik/dynamic:ro
+    networks:
+      - dike-net
 
-  # --- TEMPLATE PER I SERVIZI BACKEND ---
+  # --- BACKEND SERVICES ---
   api-gateway:
     build: { context: ., dockerfile: apps/backend/api-gateway/Dockerfile }
-    working_dir: /app
-    volumes:
-      - .:/app
-      - /app/node_modules
     env_file: .env
     environment: &common-env
       VERSION: ${API_GATEWAY_VERSION}
@@ -83,157 +88,137 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       KC_BOOTSTRAP_ADMIN_URL: ${KC_BOOTSTRAP_ADMIN_URL}
       REDIS_URL: redis://redis_broker:6379
-    command: npm run dev --workspace=apps/backend/api-gateway -- --host 0.0.0.0
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api-gateway.rule=Host(`${API_DIKE_CLOUD_HOST}`)"
       - "traefik.http.routers.api-gateway.entrypoints=web"
-      - "traefik.http.services.api-gateway.loadbalancer.server.port=${API_DIKE_CLOUD_PORT}GATEWAY_PORT}"
+      - "traefik.http.services.api-gateway.loadbalancer.server.port=${API_DIKE_CLOUD_PORT}"
     depends_on: [postgres, keycloak, auth-service, profile-service, audit-service]
+    networks:
+      - dike-net
 
   auth-service:
     build: { context: ., dockerfile: apps/backend/auth-service/Dockerfile }
-    working_dir: /app
-    volumes: &common-volumes
-      - .:/app
-      - /app/node_modules
     env_file: .env
     environment:
       <<: *common-env
       AUTH_DB_CONNECTION_STR: ${AUTH_DB_CONNECTION_STR}
-    command: npm run dev --workspace=apps/backend/auth-service -- --host 0.0.0.0
     ports: ["8000:8000"]
     depends_on: [postgres, keycloak, audit-service]
+    networks:
+      - dike-net
 
   audit-service:
     build: { context: ., dockerfile: apps/backend/audit-service/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
     env_file: .env
     environment:
       <<: *common-env
       POSTGRES_CONNECTION_STR: ${POSTGRES_CONNECTION_STR}
       AUDIT_DB_CONNECTION_STR: ${AUDIT_DB_CONNECTION_STR}
-    command: npm run dev --workspace=apps/backend/audit-service -- --host 0.0.0.0
     ports: ["8001:8001"]
     depends_on: [postgres, redis]
+    networks:
+      - dike-net
 
   profile-service:
     build: { context: ., dockerfile: apps/backend/profile-service/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
     env_file: .env
     environment:
       <<: *common-env
       PROFILE_DB_CONNECTION_STR: ${PROFILE_DB_CONNECTION_STR}
-    command: npm run dev --workspace=apps/backend/profile-service -- --host 0.0.0.0
     ports: ["8002:8002"]
     depends_on: [postgres]
+    networks:
+      - dike-net
 
   notification-service:
     build: { context: ., dockerfile: apps/backend/notification-service/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
     env_file: .env
     environment:
       <<: *common-env
       NOTIFICATION_DB_CONNECTION_STR: ${NOTIFICATION_DB_CONNECTION_STR}
-    command: npm run dev --workspace=apps/backend/notification-service -- --host 0.0.0.0
     ports: ["8003:8003"]
+    networks:
+      - dike-net
 
   subscription-service:
     build: { context: ., dockerfile: apps/backend/subscription-service/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
     env_file: .env
     environment:
       <<: *common-env
       SUBSCRIPTION_DB_CONNECTION_STR: ${SUBSCRIPTION_DB_CONNECTION_STR}
-    command: npm run dev --workspace=apps/backend/subscription-service -- --host 0.0.0.0
     ports: ["8004:8004"]
+    networks:
+      - dike-net
 
   tenant-service:
     build: { context: ., dockerfile: apps/backend/tenant-service/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
     env_file: .env
     environment:
       <<: *common-env
       TENANT_DB_CONNECTION_STR: ${TENANT_DB_CONNECTION_STR}
-    command: npm run dev --workspace=apps/backend/tenant-service -- --host 0.0.0.0
     ports: ["8005:8005"]
+    networks:
+      - dike-net
 
   contact-service:
     build: { context: ., dockerfile: apps/backend/contact-service/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
     env_file: .env
     environment:
       <<: *common-env
       CONTACT_DB_CONNECTION_STR: ${CONTACT_DB_CONNECTION_STR}
-    command: npm run dev --workspace=apps/backend/contact-service -- --host 0.0.0.0
     ports: ["8006:8006"]
+    networks:
+      - dike-net
 
   import-service:
     build: { context: ., dockerfile: apps/backend/import-service/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
     env_file: .env
     environment:
       <<: *common-env
       IMPORT_DB_CONNECTION_STR: ${IMPORT_DB_CONNECTION_STR}
-    command: npm run dev --workspace=apps/backend/import-service -- --host 0.0.0.0
     ports: ["8007:8007"]
-
-  # template-service:
-  #   build:
-  #     context: .
-  #     dockerfile: apps/backend/template-service/Dockerfile
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   command: npm run dev --workspace=apps/backend/template-service -- --host 0.0.0.0
-  #   ports:
-  #     - 8008:8008
-  #   environment:
-  #     <<: *common-env
-  #     TEMPLATE_DB_CONNECTION_STR: ${TEMPLATE_DB_CONNECTION_STR}
-
+    networks:
+      - dike-net
 
   # --- FRONTEND SERVICES ---
   web-site:
     build: { context: ., dockerfile: apps/frontend/web-site/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
     env_file: .env
     environment:
       <<: *common-env
-    command: npm run dev --workspace=apps/frontend/web-site
     ports: ["5172:5172"]
     depends_on:
       keycloak:
         condition: service_healthy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.website.rule=Host(`${WWW_DIKE_CLOUD_HOST}`)" # O il tuo dominio SSR
+      - "traefik.http.routers.website.rule=Host(`${WWW_DIKE_CLOUD_HOST}`)"
       - "traefik.http.routers.website.entrypoints=web"
-      - "traefik.http.services.website.loadbalancer.server.port=${WWW_DIKE_CLOUD_PORT}" # La porta interna di Vite/Next
+      - "traefik.http.services.website.loadbalancer.server.port=${WWW_DIKE_CLOUD_PORT}"
+    networks:
+      - dike-net
 
   react:
-    build: { context: ., dockerfile: apps/frontend/react/Dockerfile }
-    working_dir: /app
-    volumes: *common-volumes
-    env_file: .env
-    # CAMBIO QUI: Usa direttamente il comando dev del workspace
-    command: yarn workspace @dike/react dev --host 0.0.0.0
-    # Se usi npm: command: npm run dev --workspace=apps/frontend/react -- --host 0.0.0.0
+    build: 
+      context: .
+      dockerfile: apps/frontend/react/Dockerfile
     environment:
+      VITE_PORT: ${APP_DIKE_CLOUD_PORT}
       <<: *common-env
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.spa.rule=Host(`${APP_DIKE_CLOUD_HOST}`)"
       - "traefik.http.routers.spa.entrypoints=web"
       - "traefik.http.services.spa.loadbalancer.server.port=${APP_DIKE_CLOUD_PORT}"
+    networks:
+      - dike-net
+    ports:
+      - "5173:5173"
+
+networks:
+  dike-net:
+    driver: bridge
 
 volumes:
   postgres_data:

@@ -1,0 +1,14 @@
+http:
+  routers:
+    to-react:
+      rule: "Host(`app.dike.cloud`)"
+      service: react-service
+      entryPoints:
+        - web
+
+  services:
+    react-service:
+      loadBalancer:
+        servers:
+          # Usiamo l'IP interno o il nome del servizio nel network
+          - url: "http://react:5173"
