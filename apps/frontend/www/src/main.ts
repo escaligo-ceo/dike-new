@@ -15,7 +15,7 @@ import { join } from "path";
 import { AppModule } from "./app.module";
 import { checkKeycloakConnection } from "@dike/communication";
 
-export let logger: AppLogger = new AppLogger("web-site");
+export let logger: AppLogger = new AppLogger("www");
 
 (async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -40,7 +40,7 @@ export let logger: AppLogger = new AppLogger("web-site");
 
   const ENV = configService.env("ENV", "development");
 
-  const appName = configService.env("APP_NAME", "web-site");
+  const appName = configService.env("APP_NAME", "www");
 
   logger = new AppLogger(appName);
 

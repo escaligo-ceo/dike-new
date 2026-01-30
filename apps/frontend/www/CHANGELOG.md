@@ -111,3 +111,7 @@
 ## [0.1.18] - 2026-01-04
 
 - improvments to onboarding procedure
+
+## [0.1.19] - 2026-01-30
+
+- renaming service from web-site to www

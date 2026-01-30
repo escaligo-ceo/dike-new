@@ -11,15 +11,15 @@ COPY .yarn ./.yarn
 COPY libs/contracts/package.json ./libs/contracts/
 COPY libs/common/package.json ./libs/common/
 COPY libs/communication/package.json ./libs/communication/
-COPY apps/frontend/web-site/package.json ./apps/frontend/web-site/
+COPY apps/frontend/www/package.json ./apps/frontend/www/
 
 # 3. Installazione dipendenze
 RUN yarn install --inline-builds
 
 # 4. Sorgenti e Build
 COPY libs/ ./libs
-COPY apps/frontend/web-site ./apps/frontend/web-site
-RUN yarn workspace @dike/web-site build
+COPY apps/frontend/www ./apps/frontend/www
+RUN yarn workspace @dike/www build
 
 # Stage 2: Runtime (Software della Madonna Edition)
 FROM node:22-alpine
@@ -34,7 +34,7 @@ COPY --from=builder /app/libs/common/dist ./libs/common/dist
 COPY --from=builder /app/libs/communication/dist ./libs/communication/dist
 
 # Copiamo la build del sito
-COPY --from=builder /app/apps/frontend/web-site/dist ./dist
+COPY --from=builder /app/apps/frontend/www/dist ./dist
 
 EXPOSE 5172
 

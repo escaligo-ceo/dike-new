@@ -20,7 +20,7 @@ export class AppService {
     return {
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
-      name: this.configService.env("APP_NAME", "web-site"),
+      name: this.configService.env("APP_NAME", "www"),
       version: this.configService.env("VERSION", "0.0.1"),
       copyright: `Copyright © ${this.copyrightPeriod} Escaligo s.r.l.`,
       services: {

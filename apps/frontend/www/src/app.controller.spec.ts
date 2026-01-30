@@ -3,7 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
-const appName = process.env.APP_NAME || "web-site";
+const appName = process.env.APP_NAME || "www";
 const VERSION = process.env.VERSION || "0.0.1";
 
 describe("AppController", () => {

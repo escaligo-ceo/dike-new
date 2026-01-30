@@ -880,3 +880,7 @@
 ## [0.6.383] - 2026-01-30
 
 - Paging di login arricchita dei link "classici"
+
+## [0.6.384] - 2026-01-30
+
+- renaming service from web-site to www

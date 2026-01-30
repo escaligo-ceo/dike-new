@@ -51,7 +51,7 @@ export class AppController {
     private readonly keycloakService: KeycloakService,
     private readonly userFactory: UserFactory
   ) {
-    this._appUrl = this.configService.env("APP_URL", "web-site");
+    this._appUrl = this.configService.env("APP_URL", "www");
     this.logger = new AppLogger(AppController.name);
   }
 

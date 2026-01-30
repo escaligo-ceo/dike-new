@@ -27,7 +27,7 @@ describe("Web Site (e2e)", () => {
       .get("/ping")
       .expect(HttpStatus.OK)
       .expect({
-        name: "web-site",
+        name: "www",
         version: "0.0.1",
         copyright: "Copyright © 2025 Escaligo s.r.l.",
       });
