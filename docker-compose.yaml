@@ -203,14 +203,21 @@ services:
     build: 
       context: .
       dockerfile: apps/frontend/react/Dockerfile
+    volumes:
+      - .:/app  # Monta l'intero progetto (compresi yarn.lock e .yarn)
+      - /app/node_modules # Protegge le dipendenze installate nel container
+      - /app/apps/frontend/react/node_modules # Protegge le dipendenze specifiche
+    working_dir: /app/apps/frontend/react # Diciamo a Docker di "entrare" qui
     environment:
-      VITE_PORT: ${APP_DIKE_CLOUD_PORT}
+      VITE_PORT: 5173
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
       <<: *common-env
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.spa.rule=Host(`${APP_DIKE_CLOUD_HOST}`)"
       - "traefik.http.routers.spa.entrypoints=web"
-      - "traefik.http.services.spa.loadbalancer.server.port=${APP_DIKE_CLOUD_PORT}"
+      - "traefik.http.services.spa.loadbalancer.server.port=5173"
     networks:
       - dike-net
     ports:
