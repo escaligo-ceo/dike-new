@@ -8,7 +8,12 @@ export default defineConfig({
     watch: {
       usePolling: true, // Questo è l'equivalente del --poll che hai nel backend
     },
-    host: true, // Necessario per Docker
+    host: '0.0.0.0',
+    port: 5173,
+    allowedHosts: [
+      'app.dike.cloud',
+      'localhost'
+    ],
     strictPort: true,
   },
 })

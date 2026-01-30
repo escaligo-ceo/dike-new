@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardPreview } from "@fluentui/react-components";
 import { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
-import API_CONFIG from "../config/api";
+import API_DIKE_CLOUD_HOST from "../config/api";
 
 interface DashboardData {
   contactsCount: number;
@@ -22,7 +22,7 @@ function Dashboard() {
         setError(null);
 
         const contactsRes = await fetch(
-          `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/count`,
+          `${API_DIKE_CLOUD_HOST.baseUrl.replace(/\/$/, "")}/v1/contacts/count`,
           {
             method: "GET",
             headers: {

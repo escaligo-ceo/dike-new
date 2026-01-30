@@ -23,19 +23,16 @@ COPY apps/frontend/react ./apps/frontend/react
 # 5. Build (Qui React genera la cartella /dist con gli statici)
 RUN yarn workspace @dike/react build
 
-# Stage 2: Runtime (Software della Madonna Style)
+# Stage 2: Sviluppo (Software della Madonna - Dev Edition)
 FROM node:22-alpine
+RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 WORKDIR /app
 
-# Non serve corepack enable qui se usiamo 'serve' o node direttamente
-# Installiamo 'serve' globalmente (metodo veloce)
-RUN npm install -g serve
-
-# Copiamo SOLO la cartella dist (il risultato del build)
-# Non copiare node_modules qui! Sono 500MB+ inutili per il browser
-COPY --from=builder /app/apps/frontend/react/dist ./dist
+# Copiamo le dipendenze dallo stage builder (per non rifare yarn install)
+COPY --from=builder /app ./ 
 
 EXPOSE 5173
 
-# Avviamo il server statico
-CMD ["serve", "-s", "dist", "-l", "5173"]
+# Avviamo VITE in modalità development
+# Puntiamo al workspace corretto
+CMD ["yarn", "workspace", "@dike/react", "dev", "--host", "0.0.0.0"]

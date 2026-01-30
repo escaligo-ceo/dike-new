@@ -5,12 +5,14 @@ import {
   Label,
   Text,
   Title3,
+  Checkbox,
+  Link,
   makeStyles,
   tokens,
 } from "@fluentui/react-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_CONFIG } from "../config/api";
+import { API_DIKE_CLOUD_HOST } from "../config/api";
 
 const useStyles = makeStyles({
   container: {
@@ -25,8 +27,14 @@ const useStyles = makeStyles({
     padding: "32px",
   },
   title: {
+    marginBottom: "4px",
+    textAlign: "center",
+  },
+  subtitle: {
     marginBottom: "24px",
     textAlign: "center",
+    display: "block",
+    color: tokens.colorNeutralForeground3,
   },
   form: {
     display: "flex",
@@ -38,6 +46,12 @@ const useStyles = makeStyles({
     flexDirection: "column",
     gap: "4px",
   },
+  optionsRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "-4px",
+  },
   error: {
     color: tokens.colorPaletteRedForeground1,
     fontSize: "12px",
@@ -46,13 +60,24 @@ const useStyles = makeStyles({
   button: {
     marginTop: "8px",
   },
+  footer: {
+    marginTop: "24px",
+    textAlign: "center",
+    borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
+    paddingTop: "16px",
+  },
+  linkSemibold: {
+    fontWeight: tokens.fontWeightSemibold,
+  },
 });
 
 export default function Login() {
   const styles = useStyles();
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -63,16 +88,16 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/auth/login`,
+        `${API_DIKE_CLOUD_HOST.baseUrl.replace(/\/$/, "")}/v1/auth/login`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({
             email,
             password,
+            rememberMe,
           }),
         }
       );
@@ -85,21 +110,12 @@ export default function Login() {
       }
 
       const data = await response.json();
-      console.log("Login data:", data);
 
-      // Salva il token nel localStorage
       if (data.access_token) {
         localStorage.setItem("token", data.access_token);
+        if (data.refresh_token) localStorage.setItem("refreshToken", data.refresh_token);
+        if (data.userId) localStorage.setItem("userId", data.userId);
 
-        // Salva anche altre informazioni utili se presenti
-        if (data.refresh_token) {
-          localStorage.setItem("refreshToken", data.refresh_token);
-        }
-        if (data.userId) {
-          localStorage.setItem("userId", data.userId);
-        }
-
-        // Redirect alla dashboard
         navigate("/dashboard");
       } else {
         setError("Token non ricevuto dal server");
@@ -115,7 +131,9 @@ export default function Login() {
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
-        <Title3 className={styles.title}>Accedi a Dike</Title3>
+        <Title3 className={styles.title}>Dike.cloud</Title3>
+        <Text className={styles.subtitle}>La tua professione in ordine</Text>
+
         <form className={styles.form} onSubmit={handleLogin}>
           <div className={styles.field}>
             <Label htmlFor="email" required>
@@ -126,7 +144,7 @@ export default function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="nome@esempio.com"
+              placeholder="nome@studiolegale.it"
               required
               disabled={loading}
             />
@@ -147,6 +165,21 @@ export default function Login() {
             />
           </div>
 
+          <div className={styles.optionsRow}>
+            <Checkbox
+              label="Ricordami"
+              checked={rememberMe}
+              onChange={(_, data) => setRememberMe(!!data.checked)}
+              disabled={loading}
+            />
+            <Link 
+              onClick={() => navigate("/recupera-password")} 
+              style={{ fontSize: '12px' }}
+            >
+              Password dimenticata?
+            </Link>
+          </div>
+
           {error && <Text className={styles.error}>{error}</Text>}
 
           <Button
@@ -158,6 +191,16 @@ export default function Login() {
             {loading ? "Accesso in corso..." : "Accedi"}
           </Button>
         </form>
+
+        <div className={styles.footer}>
+          <Text size={200}>Non hai un account?</Text>{" "}
+          <Link 
+            className={styles.linkSemibold} 
+            onClick={() => navigate("/registrati")}
+          >
+            Registrati ora
+          </Link>
+        </div>
       </Card>
     </div>
   );

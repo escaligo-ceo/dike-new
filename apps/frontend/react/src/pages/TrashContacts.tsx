@@ -29,7 +29,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadContactAvatarBlob } from "./Contacts";
 import styles from "./Contacts.module.css";
-import API_CONFIG from "../config/api";
+import API_DIKE_CLOUD_HOST from "../config/api";
 
 function TrashContacts() {
   const [trashContacts, setTrashContacts] = useState<IContact[]>([]);
@@ -57,7 +57,7 @@ function TrashContacts() {
       setError(null);
 
       const response = await fetch(
-        `${API_CONFIG.baseUrl.replace(/\/$/, "")}/v1/contacts/trash?page=${pageNum}&limit=25`,
+        `${API_DIKE_CLOUD_HOST.baseUrl.replace(/\/$/, "")}/v1/contacts/trash?page=${pageNum}&limit=25`,
         {
           method: "GET",
           headers: {

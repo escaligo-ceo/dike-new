@@ -6,27 +6,29 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import TrashContacts from "./pages/TrashContacts";
 
+// function App() {
+//   return (
+//     <Routes>
+//       <Route path="/login" element={<Login />} />
+//       <Route
+//         path="/*"
+//         element={
+//           <ProtectedRoute>
+//             <Layout>
+//               <Routes>
+//                 <Route path="/" element={<Dashboard />} />
+//                 <Route path="/dashboard" element={<Dashboard />} />
+//                 <Route path="/contacts" element={<Contacts />} />
+//                 <Route path="/contacts/trash" element={<TrashContacts />} />
+//               </Routes>
+//             </Layout>
+//           </ProtectedRoute>
+//         }
+//       />
+//     </Routes>
+//   );
+// }
 function App() {
-  return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route
-        path="/*"
-        element={
-          <ProtectedRoute>
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/contacts" element={<Contacts />} />
-                <Route path="/contacts/trash" element={<TrashContacts />} />
-              </Routes>
-            </Layout>
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  );
+  return <Login />; // Renderizza solo il login ignorando le rotte
 }
-
 export default App;

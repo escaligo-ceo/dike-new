@@ -876,3 +876,7 @@
 ## [0.6.382] - 2026-01-28
 
 - integrazione hot-reload
+
+## [0.6.383] - 2026-01-30
+
+- Paging di login arricchita dei link "classici"
