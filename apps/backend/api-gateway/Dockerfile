@@ -19,7 +19,8 @@ COPY libs/communication/package.json ./libs/communication/
 # COPY libs/internal/package.json ./libs/internal/
 
 # 3. Installazione dipendenze
-RUN yarn install --inline-builds
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
+    yarn install --inline-builds
 
 # 4. Copia i sorgenti (solo ora!)
 COPY libs/ ./libs

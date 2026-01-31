@@ -14,7 +14,8 @@ COPY libs/communication/package.json ./libs/communication/
 COPY apps/backend/audit-service/package.json ./apps/backend/audit-service/
 
 # 3. Installazione (Layer pesante, ora protetto dalla cache se cambi il codice)
-RUN yarn install --inline-builds
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
+    yarn install --inline-builds
 
 # 4. Sorgenti (Cambiano spesso)
 COPY libs/ ./libs

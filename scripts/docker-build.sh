@@ -18,7 +18,8 @@ SERVICES=(
   "tenant-service"
   "notification-service"
   "api-gateway"
-  "react"
+  "flow-manager"
+  "app"
   "www"
 )
 

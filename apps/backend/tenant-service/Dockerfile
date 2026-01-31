@@ -14,7 +14,8 @@ COPY libs/communication/package.json ./libs/communication/
 COPY apps/backend/tenant-service/package.json ./apps/backend/tenant-service/
 
 # 3. Installazione (Layer protetto da cache: se non cambi i package, non scarica nulla)
-RUN yarn install --inline-builds
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
+    yarn install --inline-builds
 
 # 4. Build delle librerie (Risolve TS2307 e i metodi dell'Audit)
 COPY libs/ ./libs/

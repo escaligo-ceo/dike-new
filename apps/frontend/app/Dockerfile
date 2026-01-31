@@ -14,7 +14,8 @@ COPY libs/communication/package.json ./libs/communication/
 COPY apps/frontend/app/package.json ./apps/frontend/app/
 
 # 3. Installazione
-RUN yarn install --inline-builds
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
+    yarn install --inline-builds
 
 # 4. Copia librerie e sorgenti frontend
 COPY libs/ ./libs

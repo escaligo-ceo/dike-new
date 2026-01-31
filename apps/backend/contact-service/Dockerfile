@@ -12,7 +12,8 @@ COPY libs/common/package.json ./libs/common/
 COPY libs/communication/package.json ./libs/communication/
 COPY apps/backend/contact-service/package.json ./apps/backend/contact-service/
 
-RUN yarn install --inline-builds
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
+    yarn install --inline-builds
 
 # Ora i sorgenti e i build
 COPY libs/ ./libs

@@ -2,7 +2,7 @@
 
 # Controllo se è stato passato il nome del servizio
 if [ -z "$1" ]; then
-    echo "Errore: Devi specificare il nome del servizio (es: ./docker-restart-service.sh react)"
+    echo "Errore: Devi specificare il nome del servizio (es: ./docker-restart-service.sh app)"
     exit 1
 fi
 

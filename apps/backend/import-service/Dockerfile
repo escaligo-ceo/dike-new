@@ -17,7 +17,8 @@ COPY libs/common/package.json ./libs/common/
 COPY libs/communication/package.json ./libs/communication/
 
 # 3. Installazione dipendenze (Layer pesante, protetto da cache)
-RUN yarn install --inline-builds
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
+    yarn install --inline-builds
 
 # 4. Copia i sorgenti delle librerie e buildale (Risolve TS2307 e logRequest)
 COPY libs/ ./libs

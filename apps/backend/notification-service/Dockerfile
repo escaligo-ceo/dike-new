@@ -14,7 +14,8 @@ COPY libs/communication/package.json ./libs/communication/
 COPY apps/backend/notification-service/package.json ./apps/backend/notification-service/
 
 # 3. Installazione (Sfrutta la cache se il codice cambia ma le dipendenze no)
-RUN yarn install --inline-builds
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
+    yarn install --inline-builds
 
 # 4. Sorgenti e Build delle librerie (Risolve TS2307)
 COPY libs/ ./libs

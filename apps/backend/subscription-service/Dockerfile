@@ -18,7 +18,8 @@ COPY libs/internal/package.json ./libs/internal/
 COPY apps/backend/subscription-service/package.json ./apps/backend/subscription-service/
 
 # 3. Installazione dipendenze
-RUN yarn install --inline-builds
+RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
+    yarn install --inline-builds
 
 # 4. Sorgenti e Build delle librerie (Risolve TS2307 e logRequest)
 COPY libs/ ./libs/
