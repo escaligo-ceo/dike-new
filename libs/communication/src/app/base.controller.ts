@@ -11,7 +11,7 @@ export class BaseController {
   }
 
   get appUrl(): string {
-    return this.configService.env("APP_URL");
+    return this.configService.env("WWW_URL");
   }
 
   protected logRequest(req: Request, message: string): void {

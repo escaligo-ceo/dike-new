@@ -2,6 +2,9 @@
 # Dike.cloud Build Script V2 - "Sequential Power"
 
 echo "--- 1. Resetting Build Environment ---"
+
+rm -rf /var/lib/docker/buildkit/
+
 # Puliamo i rimasugli del crash precedente
 docker builder prune -f
 

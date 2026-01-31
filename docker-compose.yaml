@@ -65,7 +65,6 @@ services:
     command:
       - "--api.insecure=true"
       - "--api.dashboard=true"
-      # Disabilitiamo il provider docker temporaneamente per pulire i log
       - "--providers.docker=false" 
       - "--providers.file.directory=/etc/traefik/dynamic"
       - "--entrypoints.web.address=:80"
@@ -73,13 +72,16 @@ services:
       - "80:80"
       - "8081:8080"
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # <--- FONDAMENTALE
       - ./traefik_dynamic:/etc/traefik/dynamic:ro
     networks:
       - dike-net
 
   # --- BACKEND SERVICES ---
   api-gateway:
-    build: { context: ., dockerfile: apps/backend/api-gateway/Dockerfile }
+    build:
+      context: .
+      dockerfile: apps/backend/api-gateway/Dockerfile
     env_file: .env
     environment: &common-env
       VERSION: ${API_GATEWAY_VERSION}
@@ -96,6 +98,36 @@ services:
     depends_on: [postgres, keycloak, auth-service, profile-service, audit-service]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+    #   - ../../dike/common:/app/dike/common
+    #   - ../../dike/common:/app/dike/communication
+    #   - ./auth-service:/app/apps/backend/auth-service
+    #   - /app/apps/backend/auth-service/node_modules
+
+  flow-manager:
+    build: 
+      context: .
+      dockerfile: apps/backend/flow-manager/Dockerfile
+    env_file: .env
+    environment:
+      <<: *common-env
+      VERSION: ${FLOW_MANAGER_VERSION}
+      ENV: ${FLOW_MANAGER_ENV}
+      LOG_LEVEL: ${FLOW_MANAGER_LOG_LEVEL}
+      APP_NAME: ${FLOW_MANAGER_APP_NAME}
+      FLOW_MANAGER_APP_URL: ${FLOW_MANAGER_APP_URL}
+      FLOW_MANAGER_BASE_URL: ${FLOW_MANAGER_BASE_URL}
+      FLOW_MANAGER_DB_CONNECTION_STR: ${FLOW_MANAGER_DB_CONNECTION_STR}
+    depends_on: [postgres, keycloak, auth-service, profile-service, audit-service]
+    networks:
+      - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - ./flow-manager:/app/apps/backend/flow-manager
+      - /app/apps/backend/flow-manager/node_modules
 
   auth-service:
     build: { context: ., dockerfile: apps/backend/auth-service/Dockerfile }
@@ -107,6 +139,13 @@ services:
     depends_on: [postgres, keycloak, audit-service]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - ./auth-service:/app/apps/backend/auth-service
+      - /app/apps/backend/auth-service/node_modules
+    working_dir: /app/apps/backend/auth-service
 
   audit-service:
     build: { context: ., dockerfile: apps/backend/audit-service/Dockerfile }
@@ -119,6 +158,12 @@ services:
     depends_on: [postgres, redis]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - /app/node_modules
+      - /app/apps/backend/audit-service/node_modules
 
   profile-service:
     build: { context: ., dockerfile: apps/backend/profile-service/Dockerfile }
@@ -130,6 +175,12 @@ services:
     depends_on: [postgres]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - /app/node_modules
+      - /app/apps/backend/profile-service/node_modules
 
   notification-service:
     build: { context: ., dockerfile: apps/backend/notification-service/Dockerfile }
@@ -140,6 +191,12 @@ services:
     ports: ["8003:8003"]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - /app/node_modules
+      - /app/apps/backend/notification-service/node_modules
 
   subscription-service:
     build: { context: ., dockerfile: apps/backend/subscription-service/Dockerfile }
@@ -150,6 +207,12 @@ services:
     ports: ["8004:8004"]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - /app/node_modules
+      - /app/apps/backend/subscription-service/node_modules
 
   tenant-service:
     build: { context: ., dockerfile: apps/backend/tenant-service/Dockerfile }
@@ -160,6 +223,12 @@ services:
     ports: ["8005:8005"]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - /app/node_modules
+      - /app/apps/backend/tenant-service/node_modules
 
   contact-service:
     build: { context: ., dockerfile: apps/backend/contact-service/Dockerfile }
@@ -170,6 +239,12 @@ services:
     ports: ["8006:8006"]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - /app/node_modules
+      - /app/apps/backend/contact-service/node_modules
 
   import-service:
     build: { context: ., dockerfile: apps/backend/import-service/Dockerfile }
@@ -180,10 +255,18 @@ services:
     ports: ["8007:8007"]
     networks:
       - dike-net
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - /app/node_modules
+      - /app/apps/backend/import-service/node_modules
 
   # --- FRONTEND SERVICES ---
   www:
-    build: { context: ., dockerfile: apps/frontend/www/Dockerfile }
+    build:
+      context: .
+      dockerfile: apps/frontend/www/Dockerfile
     env_file: .env
     environment:
       <<: *common-env
@@ -191,23 +274,34 @@ services:
     depends_on:
       keycloak:
         condition: service_healthy
+    volumes:
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
+      - /app/node_modules
+      - /app/apps/frontend/www/node_modules
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.website.rule=Host(`${WWW_DIKE_CLOUD_HOST}`)"
-      - "traefik.http.routers.website.entrypoints=web"
-      - "traefik.http.services.website.loadbalancer.server.port=${WWW_DIKE_CLOUD_PORT}"
+      # Router: usa la variabile d'ambiente che punta a www.dike.cloud
+      - "traefik.http.routers.www-router.rule=Host(`${WWW_DIKE_CLOUD_HOST}`)"
+      - "traefik.http.routers.www-router.entrypoints=web"
+      # Servizio: Traefik capisce automaticamente l'IP del container
+      - "traefik.http.routers.www-router.service=www"
+      - "traefik.http.services.www.loadbalancer.server.port=5172"
     networks:
       - dike-net
 
-  react:
+  app:
     build: 
       context: .
-      dockerfile: apps/frontend/react/Dockerfile
+      dockerfile: apps/frontend/app/Dockerfile
     volumes:
-      - .:/app  # Monta l'intero progetto (compresi yarn.lock e .yarn)
+      - ../../dike/common:/app/dike/contracts
+      - ../../dike/common:/app/dike/common
+      - ../../dike/common:/app/dike/communication
       - /app/node_modules # Protegge le dipendenze installate nel container
-      - /app/apps/frontend/react/node_modules # Protegge le dipendenze specifiche
-    working_dir: /app/apps/frontend/react # Diciamo a Docker di "entrare" qui
+      - /app/apps/frontend/app/node_modules # Protegge le dipendenze specifiche
+    working_dir: /app/apps/frontend/app # Diciamo a Docker di "entrare" qui
     environment:
       VITE_PORT: 5173
       CHOKIDAR_USEPOLLING: "true"
@@ -215,9 +309,9 @@ services:
       <<: *common-env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.spa.rule=Host(`${APP_DIKE_CLOUD_HOST}`)"
-      - "traefik.http.routers.spa.entrypoints=web"
-      - "traefik.http.services.spa.loadbalancer.server.port=5173"
+      - "traefik.http.routers.app-router.rule=Host(`${APP_DIKE_CLOUD_HOST}`)"
+      - "traefik.http.routers.app-router.entrypoints=web"
+      - "traefik.http.services.app-router.loadbalancer.server.port=5173"
     networks:
       - dike-net
     ports:

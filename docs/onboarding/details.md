@@ -5,7 +5,7 @@
 ```mermaid
 sequenceDiagram
   participant User
-  participant Frontend as web-site
+  participant Frontend as www
   participant AuthService as auth-service
   participant ProfileService as profile-service
   participant TenantService as tenant-service

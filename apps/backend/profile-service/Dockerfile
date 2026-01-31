@@ -29,11 +29,21 @@ RUN yarn workspace @dike/profile-service build
 
 # Stage 2: Runtime (Pronto per la VPS)
 FROM node:22-alpine
+RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 WORKDIR /app
 
-# Copia selettiva: solo ciò che serve per girare
+# Copia configurazione Yarn e dipendenze
+COPY --from=builder /app/.yarnrc.yml ./
+COPY --from=builder /app/.yarn ./.yarn
+COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.pnp.* ./
+
+# Copia package.json dei workspace necessari
+COPY --from=builder /app/apps/backend/profile-service/package.json ./apps/backend/profile-service/
+COPY --from=builder /app/libs/common/package.json ./libs/common/
+COPY --from=builder /app/libs/communication/package.json ./libs/communication/
+COPY --from=builder /app/libs/contracts/package.json ./libs/contracts/
 
 # Copiamo le dist delle libs (indispensabili)
 COPY --from=builder /app/libs/common/dist ./libs/common/dist
@@ -45,5 +55,5 @@ COPY --from=builder /app/apps/backend/profile-service/dist ./dist
 
 EXPOSE 8002
 
-# Avvio pulito
-CMD ["node", "dist/main"]
+# Avvio con Yarn (necessario per PnP)
+CMD ["yarn", "node", "dist/main"]

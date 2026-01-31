@@ -132,7 +132,7 @@ compile_backend_services() {
 compile_frontend_services() {
     print_step 4 "Compilazione servizi frontend"
     
-    compile_service "web-site" "./apps/frontend/web-site" || return 1
+    compile_service "www" "./apps/frontend/www" || return 1
     
     print_success "Servizi frontend compilati con successo"
     return 0

@@ -30,7 +30,7 @@ export class OnboardingService {
     private readonly userFactory: UserFactory
   ) {
     this.logger = new AppLogger(OnboardingService.name);
-    this.appUrl = this.configService.env("APP_URL");
+    this.appUrl = this.configService.env("WWW_URL");
   }
 
   csrfToken(req: IAuthenticatedRequest): string {

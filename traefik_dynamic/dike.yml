@@ -1,14 +1,41 @@
 http:
   routers:
+    # 1. SPA (React)
     to-react:
       rule: "Host(`app.dike.cloud`)"
       service: react-service
       entryPoints:
         - web
 
+    # 2. SSR (Sito Web / www)
+    to-www:
+      rule: "Host(`www.dike.cloud`)"
+      service: www-service
+      entryPoints:
+        - web
+
+    # 3. API Gateway
+    to-api:
+      rule: "Host(`api.dike.cloud`)"
+      service: api-service
+      entryPoints:
+        - web
+
   services:
+    # 1. Deve puntare al container della SPA
     react-service:
       loadBalancer:
         servers:
-          # Usiamo l'IP interno o il nome del servizio nel network
-          - url: "http://react:5173"
+          - url: "http://app:5173"
+
+    # 2. Deve puntare al container del sito SSR (www)
+    www-service:
+      loadBalancer:
+        servers:
+          - url: "http://www:5172"
+
+    # 3. Deve puntare al Gateway API
+    api-service:
+      loadBalancer:
+        servers:
+          - url: "http://api-gateway:3000"

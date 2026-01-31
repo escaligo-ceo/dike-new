@@ -29,13 +29,23 @@ RUN yarn workspace @dike/notification-service build
 
 # Stage 2: Runtime (Estonia-ready)
 FROM node:22-alpine
+RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 WORKDIR /app
 
-# Copiamo solo il necessario per l'esecuzione
+# Copiamo solo i binari e le dipendenze, niente sorgenti .ts sulla VPS
+COPY --from=builder /app/.yarnrc.yml ./
+COPY --from=builder /app/.yarn ./.yarn
+COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.pnp.* ./
 
-# Copiamo le dist delle libs (indispensabili per i riferimenti a runtime)
+# Copia package.json dei workspace necessari
+COPY --from=builder /app/libs/contracts/package.json ./libs/contracts/
+COPY --from=builder /app/libs/common/package.json ./libs/common/
+COPY --from=builder /app/libs/communication/package.json ./libs/communication/
+COPY --from=builder /app/apps/backend/notification-service/package.json ./apps/backend/notification-service/
+
+# Copiamo le dist delle libs (necessarie per l'importazione a runtime)
 COPY --from=builder /app/libs/common/dist ./libs/common/dist
 COPY --from=builder /app/libs/communication/dist ./libs/communication/dist
 COPY --from=builder /app/libs/contracts/dist ./libs/contracts/dist
@@ -46,4 +56,4 @@ COPY --from=builder /app/apps/backend/notification-service/dist ./dist
 EXPOSE 8003
 
 # Avvio pulito ed efficiente
-CMD ["node", "dist/main"]
+CMD ["yarn", "node", "dist/main"]

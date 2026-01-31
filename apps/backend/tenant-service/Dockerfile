@@ -15,7 +15,7 @@ COPY apps/backend/tenant-service/package.json ./apps/backend/tenant-service/
 
 # 3. Installazione (Layer protetto da cache: se non cambi i package, non scarica nulla)
 RUN --mount=type=cache,target=/root/.yarn/berry/cache,id=yarn_cache \
-    yarn install --inline-builds
+        yarn install --inline-builds
 
 # 4. Build delle librerie (Risolve TS2307 e i metodi dell'Audit)
 COPY libs/ ./libs/
@@ -27,13 +27,23 @@ RUN yarn workspace @dike/contracts build || true
 COPY apps/backend/tenant-service ./apps/backend/tenant-service
 RUN yarn workspace @dike/tenant-service build
 
-# Stage 2: Runtime (Software della Madonna Edition)
+# Stage 2: Runtime
 FROM node:22-alpine
+RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 WORKDIR /app
 
 # Copiamo solo i binari e le dipendenze, niente sorgenti .ts sulla VPS
+COPY --from=builder /app/.yarnrc.yml ./
+COPY --from=builder /app/.yarn ./.yarn
+COPY --from=builder /app/yarn.lock ./
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.pnp.* ./
+
+# Copia package.json dei workspace necessari
+COPY --from=builder /app/libs/contracts/package.json ./libs/contracts/
+COPY --from=builder /app/libs/common/package.json ./libs/common/
+COPY --from=builder /app/libs/communication/package.json ./libs/communication/
+COPY --from=builder /app/apps/backend/tenant-service/package.json ./apps/backend/tenant-service/
 
 # Copiamo le dist delle libs (necessarie per l'importazione a runtime)
 COPY --from=builder /app/libs/common/dist ./libs/common/dist
@@ -45,4 +55,4 @@ COPY --from=builder /app/apps/backend/tenant-service/dist ./dist
 
 # Nota: Assicurati che la porta 8007 sia libera (l'8005 era dell'import)
 EXPOSE 8007
-CMD ["node", "dist/main"]
+CMD ["yarn", "node", "dist/main"]

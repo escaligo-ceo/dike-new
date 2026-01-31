@@ -22,22 +22,23 @@ COPY libs/ ./libs
 COPY apps/frontend/www ./apps/frontend/www
 RUN yarn workspace @dike/www build
 
-# Stage 2: Runtime (Software della Madonna Edition)
+# Stage 2: Runtime
 FROM node:22-alpine
 WORKDIR /app
 
-# Copiamo solo il necessario per l'esecuzione
+# Copia i metadati globali
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
 
-# Se il sito usa le libs a runtime, copiamo le loro dist
-COPY --from=builder /app/libs/common/dist ./libs/common/dist
-COPY --from=builder /app/libs/communication/dist ./libs/communication/dist
+# Copia l'intera cartella dell'app (non solo dist) per mantenere package.json e config locali
+COPY --from=builder /app/apps/frontend/www ./apps/frontend/www
 
-# Copiamo la build del sito
-COPY --from=builder /app/apps/frontend/www/dist ./dist
+# Copia le libs compilate (assicurati che il path sia coerente con tsconfig/workspace)
+COPY --from=builder /app/libs ./libs
 
 EXPOSE 5172
 
-# Verifica se l'entrypoint è effettivamente dist/main.js o dist/src/main.js
-CMD ["node", "dist/main"]
+# Forza il working directory alla radice del monorepo per evitare ambiguità
+WORKDIR /app
+# CMD ["node", "apps/frontend/www/dist/main"]
+CMD ["node", "apps/frontend/www/dist/src/main.js"]

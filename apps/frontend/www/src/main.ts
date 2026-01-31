@@ -48,7 +48,7 @@ export let logger: AppLogger = new AppLogger("www");
 
   logger.log(`Node environment: ${ENV}`);
 
-  const appUrl = configService.env("APP_URL");
+  const appUrl = configService.env("WWW_URL");
   logger.log(`App URL: ${appUrl}`);
 
   const appUrlApi = `${appUrl}/api`;

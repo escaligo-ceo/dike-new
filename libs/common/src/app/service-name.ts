@@ -11,5 +11,6 @@ export enum DikeServiceName {
   OnboardingService = 'onboarding-service',
   // BillingService = 'billing-service',
   // MatterService = 'matter-service',
-  WebSite = 'web-site',
+  www = 'www',
+  app = 'app',
 }
