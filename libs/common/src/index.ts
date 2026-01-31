@@ -99,4 +99,5 @@ export * from './auth/auth.interface.js';
 export * from './access/access.type.js';
 export * from './decorators/current-user.decorator.js';
 export * from './decorators/analytics.decorator.js';
+export * from './token/email-verification-token.entity.js';
 

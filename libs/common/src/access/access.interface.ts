@@ -16,8 +16,8 @@ export interface ILoginResult {
   message?: string;
   emailVerified?: boolean;
   onboarding?: IOnboardingResponse;
-
-
+  email?: string;
+  username?: string;
 
   // loginStatus: LoginStatus;
 
@@ -76,14 +76,15 @@ export interface IRegisterResult {
 // }
 
 export interface AccessResponse<T = any> {
-  step: AccessStep;
-  stepStatus: AccessStepStatus;
+  status: AccessStatus;
+
+  step?: AccessStep;
+  stepStatus?: AccessStepStatus;
 
   // UX / navigazione
   nextAction?: AccessAction;
   message?: string;
 
-  status: AccessStatus;
 
   // Sicurezza
   token?: {

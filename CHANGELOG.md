@@ -892,3 +892,7 @@
 ## [0.6.386] - 2026-01-31
 
 - flow - verify-email completed
+
+## [0.6.387] - 2026-01-31
+
+- verify-email related changes

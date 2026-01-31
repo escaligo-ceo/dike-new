@@ -284,3 +284,7 @@
 ## [0.1.70] - 2026-01-05
 
 - initializeViewEngine function introdud
+
+## [0.1.71] - 2026-01-31
+
+- verify-email related changes

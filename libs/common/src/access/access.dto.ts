@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString, ValidateIf } from "class-validator";
+import { ILoginResult } from "./access.interface.js";
 
 export class KeycloakUserDto {
   @ApiProperty({
@@ -43,5 +44,31 @@ export class LoginUserDto {
     message: 'email o username devono essere presenti',
   })
   identifierCheck?: string;
+}
+
+export class LoginDto {
+  constructor(data: ILoginResult) {
+    if (!data || !data.userId) {
+      throw new Error('User ID is required.');
+    }
+    if (!data.email) {
+      throw new Error('Email is required.');
+    }
+    
+    this.userId = data.userId;
+    this.email = data.email;
+  }
+
+  @ApiProperty()
+  @IsString()
+  userId: string;
+
+  @ApiProperty()
+  @IsString()
+  email: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  username?: string;
 }
 
