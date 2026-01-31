@@ -1,5 +1,5 @@
 {
-  "name": "@dike/react",
+  "name": "@dike/app",
   "private": true,
   "version": "0.0.21",
   "type": "module",
@@ -28,13 +28,13 @@
     "release:custom": "node ../../../scripts/releaseCustom.js $(pwd)",
     "swagger": "ts-node ../../../scripts/swagger.ts",
     "service-restart": "yarn clean && yarn && yarn build && yarn start",
-    "rebuild": "docker compose build react --no-cache",
-    "restart": "docker compose up -d react",
+    "rebuild": "docker compose build app --no-cache",
+    "restart": "docker compose up -d app",
     "b": "yarn clean && yarn && yarn rebuild",
     "service-start": "yarn start",
     "r": "yarn service-restart",
     "routes:print": "node ../../../scripts/print-routes.js",
-    "log": "docker compose logs -f react",
+    "log": "docker compose logs -f app",
     "l": "yarn dev"
   },
   "dependencies": {

@@ -19,7 +19,7 @@ SERVICES=(
   "notification-service"
   "api-gateway"
   "react"
-  "web-site"
+  "www"
 )
 
 for SERVICE in "${SERVICES[@]}"

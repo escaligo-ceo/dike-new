@@ -182,8 +182,8 @@ services:
       - dike-net
 
   # --- FRONTEND SERVICES ---
-  web-site:
-    build: { context: ., dockerfile: apps/frontend/web-site/Dockerfile }
+  www:
+    build: { context: ., dockerfile: apps/frontend/www/Dockerfile }
     env_file: .env
     environment:
       <<: *common-env

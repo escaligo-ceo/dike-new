@@ -11,17 +11,17 @@ COPY .yarn ./.yarn
 COPY libs/contracts/package.json ./libs/contracts/
 COPY libs/common/package.json ./libs/common/
 COPY libs/communication/package.json ./libs/communication/
-COPY apps/frontend/react/package.json ./apps/frontend/react/
+COPY apps/frontend/app/package.json ./apps/frontend/app/
 
 # 3. Installazione
 RUN yarn install --inline-builds
 
 # 4. Copia librerie e sorgenti frontend
 COPY libs/ ./libs
-COPY apps/frontend/react ./apps/frontend/react
+COPY apps/frontend/app ./apps/frontend/app
 
 # 5. Build (Qui React genera la cartella /dist con gli statici)
-RUN yarn workspace @dike/react build
+RUN yarn workspace @dike/app build
 
 # Stage 2: Sviluppo (Software della Madonna - Dev Edition)
 FROM node:22-alpine
@@ -35,4 +35,4 @@ EXPOSE 5173
 
 # Avviamo VITE in modalità development
 # Puntiamo al workspace corretto
-CMD ["yarn", "workspace", "@dike/react", "dev", "--host", "0.0.0.0"]
+CMD ["yarn", "workspace", "@dike/app", "dev", "--host", "0.0.0.0"]
