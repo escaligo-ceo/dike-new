@@ -13,8 +13,8 @@ import { PhoneDto } from "./phone.dto.js";
 import { IPhone } from "./phone.interface.js";
 import { TaxIdentifierDto } from "./tax-identifier.dto.js";
 import { ITaxIdentifier } from "./tax-identifier.interface.js";
-import { WebsiteDto } from "./web-site.dto.js";
-import { IWebsite } from "./web-site.interface.js";
+import { WebsiteDto } from "./www.dto.js";
+import { IWebsite } from "./www.interface.js";
 
 export class ContactDto implements IContact {
   id?: string;

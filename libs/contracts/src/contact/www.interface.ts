@@ -1,4 +1,4 @@
-import { WebsiteType } from "./web-site.enum.js";
+import { WebsiteType } from "./www.enum.js";
 
 export interface IWebsite {
   id?: string;

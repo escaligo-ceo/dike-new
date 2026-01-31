@@ -1,9 +1,9 @@
 {
+  "type": "module",
   "name": "@dike/contracts",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "private": true,
   "author": "Tommaso Centurioni",
-  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

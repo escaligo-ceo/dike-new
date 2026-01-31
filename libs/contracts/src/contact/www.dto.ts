@@ -1,5 +1,5 @@
-import { WebsiteType } from "./web-site.enum.js";
-import { IWebsite } from "./web-site.interface.js";
+import { WebsiteType } from "./www.enum.js";
+import { IWebsite } from "./www.interface.js";
 
 export class WebsiteDto implements IWebsite {
   id?: string;

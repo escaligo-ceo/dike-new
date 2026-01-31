@@ -5,7 +5,7 @@ import { ICompany } from "./company.interface.js";
 import { IEmail } from "./email.interface.js";
 import { IPhone } from "./phone.interface.js";
 import { ITaxIdentifier } from "./tax-identifier.interface.js";
-import { IWebsite } from "./web-site.interface.js";
+import { IWebsite } from "./www.interface.js";
 import { AnagraphicSex } from "./anagraphic-sex.enum.js";
 
 export interface IContact {

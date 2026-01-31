@@ -35,3 +35,7 @@
 ## [0.0.9] - 2026-01-03
 
 - contact entities, mappers and transformers added and fixed
+
+## [0.0.10] - 2026-01-31
+
+- renaming del servizio web-site to www
