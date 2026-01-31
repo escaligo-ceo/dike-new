@@ -168,3 +168,7 @@
 ## [0.0.43] - 2026-01-04
 
 - params sorting
+
+## [0.0.44] - 2026-01-31
+
+- IStep enrichment
