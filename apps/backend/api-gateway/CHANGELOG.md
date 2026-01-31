@@ -227,3 +227,7 @@
 ## [0.2.47] - 2026-01-05
 
 - initializeViewEngine function introduced
+
+## [0.2.48] - 2026-01-31
+
+- clean up

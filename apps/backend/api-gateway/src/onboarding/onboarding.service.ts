@@ -3,7 +3,6 @@ import {
   inspect,
   Profile,
   Token,
-  userIdFromToken,
 } from "@dike/common";
 import {
   HttpException,

@@ -896,3 +896,7 @@
 ## [0.6.387] - 2026-01-31
 
 - verify-email related changes
+
+## [0.6.388] - 2026-01-31
+
+- clean up
