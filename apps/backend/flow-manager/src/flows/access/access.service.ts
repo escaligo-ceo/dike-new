@@ -6,6 +6,7 @@ import {
   AccessStepStatus,
   Actions,
   AppLogger,
+  ILoginResult,
   IVerificationResult,
   LoginUserDto,
   OriginDto,
@@ -14,60 +15,56 @@ import {
   VerificationDto,
   VerificationTokenService,
 } from "@dike/common";
-import { KeycloakService, LoggedUser, IStep } from "@dike/communication";
+import { KeycloakService, LoggedUser, IBaseStep } from "@dike/communication";
 import { Injectable } from "@nestjs/common";
-import { HttpAuthService } from "../communication/http.auth.service";
-import { HttpNotificationService } from "../communication/http.notification.service";
-import { EmailVerificationStep } from "./steps/email-verification.step";
-import { KeycloakCheckStep } from "./steps/keycloak-check";
+import { HttpAuthService } from "../../communication/http.auth.service";
+import { HttpNotificationService } from "../../communication/http.notification.service";
 import { OnboardingStepService } from "./steps/onboarding.step";
+import { VerifyEmailService } from "../verify-email/verify-email.service";
+import { VerifyEmailStep } from "./steps/verify-email.step";
+import { AuthorizeUserStep } from "./steps/authorize-user.step";
 
 @Injectable()
 export class AccessService {
   constructor(
-    private readonly logger: AppLogger,
-    private readonly httpAuthService: HttpAuthService,
-    private readonly httpNotificationService: HttpNotificationService,
-    private readonly verificationTokenService: VerificationTokenService,
-    private readonly keycloakService: KeycloakService,
-    private readonly onboardingService: OnboardingStepService,
+    private readonly _logger: AppLogger,
+    private readonly _httpAuthService: HttpAuthService,
+    private readonly _httpNotificationService: HttpNotificationService,
+    private readonly _verificationTokenService: VerificationTokenService,
+    private readonly _keycloakService: KeycloakService,
+    private readonly _onboardingService: OnboardingStepService,
+    private readonly _verifyEmailFlow: VerifyEmailService,
   ) {
-    this.logger = new AppLogger(AccessService.name);
+    this._logger = new AppLogger(AccessService.name);
   }
 
   async internalExchangeToken(
     originDto: OriginDto,
     token: string,
   ): Promise<{ token: string }> {
-    return this.httpAuthService.internalExchangeToken(originDto, token);
+    return this._httpAuthService.internalExchangeToken(originDto, token);
   }
 
-  async startAccessFlow(
+  async start(
     loggedUser: LoggedUser,
-    loginUserDto: LoginUserDto,
   ): Promise<AccessResponse> {
-    const loginResult = await this.httpAuthService.login(
-      loggedUser.token.originDto,
-      loginUserDto,
-    );
-
-    const steps: IStep[] = [
-      new KeycloakCheckStep(
-        new AppLogger(KeycloakCheckStep.name),
-        this.httpAuthService as any,
+    const steps: IBaseStep[] = [
+      new AuthorizeUserStep(
+        this._httpAuthService,
+        this._httpAuthService,
       ),
-      new EmailVerificationStep(
-        this.httpAuthService as any,
-        new AppLogger(EmailVerificationStep.name),
-        this.keycloakService as any,
+      new VerifyEmailStep(
+        this._httpAuthService,
+        this._verifyEmailFlow,
+        this._keycloakService,
       ),
       new OnboardingStepService(
-        new AppLogger(OnboardingStepService.name),
-        this.httpAuthService as any,
-        this.onboardingService as any,
+        this._onboardingService as any,
       ),
     ];
 
+    let loginResult: ILoginResult | undefined;
+    let refreshToken: string | undefined;
     for (const step of steps) {
       const result = await step.execute(loggedUser, {});
 
@@ -75,6 +72,15 @@ export class AccessService {
         // blocco immediato e restituisci al FE
         return this.mapStepResultToAccessResponse(result);
       }
+      loginResult = result.token as ILoginResult;
+      refreshToken = result.refreshToken;
+    }
+
+    if (!loginResult?.access_token) {
+      throw new Error("Access token not found");
+    }
+    if (!refreshToken) {
+      throw new Error("Refresh token not found");
     }
 
     // Tutti gli step completati → accesso finale
@@ -83,8 +89,11 @@ export class AccessService {
       step: AccessStep.READY,
       stepStatus: AccessStepStatus.COMPLETED,
       nextAction: AccessAction.ACCESS_APP,
-      token: { type: "FULL", value: loginResult.access_token },
-      refreshToken: loginResult.refresh_token,
+      token: {
+        type: "FULL",
+        value: loginResult.access_token,
+      },
+      refreshToken,
     };
   }
 
@@ -93,7 +102,7 @@ export class AccessService {
     dto: any,
   ): Promise<AccessResponse> {
     const verificationLink: IVerificationResult =
-      this.verificationTokenService.generateEmailVerificationToken({
+      this._verificationTokenService.generateEmailVerificationToken({
         userId: loggedUser.id,
         email: dto.email,
         tokenType: TokenType.EMAIL_VERIFICATION,
@@ -104,7 +113,7 @@ export class AccessService {
       verificationLink: verificationLink.verificationUrl,
       username: loggedUser.username ? loggedUser.username : undefined,
     };
-    const res = await this.httpNotificationService.sendEmailVerification(
+    const res = await this._httpNotificationService.sendEmailVerification(
       loggedUser,
       payload,
     );

@@ -888,3 +888,7 @@
 ## [0.6.385] - 2026-01-31
 
 - renaming del servizio web-site to www
+
+## [0.6.386] - 2026-01-31
+
+- flow - verify-email completed

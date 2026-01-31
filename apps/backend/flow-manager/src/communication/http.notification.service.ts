@@ -42,15 +42,18 @@ export class HttpNotificationService extends BaseHttpService {
 
   @Post("verification")
   async sendEmailVerification(
-    loggedUser: LoggedUser,
-    payload: VerificationDto
+    originDto: OriginDto,
+    { to, token }: {
+      to: string,
+      token: string, // VerificationDto
+    }
   ): Promise<void> {
     const requestUrl = `/v1/email/verification`;
     try {
       const response = await this.post(
         requestUrl,
-        payload,
-        loggedUser.token.originDto
+        { to, token },
+        originDto
       );
       return response.data;
     } catch (error) {

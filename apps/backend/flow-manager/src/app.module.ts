@@ -19,7 +19,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdminModule } from "./admin/admin.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { AccessModule } from "./access/access.module";
+import { AccessModule } from "./flows/access/access.module";
 import { DatabaseModule } from "./database/database.module";
 import { entities } from "./database/entites";
 import { OnboardingModule } from "./onboarding/onboarding.module";

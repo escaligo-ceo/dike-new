@@ -1,6 +1,6 @@
 {
   "name": "@dike/flow-manager",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Process engine - Flow orchestrator",
   "main": "src/main.ts",
   "author": "Tommaso Centurioni",
@@ -36,7 +36,8 @@
     "r": "yarn service-restart",
     "l": "yarn start",
     "routes": "node ../../../scripts/scan-routes.js --show-method",
-    "log": "docker compose logs -f api-gateway"
+    "log": "docker compose logs -f api-gateway",
+    "migration:generate": "node ../../../scripts/generate-migration.js"
   },
   "dependencies": {
     "@dike/common": "*",
@@ -50,6 +51,7 @@
     "@nestjs/platform-express": "^11.1.9",
     "@nestjs/typeorm": "^11.0.0",
     "axios": "^1.10.0",
+    "crypto": "^1.0.1",
     "form-data": "^4.0.5",
     "jwks-rsa": "^3.2.0",
     "multer": "^2.0.2",

@@ -4,8 +4,8 @@ import { HttpModule } from "@nestjs/axios";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
-import { HttpProfileService } from "../communication/http.profile.service";
-import { ProfileController } from "./profile.controller";
+import { UserCreateController } from "./user-create.controller";
+import { HttpProfileService } from "../../communication/http.profile.service";
 
 @Module({
   exports: [HttpProfileService],
@@ -21,7 +21,7 @@ import { ProfileController } from "./profile.controller";
       signOptions: { expiresIn: "1h" },
     }),
   ],
-  controllers: [ProfileController],
+  controllers: [UserCreateController],
   providers: [
     HttpProfileService,
     AppLogger,

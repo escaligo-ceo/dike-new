@@ -20,7 +20,7 @@ import {
 } from "@dike/communication";
 import { Body, Controller, Post, Req, Version } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation } from "@nestjs/swagger";
-import { HttpNotificationService } from "../communication/http.notification.service";
+import { HttpNotificationService } from "../../communication/http.notification.service";
 import { AccessService } from "./access.service";
 
 @Controller("auth")
@@ -47,7 +47,7 @@ export class AccessFlowController extends BaseController {
   ): Promise<AccessResponse> {
     this.logRequest(req, `Login attempt for user: ${inspect(loginUserDto)}`);
     // const res = await this.httpAuthService.login(originDto, payload);
-    const res = await this.accessService.startAccessFlow(
+    const res = await this.accessService.start(
       loggedUser,
       loginUserDto,
     );

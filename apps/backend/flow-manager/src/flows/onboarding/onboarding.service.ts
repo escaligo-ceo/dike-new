@@ -7,6 +7,7 @@ import {
   Actions,
   FullAccessTokenDto,
   IOnboardingResponse,
+  LoginDto,
   Onboarding,
   OnboardingStep,
   Tenant,
@@ -15,24 +16,26 @@ import { LoggedUser } from "@dike/communication";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { HttpAuthService } from "../communication/http.auth.service";
-import { HttpTenantService } from "../communication/http.tenant.service";
 import { OfficeStepService } from "./steps/create-office.step";
 import { SubscriptionStepService } from "./steps/create-subscription.step";
 import { TeamStepService } from "./steps/create-team.step";
 import { TenantStepService } from "./steps/create-tenant.step";
+import { HttpAuthService } from "../../communication/http.auth.service";
+import { HttpTenantService } from "../../communication/http.tenant.service";
+import { HttpNotificationService } from "../../communication/http.notification.service";
 
 @Injectable()
 export class OnboardingService {
   constructor(
-    private readonly tenantStep: TenantStepService,
-    private readonly subscriptionStep: SubscriptionStepService,
-    private readonly teamStep: TeamStepService,
-    private readonly officeStep: OfficeStepService,
+    private readonly _tenantStep: TenantStepService,
+    private readonly _subscriptionStep: SubscriptionStepService,
+    private readonly _teamStep: TeamStepService,
+    private readonly _officeStep: OfficeStepService,
     @InjectRepository(Onboarding)
-    private readonly onboardingRepository: Repository<Onboarding>,
-    private readonly httpTenantService: HttpTenantService,
-    private readonly httpAuthService: HttpAuthService,
+    private readonly _onboardingRepository: Repository<Onboarding>,
+    private readonly _httpAuthService: HttpAuthService,
+    private readonly _httpTenantService: HttpTenantService,
+    private readonly _httpNotificationService: HttpNotificationService,
   ) {}
 
   async stepOnboarding(
@@ -47,20 +50,20 @@ export class OnboardingService {
     let onboardingResponse: IOnboardingResponse;
     switch (onboarding.currentStep) {
       case OnboardingStep.STARTED:
-        onboardingResponse = await this.tenantStep.execute(loggedUser, data);
+        onboardingResponse = await this._tenantStep.execute(loggedUser, data);
       case OnboardingStep.PROFILE_CREATION:
-        onboardingResponse = await this.tenantStep.execute(loggedUser, data);
+        onboardingResponse = await this._tenantStep.execute(loggedUser, data);
       case OnboardingStep.TENANT_CREATION:
-        onboardingResponse = await this.tenantStep.execute(loggedUser, data);
+        onboardingResponse = await this._tenantStep.execute(loggedUser, data);
       case OnboardingStep.ASSIGN_SUBSCRIPTION:
-        onboardingResponse = await this.subscriptionStep.execute(
+        onboardingResponse = await this._subscriptionStep.execute(
           loggedUser,
           data,
         );
       case OnboardingStep.TEAM_CREATION:
-        onboardingResponse = await this.teamStep.execute(loggedUser, data);
+        onboardingResponse = await this._teamStep.execute(loggedUser, data);
       case OnboardingStep.OFFICE_CREATION:
-        onboardingResponse = await this.officeStep.execute(loggedUser, data);
+        onboardingResponse = await this._officeStep.execute(loggedUser, data);
       case OnboardingStep.COMPLETED:
         onboardingResponse = {
           userId,
@@ -100,9 +103,9 @@ export class OnboardingService {
     };
   }
 
-  async startOnboarding(loggedUser: LoggedUser): Promise<IOnboardingResponse> {
-    const userId = loggedUser.id;
-    const existingOnboarding = await this.findByUserId(loggedUser);
+  async start(loginDto: LoginDto): Promise<IOnboardingResponse> {
+    const { userId } = loginDto;
+    const existingOnboarding = await this.findByUserId(loginDto);
     if (existingOnboarding) {
       return {
         userId,
@@ -120,11 +123,11 @@ export class OnboardingService {
       };
     }
 
-    const newOnboarding = this.onboardingRepository.create({
+    const newOnboarding = this._onboardingRepository.create({
       userId,
       step: OnboardingStep.STARTED,
     });
-    await this.onboardingRepository.save(newOnboarding);
+    await this._onboardingRepository.save(newOnboarding);
 
     return {
       userId,
@@ -136,9 +139,16 @@ export class OnboardingService {
     };
   }
 
+  async isCompleted(userId: string): Promise<boolean> {
+    const onboarding = await this._onboardingRepository.findOne({
+      where: { userId },
+    });
+    return onboarding?.step === OnboardingStep.COMPLETED;
+  }
+
   async completeOnboarding(loggedUser: LoggedUser): Promise<AccessResponse> {
     const userId = loggedUser.id;
-    const onboarding = await this.onboardingRepository.findOne({
+    const onboarding = await this._onboardingRepository.findOne({
       where: { userId },
     });
     if (!onboarding) {
@@ -183,7 +193,7 @@ export class OnboardingService {
     onboarding.step = OnboardingStep.COMPLETED;
     onboarding.completedSteps = requiredSteps;
     onboarding.error = undefined;
-    await this.onboardingRepository.save(onboarding);
+    await this._onboardingRepository.save(onboarding);
 
     const payload: FullAccessTokenDto = {
       kc_access_token: loggedUser.token.accessToken,
@@ -199,7 +209,7 @@ export class OnboardingService {
       message: "Onboarding completato",
       token: {
         type: "FULL",
-        value: await this.httpAuthService.generateFullAccessToken(
+        value: await this._httpAuthService.generateFullAccessToken(
           loggedUser,
           payload,
         ),
@@ -208,7 +218,7 @@ export class OnboardingService {
   }
 
   async getTenantIdByUserId(userId: string): Promise<string | undefined> {
-    const onboarding = await this.onboardingRepository.findOne({
+    const onboarding = await this._onboardingRepository.findOne({
       where: { userId },
     });
     if (!onboarding) return undefined;
@@ -224,17 +234,18 @@ export class OnboardingService {
     if (!tenantId) {
       throw new Error(`Tenant not found for userId: ${userId}`);
     }
-    return this.httpTenantService.getTenant(loggedUser, tenantId);
+    return this._httpTenantService.getTenant(loggedUser, tenantId);
   }
 
-  async findByUserId(loggedUser: LoggedUser): Promise<IOnboardingResponse> {
-    const onboarding = await this.onboardingRepository.findOne({
-      where: { userId: loggedUser.id },
+  async findByUserId(loginDto): Promise<IOnboardingResponse> {
+    const { userId } = loginDto;
+    const onboarding = await this._onboardingRepository.findOne({
+      where: { userId },
     });
 
     if (!onboarding) {
       return {
-        userId: loggedUser.id,
+        userId,
         currentStep: OnboardingStep.NOT_STARTED,
         nextStep: OnboardingStep.STARTED,
         requiredFields: undefined,
@@ -245,7 +256,7 @@ export class OnboardingService {
     }
 
     return {
-      userId: loggedUser.id,
+      userId,
       currentStep: onboarding.step as IOnboardingResponse["currentStep"],
       nextStep: this.getNextOnboardingStep(
         onboarding.step as IOnboardingResponse["currentStep"],

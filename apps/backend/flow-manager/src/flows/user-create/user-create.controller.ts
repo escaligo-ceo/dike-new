@@ -28,17 +28,17 @@ import {
   Version,
 } from "@nestjs/common";
 import { ApiConsumes, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { HttpProfileService } from "../communication/http.profile.service";
+import { HttpProfileService } from "../../communication/http.profile.service";
 
 @Controller(profileTableName)
-export class ProfileController extends BaseController {
+export class UserCreateController extends BaseController {
   constructor(
     private readonly httpProfileService: HttpProfileService,
     protected readonly logger: AppLogger,
     protected readonly configService: DikeConfigService,
     protected readonly userFactory: UserFactory,
   ) {
-    super(new AppLogger(ProfileController.name), configService, userFactory);
+    super(new AppLogger(UserCreateController.name), configService, userFactory);
   }
 
   @Post("find-or-create")

@@ -1,4 +1,4 @@
-import { AppLogger, CurrentUser, DikeConfigService } from "@dike/common";
+import { AppLogger, CurrentUser, DikeConfigService, LoginDto } from "@dike/common";
 import {
   Audit,
   AuditAction,
@@ -9,18 +9,18 @@ import {
 } from "@dike/communication";
 import { Controller, Post, Query, Version } from "@nestjs/common";
 import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
-import { EmailService } from "./email.service";
+import { VerifyEmailService } from "./verify-email.service";
 
 @Controller("email")
 @ApiTags("Email")
-export class EmailController extends BaseController {
+export class VerifyEmailController extends BaseController {
   constructor(
     protected readonly logger: AppLogger,
     protected readonly configService: DikeConfigService,
     protected readonly userFactory: UserFactory,
-    private readonly emailService: EmailService,
+    private readonly verifyEmailService: VerifyEmailService,
   ) {
-    super(new AppLogger(EmailController.name), configService, userFactory);
+    super(new AppLogger(VerifyEmailController.name), configService, userFactory);
   }
 
   @Post("start-verification")
@@ -28,11 +28,11 @@ export class EmailController extends BaseController {
   @Audit(AuditCategory.PROCESS, AuditAction.EMAIL_VERIFICATION_START) // Questo gestisce già IP, UA e l'esito (Success/Failure)
   @ApiOperation({ summary: "Avvia il flow di verifica email" })
   async sendVerificationEmail(@CurrentUser() loggedUser: LoggedUser) {
-    // 1. Il Guard o un Interceptor hanno già validato il token e popolato @CurrentUser
-    // 2. Non serve passare IP e UA a mano, il servizio di Audit li prende dal contesto
-    // 3. Il servizio di processo (orchestratore) riceve l'utente e decide cosa fare
-
-    return await this.emailService.startEmailVerification(loggedUser);
+    const loginResult: LoginDto = {
+      userId: loggedUser.id,
+      email: loggedUser.email,
+    };
+    return await this.verifyEmailService.start(loginResult);
   }
 
   @Post("verify")
@@ -48,6 +48,6 @@ export class EmailController extends BaseController {
     @CurrentUser() loggedUser: LoggedUser,
     @Query("token") token: string,
   ) {
-    return await this.emailService.verifyEmailToken(loggedUser, token);
+    return await this.verifyEmailService.verifyEmailToken(loggedUser, token);
   }
 }
