@@ -4,13 +4,13 @@ import {
   DikeDataSource,
   DikeModule,
   Seed,
+  EmailVerificationToken,
 } from "@dike/common";
 import { HttpStatus, Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import path from "path";
 import { Client } from "pg";
-import { EmailVerificationToken } from "../entities/email-verification-token.entity";
 import { LoginSession } from "../entities/login-session.entity";
 import { WatchedPerson } from "../entities/watched-person.entity";
 

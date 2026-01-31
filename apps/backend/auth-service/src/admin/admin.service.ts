@@ -1,12 +1,10 @@
-import { AppLogger, Token, TokenType, VerificationTokenService } from "@dike/common";
+import { AppLogger, Token, TokenType, EmailVerificationToken, VerificationTokenService, IVerificationResult } from "@dike/common";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { HttpNotificationService } from "../communication/http.notification.service";
-import { EmailVerificationToken } from "../entities/email-verification-token.entity";
 import { WatchedPersonService } from "../watched-person/watched-person.service";
 import { ApiGatewayService, BaseAdminService, IKeycloakUser, KeycloakService, LoggedUser } from "@dike/communication";
-import { IVerificationResult } from "@dike/common/src/access/verification-token.interface";
 
 @Injectable()
 export class AdminService extends BaseAdminService {

@@ -7,6 +7,7 @@ import {
   OriginIp,
   OriginUserAgent,
   Token,
+  EmailVerificationToken,
 } from "@dike/common";
 import {
   Audit,
@@ -30,15 +31,12 @@ import {
   Version,
 } from "@nestjs/common";
 import {
-  ApiBody,
   ApiOperation,
   ApiQuery,
-  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { EmailVerificationToken } from "../entities/email-verification-token.entity";
 
 @ApiTags("tokens")
 @Controller("tokens")
@@ -59,24 +57,6 @@ export class TokensController extends BaseController {
   @Version("1")
   @Audit(AuditCategory.TOKEN, AuditAction.REQUEST_PASSWORD_RESET)
   @ApiOperation({ summary: "Crea un nuovo token di verifica email" })
-  @ApiBody({
-    schema: {
-      type: "object",
-      properties: {
-        email: { type: "string", example: "user@example.com" },
-        userId: { type: "string", format: "uuid", example: "uuid-utente" },
-        token: { type: "string", example: "token-di-verifica" },
-        expiresAt: {
-          type: "string",
-          format: "date-time",
-          example: "2025-08-16T12:00:00Z",
-        },
-        ip: { type: "string", example: "192.168.1.1" },
-        userAgent: { type: "string", example: "Mozilla/5.0" },
-      },
-      required: ["email", "userId", "token", "expiresAt"],
-    },
-  })
   async createToken(
     @Body()
     body: {

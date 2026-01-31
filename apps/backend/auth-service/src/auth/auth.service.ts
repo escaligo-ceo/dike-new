@@ -17,6 +17,7 @@ import {
   Token,
   TokenType,
   UserAlreadyExistsException,
+  EmailVerificationToken,
   VerificationTokenService,
 } from "@dike/common";
 import {
@@ -45,7 +46,6 @@ import { AxiosResponse } from "axios";
 import { firstValueFrom } from "rxjs";
 import { Repository } from "typeorm";
 import { HttpProcessService } from "../communication/http.process.service";
-import { EmailVerificationToken } from "../entities/email-verification-token.entity";
 
 @Injectable()
 export class AuthService {
@@ -271,6 +271,8 @@ export class AuthService {
       // loginStatus: LoginStatus.SUCCESS,
       loginStatus: AccessStatus.SUCCESS,
       // redirectUrl: '/dashboard', // opzionale, il controller decide
+      email: userInfo.email,
+      username: userInfo.username,
     };
 
     return loginResult;

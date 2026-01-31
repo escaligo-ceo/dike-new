@@ -1,4 +1,4 @@
-import { EmailVerificationToken } from "../entities/email-verification-token.entity";
+import { EmailVerificationToken } from "@dike/common";
 import { LoginSession } from "../entities/login-session.entity";
 import { WatchedPerson } from "../entities/watched-person.entity";
 

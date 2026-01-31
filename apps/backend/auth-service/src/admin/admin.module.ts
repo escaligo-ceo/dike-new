@@ -19,7 +19,6 @@ import { AppService } from "../app.service";
 import { AuthService } from "../auth/auth.service";
 import { CommunicationModule } from "../communication/communication.module";
 import { HttpNotificationService } from "../communication/http.notification.service";
-import { EmailVerificationToken } from "../entities/email-verification-token.entity";
 import { WatchedPersonModule } from "../watched-person/watched-person.module";
 import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";

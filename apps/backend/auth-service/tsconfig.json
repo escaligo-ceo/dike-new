@@ -17,7 +17,7 @@
   },
   "include": [
     "src/**/*",
-    "../../../libs/common/src/access/keycloak.service.spec.ts", "../../../libs/common/src/exceptions/keycloak.exception.ts", "../../../libs/common/src/access/keycloak.interface.ts", "../../../libs/common/src/access/verification-token.interface.ts", "../../../libs/common/src/access/verification-token.service.ts",
+    "../../../libs/common/src/access/keycloak.service.spec.ts", "../../../libs/common/src/exceptions/keycloak.exception.ts", "../../../libs/common/src/access/keycloak.interface.ts", "../../../libs/common/src/access/verification-token.interface.ts", "../../../libs/common/src/access/verification-token.service.ts", "../../../libs/common/src/token/email-verification-token.entity.ts",
     // "src/**/*.json",
     // "src/**/*.d.ts",
     // "src/**/*.js"
